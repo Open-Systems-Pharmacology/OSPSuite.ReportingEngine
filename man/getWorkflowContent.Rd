@@ -12,9 +12,9 @@ getWorkflowContent(workflowTable, excelFile)
 \item{excelFile}{name of the Excel file from which the R script is created}
 }
 \value{
-Character vector defining the `Workflow` object
+Character vector defining the \code{Workflow} object
 }
 \description{
-Creates a character vector to be written in a workflow .R script defining `Workflow` object
+Creates a character vector to be written in a workflow .R script defining \code{Workflow} object
 }
 \keyword{internal}

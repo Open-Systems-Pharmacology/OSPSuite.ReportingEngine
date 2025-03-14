@@ -27,7 +27,7 @@ StudyDesignTarget
 \if{html}{\out{<a id="method-StudyDesign-new"></a>}}
 \if{latex}{\out{\hypertarget{method-StudyDesign-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `StudyDesign` object.
+Create a new \code{StudyDesign} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StudyDesignTarget$new(name, values)}\if{html}{\out{</div>}}
 }
@@ -38,12 +38,12 @@ Create a new `StudyDesign` object.
 \item{\code{name}}{path name of study design target}
 
 \item{\code{values}}{values assigned to study design target.
-`values` must be the same length as source condition expressions}
+\code{values} must be the same length as source condition expressions}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-`StudyDesignTarget` class object
+\code{StudyDesignTarget} class object
 }
 }
 \if{html}{\out{<hr>}}

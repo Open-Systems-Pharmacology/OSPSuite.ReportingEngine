@@ -13,11 +13,11 @@ plotPopulationSensitivity(
 )
 }
 \arguments{
-\item{structureSets}{list of `SimulationStructure` objects}
+\item{structureSets}{list of \code{SimulationStructure} objects}
 
 \item{settings}{list of settings for the population sensitivity plot}
 
-\item{workflowType}{Element from `PopulationWorkflowTypes`}
+\item{workflowType}{Element from \code{PopulationWorkflowTypes}}
 
 \item{xParameters}{selected parameters to be plotted in x axis}
 

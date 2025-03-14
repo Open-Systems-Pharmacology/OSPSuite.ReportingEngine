@@ -36,7 +36,7 @@ which allows repeatability of the simulations}
 \if{html}{\out{<a id="method-SimulationSettings-new"></a>}}
 \if{latex}{\out{\hypertarget{method-SimulationSettings-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `SimulationSettings` object
+Create a \code{SimulationSettings} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSettings$new(
   numberOfCores = NULL,
@@ -57,7 +57,7 @@ Create a `SimulationSettings` object
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `SimulationSettings` object
+A new \code{SimulationSettings} object
 }
 }
 \if{html}{\out{<hr>}}

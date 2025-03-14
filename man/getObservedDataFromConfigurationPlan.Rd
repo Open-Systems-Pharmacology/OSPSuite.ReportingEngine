@@ -9,12 +9,12 @@ getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
 \arguments{
 \item{observedDataId}{Identifier of observed data}
 
-\item{configurationPlan}{A `ConfigurationPlan` object that includes methods to find the data}
+\item{configurationPlan}{A \code{ConfigurationPlan} object that includes methods to find the data}
 }
 \value{
 list of including data and metaData to perform time profile plot
 }
 \description{
-Get selected observed data from a `ConfigurationPlan` object
+Get selected observed data from a \code{ConfigurationPlan} object
 }
 \keyword{internal}

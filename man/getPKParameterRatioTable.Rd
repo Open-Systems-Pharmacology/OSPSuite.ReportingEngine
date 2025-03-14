@@ -11,7 +11,7 @@ getPKParameterRatioTable(pkParameter, outputPath, structureSets)
 
 \item{outputPath}{Quantity Path name}
 
-\item{structureSets}{`SimulationStructure` R6 class object}
+\item{structureSets}{\code{SimulationStructure} R6 class object}
 }
 \description{
 Get Table of summary statistics of PK parameter ratios across simulation sets

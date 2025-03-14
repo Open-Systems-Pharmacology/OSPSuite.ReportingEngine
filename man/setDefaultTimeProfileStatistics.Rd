@@ -14,7 +14,7 @@ setDefaultTimeProfileStatistics(
 )
 }
 \arguments{
-\item{statisticsType}{Name of statistics type as defined in enum `StatisticsTypes`}
+\item{statisticsType}{Name of statistics type as defined in enum \code{StatisticsTypes}}
 
 \item{y}{Function or function name for middle values statistics}
 

@@ -9,10 +9,10 @@ getDDIRatioList(observedDataFrameRow, ddiPKRatioColumnName)
 \arguments{
 \item{observedDataFrameRow}{data.frame of DDI observations}
 
-\item{ddiPKRatioColumnName}{Name of column in data.frame `observedDataFrameRow` containing the value of the PK parameter observation to be read}
+\item{ddiPKRatioColumnName}{Name of column in data.frame \code{observedDataFrameRow} containing the value of the PK parameter observation to be read}
 }
 \value{
-A named list containing entries in `observedDataFrameRow`corresponding to the PK parameter in the data.frame column `ddiPKRatioColumnName`
+A named list containing entries in \code{observedDataFrameRow}corresponding to the PK parameter in the data.frame column \code{ddiPKRatioColumnName}
 }
 \description{
 Read the entries from a DDI observations data.frame that correspond to a particular PK parameter into a named list

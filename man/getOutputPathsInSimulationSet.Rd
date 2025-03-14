@@ -10,7 +10,7 @@ getOutputPathsInSimulationSet(simulationSet)
 \item{simulationSet}{SimulationSet object or derived class}
 }
 \value{
-Path names of outputs in `simulationSet`
+Path names of outputs in \code{simulationSet}
 }
 \description{
 getOutputPathsInSimulationSet

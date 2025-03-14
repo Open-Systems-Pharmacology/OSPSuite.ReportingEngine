@@ -7,7 +7,7 @@
 loadRESettings(file)
 }
 \arguments{
-\item{file}{`.RData` file containing the settings}
+\item{file}{\code{.RData} file containing the settings}
 }
 \description{
 Load reporting engine global settings from a file

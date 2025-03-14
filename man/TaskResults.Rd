@@ -14,7 +14,7 @@ R6 class for TaskResults settings
 
 \item{\code{sectionId}}{unique identifier of section results, used only by qualification workflows}
 
-\item{\code{plot}}{`ggplot` object corresponding to the figure to be saved}
+\item{\code{plot}}{\code{ggplot} object corresponding to the figure to be saved}
 
 \item{\code{plotCaption}}{text included into the report explaining the figure}
 
@@ -91,9 +91,9 @@ To be displayed, figure path must be relative to report location
 \describe{
 \item{\code{reportFile}}{markdown file in which the figure and its caption should be added}
 
-\item{\code{fileRelativePath}}{figure path relative to `reportFile` location}
+\item{\code{fileRelativePath}}{figure path relative to \code{reportFile} location}
 
-\item{\code{fileRootDirectory}}{root/working directory needed by `tracelib` package}
+\item{\code{fileRootDirectory}}{root/working directory needed by \code{tracelib} package}
 }
 \if{html}{\out{</div>}}
 }
@@ -118,9 +118,9 @@ Write markdown content that adds a data.frame, available as table task result, i
 \describe{
 \item{\code{reportFile}}{markdown file in which the table and its caption should be added}
 
-\item{\code{fileRelativePath}}{table path relative to `reportFile` location}
+\item{\code{fileRelativePath}}{table path relative to \code{reportFile} location}
 
-\item{\code{fileRootDirectory}}{root/working directory needed by `tracelib` package}
+\item{\code{fileRootDirectory}}{root/working directory needed by \code{tracelib} package}
 
 \item{\code{digits}}{number of decimal digits in displayed numbers}
 

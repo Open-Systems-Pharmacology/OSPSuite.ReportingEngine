@@ -10,7 +10,7 @@ parseObservationsDataFrame(observationsDataFrame)
 \item{observationsDataFrame}{from CSV}
 }
 \value{
-A named list with `time` and `output` fields.  Each field contains a list that is output by `extractNameAndUnit` with fields that store the variable name and the unit.
+A named list with \code{time} and \code{output} fields.  Each field contains a list that is output by \code{extractNameAndUnit} with fields that store the variable name and the unit.
 }
 \description{
 Function to read the variable names and units in the first two columns of an observations data frame used for qualification. First column stores timepoints.  Second column stores measurements of a quantity corresponding to timepoints in first column.

@@ -23,7 +23,7 @@ saveTaskResults(
 
 \item{sectionId}{unique identifier of section results, used only by qualification workflows}
 
-\item{plot}{`ggplot` object corresponding to the figure to be saved}
+\item{plot}{\code{ggplot} object corresponding to the figure to be saved}
 
 \item{plotCaption}{text included into the report explaining the figure}
 
@@ -39,11 +39,11 @@ saveTaskResults(
 
 \item{includeTextChunk}{logical indicating if the text chunk should be included in final report}
 
-\item{taskResults}{A `TaskResults` object}
+\item{taskResults}{A \code{TaskResults} object}
 }
 \value{
-A `TaskResults` object
+A \code{TaskResults} object
 }
 \description{
-Save task results within a `TaskResults` object
+Save task results within a \code{TaskResults} object
 }

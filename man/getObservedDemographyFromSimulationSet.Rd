@@ -7,7 +7,7 @@
 getObservedDemographyFromSimulationSet(structureSet, demographyPaths, metaData)
 }
 \arguments{
-\item{structureSet}{A `SimulationStructure` object}
+\item{structureSet}{A \code{SimulationStructure} object}
 
 \item{demographyPaths}{Names of demography variables to display}
 

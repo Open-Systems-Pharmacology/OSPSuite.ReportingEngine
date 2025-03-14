@@ -413,20 +413,20 @@ updateWatermarkDimensions <- function(plotObject) {
 }
 
 #' @title getLegendDimensions
-#' @description 
+#' @description
 #' Get legend dimensions
 #' @param plotObject A `ggplot` object
-#' @return 
-#' A list of `width` and `height` if legend is found, 
+#' @return
+#' A list of `width` and `height` if legend is found,
 #' otherwise `NULL`
 #' @keywords internal
 #' @importFrom grid convertUnit
 #' @importFrom cowplot get_plot_component
-getLegendDimensions <- function(plotObject){
+getLegendDimensions <- function(plotObject) {
   # Duplicate plot object to apply modifications preventing crash
   legendPlotObject <- plotObject
-  for(elementName in names(legendPlotObject$theme)){
-    if(isOfType(legendPlotObject$theme[[elementName]], "element_text")){
+  for (elementName in names(legendPlotObject$theme)) {
+    if (isOfType(legendPlotObject$theme[[elementName]], "element_text")) {
       legendPlotObject$theme[[elementName]]$family <- ""
     }
   }
@@ -434,8 +434,8 @@ getLegendDimensions <- function(plotObject){
   cowplot::set_null_device("png")
   # Get grob from plot = list of plot properties
   allLegendGrobs <- cowplot::get_plot_component(
-    legendPlotObject, 
-    pattern = "guide-box", 
+    legendPlotObject,
+    pattern = "guide-box",
     return_all = TRUE
   )
   # Look for legend grob that stores the dimensions of the legend
@@ -447,13 +447,13 @@ getLegendDimensions <- function(plotObject){
   legendGrob <- allLegendGrobs[[legendGrobIndex]]
   # grid package is already required and installed by ggplot2
   legendWidth <- as.numeric(grid::convertUnit(
-    max(legendGrob$widths), 
+    max(legendGrob$widths),
     plotObject$plotConfiguration$export$units
-    ))
+  ))
   legendHeight <- as.numeric(grid::convertUnit(
-    max(legendGrob$heights), 
+    max(legendGrob$heights),
     plotObject$plotConfiguration$export$units
-    ))
+  ))
   return(list(width = legendWidth, height = legendHeight))
 }
 

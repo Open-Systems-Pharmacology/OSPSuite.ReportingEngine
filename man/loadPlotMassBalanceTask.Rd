@@ -7,18 +7,18 @@
 loadPlotMassBalanceTask(workflow, active = FALSE, settings = NULL)
 }
 \arguments{
-\item{workflow}{`MeanModelWorkflow` object}
+\item{workflow}{\code{MeanModelWorkflow} object}
 
-\item{active}{logical defining if `Task` will be run by workflow.
-Default value is `FALSE`}
+\item{active}{logical defining if \code{Task} will be run by workflow.
+Default value is \code{FALSE}}
 
-\item{settings}{specific settings for `plotMassBalance` task}
+\item{settings}{specific settings for \code{plotMassBalance} task}
 }
 \value{
-A `PlotTask` object
+A \code{PlotTask} object
 }
 \description{
-Define `plotMassBalance` task and its settings
+Define \code{plotMassBalance} task and its settings
 }
 \examples{
 \dontrun{

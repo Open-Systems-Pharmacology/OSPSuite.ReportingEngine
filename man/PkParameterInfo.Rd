@@ -9,11 +9,11 @@ R6 class representing workflow selected PK parameter.
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{pkParameter}}{PK Parameter name for the simulation (e.g. `AUC_inf`)}
+\item{\code{pkParameter}}{PK Parameter name for the simulation (e.g. \code{AUC_inf})}
 
-\item{\code{displayName}}{display name for `pkParameter`}
+\item{\code{displayName}}{display name for \code{pkParameter}}
 
-\item{\code{displayUnit}}{display unit for `pkParameter`}
+\item{\code{displayUnit}}{display unit for \code{pkParameter}}
 
 \item{\code{group}}{Grouping identifier}
 }
@@ -29,7 +29,7 @@ R6 class representing workflow selected PK parameter.
 \if{html}{\out{<a id="method-PkParameterInfo-new"></a>}}
 \if{latex}{\out{\hypertarget{method-PkParameterInfo-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `PkParameterInfo` object.
+Create a new \code{PkParameterInfo} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PkParameterInfo$new(
   pkParameter,
@@ -42,19 +42,19 @@ Create a new `PkParameterInfo` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{pkParameter}}{PK Parameter name for the simulation (e.g. `AUC_inf`)
+\item{\code{pkParameter}}{PK Parameter name for the simulation (e.g. \code{AUC_inf})
 Tips: use ospsuite::allPKParameterNames() to get a list of available PK parameters}
 
-\item{\code{displayName}}{display name for `pkParameter`}
+\item{\code{displayName}}{display name for \code{pkParameter}}
 
-\item{\code{displayUnit}}{display unit for `pkParameter`}
+\item{\code{displayUnit}}{display unit for \code{pkParameter}}
 
-\item{\code{group}}{Grouping identifier. Default group associate `pkParameter`.}
+\item{\code{group}}{Grouping identifier. Default group associate \code{pkParameter}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `PkParameterInfo` object
+A new \code{PkParameterInfo} object
 }
 }
 }

@@ -27,7 +27,7 @@ StudyDesign
 \if{html}{\out{<a id="method-StudyDesign-new"></a>}}
 \if{latex}{\out{\hypertarget{method-StudyDesign-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `StudyDesign` object.
+Create a new \code{StudyDesign} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StudyDesign$new(data, population, simulation)}\if{html}{\out{</div>}}
 }
@@ -37,14 +37,14 @@ Create a new `StudyDesign` object.
 \describe{
 \item{\code{data}}{data.frame read from study design file}
 
-\item{\code{population}}{`Population` object}
+\item{\code{population}}{\code{Population} object}
 
-\item{\code{simulation}}{`Simulation` object}
+\item{\code{simulation}}{\code{Simulation} object}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-`StudyDesign` class object
+\code{StudyDesign} class object
 }
 }
 \if{html}{\out{<hr>}}

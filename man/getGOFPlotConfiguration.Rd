@@ -22,14 +22,14 @@ getGOFPlotConfiguration(
 
 \item{metaData}{List of metaData defining dimensions and units in the data.frame}
 
-\item{dataMapping}{List `DataMapping` object}
+\item{dataMapping}{List \code{DataMapping} object}
 
-\item{plotConfiguration}{A user-defined `PlotConfiguration` object}
+\item{plotConfiguration}{A user-defined \code{PlotConfiguration} object}
 }
 \value{
-A `PlotConfiguration` object
+A \code{PlotConfiguration} object
 }
 \description{
-Define a `PlotConfiguration` object
+Define a \code{PlotConfiguration} object
 }
 \keyword{internal}

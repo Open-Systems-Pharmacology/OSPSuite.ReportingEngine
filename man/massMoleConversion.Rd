@@ -10,9 +10,9 @@ massMoleConversion(dimension)
 \item{dimension}{is string that is from among the valid OSP dimensions}
 }
 \value{
-If `dimension` is `Concentration (mass)` or `Mass`, then return `Concentration (molar)` or `Amount` respectively, otherwise return `dimension`.
+If \code{dimension} is \code{Concentration (mass)} or \code{Mass}, then return \code{Concentration (molar)} or \code{Amount} respectively, otherwise return \code{dimension}.
 }
 \description{
-Function to map `Concentration (mass)` or `Mass` dimensions to `Concentration (molar)` and `Amount` respectively.
+Function to map \code{Concentration (mass)} or \code{Mass} dimensions to \code{Concentration (molar)} and \code{Amount} respectively.
 }
 \keyword{internal}

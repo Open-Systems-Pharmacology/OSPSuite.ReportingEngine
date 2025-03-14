@@ -13,6 +13,6 @@ getOutputsFromConfigurationPlan(configurationPlan)
 A dataframe of project, simulation, output paths and (if applicable) pk parameters and start and end times of interval over which the pk parameter is evaluated
 }
 \description{
-Get a list of outputs from simulation and from `ConfigurationPlan`
+Get a list of outputs from simulation and from \code{ConfigurationPlan}
 }
 \keyword{internal}

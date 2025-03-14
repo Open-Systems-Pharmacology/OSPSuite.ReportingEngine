@@ -7,10 +7,10 @@
 updatePlotDimensions(plotObject)
 }
 \arguments{
-\item{plotObject}{A `ggplot` object}
+\item{plotObject}{A \code{ggplot} object}
 }
 \value{
-A `ggplot` object
+A \code{ggplot} object
 }
 \description{
 Update plot dimensions based on size and position of legend

@@ -8,9 +8,9 @@ setWorkflowParameterDisplayPaths(parameterDisplayPaths, workflow)
 }
 \arguments{
 \item{parameterDisplayPaths}{data.frame mapping Parameters with their display paths
-Variables of the data.frame should include `parameter` and `displayPath`.}
+Variables of the data.frame should include \code{parameter} and \code{displayPath}.}
 
-\item{workflow}{Object of class `MeanModelWorkflow` or `PopulationWorkflow`}
+\item{workflow}{Object of class \code{MeanModelWorkflow} or \code{PopulationWorkflow}}
 }
 \description{
 Set mapping between parameters and their display paths in a workflow

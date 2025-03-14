@@ -17,9 +17,9 @@ Aggregation default properties  (which functions and their captions).
 \section{Fields}{
 
 \describe{
-\item{\code{functions}}{list of `middle`, `ymin` and `ymax` functions for aggregation}
+\item{\code{functions}}{list of \code{middle}, \code{ymin} and \code{ymax} functions for aggregation}
 
-\item{\code{names}}{list of legend captions for `middle` and `range` from aggregation}
+\item{\code{names}}{list of legend captions for \code{middle} and \code{range} from aggregation}
 
 \item{\code{bins}}{default number of bins in plots}
 

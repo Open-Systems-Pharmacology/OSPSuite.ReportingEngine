@@ -11,7 +11,7 @@ getColorGroupForPKParameterPlot(
 )
 }
 \arguments{
-\item{output}{An `Output` object}
+\item{output}{An \code{Output} object}
 
 \item{referenceSetName}{Display name of reference simulation set}
 

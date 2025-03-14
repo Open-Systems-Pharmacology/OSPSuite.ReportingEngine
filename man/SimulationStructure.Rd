@@ -47,7 +47,7 @@ R6 class representing that stores file structure (file names and paths) relating
 \if{html}{\out{<a id="method-SimulationStructure-new"></a>}}
 \if{latex}{\out{\hypertarget{method-SimulationStructure-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `SimulationStructure` object.
+Create a new \code{SimulationStructure} object.
 Build and store names of potential subfolders to hold simulation results, pkAnalysis results and sensitivityAnalysis results.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationStructure$new(simulationSet, workflowFolder = getwd())}\if{html}{\out{</div>}}
@@ -56,7 +56,7 @@ Build and store names of potential subfolders to hold simulation results, pkAnal
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{simulationSet}}{A `SimulationSet` or `PopulationSimulationSet` object}
+\item{\code{simulationSet}}{A \code{SimulationSet} or \code{PopulationSimulationSet} object}
 
 \item{\code{workflowFolder}}{output folder of the workflow}
 }

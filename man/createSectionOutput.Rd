@@ -7,7 +7,7 @@
 createSectionOutput(configurationPlan)
 }
 \arguments{
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 }
 \value{
 Names of created appendices

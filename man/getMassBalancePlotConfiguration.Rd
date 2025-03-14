@@ -11,12 +11,12 @@ getMassBalancePlotConfiguration(plotType, data, metaData, settings)
 
 \item{data}{data.frame}
 
-\item{metaData}{meta data on `data`}
+\item{metaData}{meta data on \code{data}}
 
 \item{settings}{User-defined options}
 }
 \value{
-A `tlf` `PlotConfiguration` object
+A \code{tlf} \code{PlotConfiguration} object
 }
 \description{
 Get mass balance time profile plot configuration

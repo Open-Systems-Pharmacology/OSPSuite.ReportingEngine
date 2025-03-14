@@ -8,7 +8,7 @@ getDefaultDemographyXParameters(workflowType)
 }
 \arguments{
 \item{workflowType}{Name of workflow type.
-Use enum `PopulationWorkflowTypes` to get a list of available workflow types.}
+Use enum \code{PopulationWorkflowTypes} to get a list of available workflow types.}
 }
 \value{
 names of default demography parameters

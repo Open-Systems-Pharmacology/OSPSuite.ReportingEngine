@@ -7,14 +7,14 @@
 getAxesProperties(axesSettings)
 }
 \arguments{
-\item{axesSettings}{list of axes properties defined in `Axes` field of configuration plan}
+\item{axesSettings}{list of axes properties defined in \code{Axes} field of configuration plan}
 }
 \value{
-A list of properties for axes identified for `x`, `y` and `y2` axes.
-The identified properties are directly compatible with `tlf` package nomenclature
+A list of properties for axes identified for \code{x}, \code{y} and \code{y2} axes.
+The identified properties are directly compatible with \code{tlf} package nomenclature
 }
 \description{
-Get identified axes properties from global field `AxesSettings` of configuration plan or
-from plot specific field `Axes`. The identified properties are directly compatible with `tlf` package nomenclature
+Get identified axes properties from global field \code{AxesSettings} of configuration plan or
+from plot specific field \code{Axes}. The identified properties are directly compatible with \code{tlf} package nomenclature
 }
 \keyword{internal}

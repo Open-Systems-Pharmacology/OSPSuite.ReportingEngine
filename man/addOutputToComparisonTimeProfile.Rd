@@ -13,15 +13,15 @@ addOutputToComparisonTimeProfile(
 )
 }
 \arguments{
-\item{outputMapping}{list of mapping elements from `OutputMappings` field in configuration plan}
+\item{outputMapping}{list of mapping elements from \code{OutputMappings} field in configuration plan}
 
 \item{simulationDuration}{Duration of simulation in X axis unit}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+\item{axesProperties}{list of axes properties obtained from \code{getAxesProperties}}
 
 \item{plotObject}{ggplot object}
 
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 }
 \value{
 A ggplot object

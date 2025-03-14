@@ -14,18 +14,18 @@ getTimeProfileObservedDataFromResults(
 \arguments{
 \item{observedResults}{List that includes
 \itemize{
-\item `data`: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
-\item `metaData`: a list for each column of data that includes their unit
+\item \code{data}: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
+\item \code{metaData}: a list for each column of data that includes their unit
 }}
 
 \item{molWeight}{Molecular weight of compound}
 
-\item{axesProperties}{list of axes properties obtained from `getAxesProperties`}
+\item{axesProperties}{list of axes properties obtained from \code{getAxesProperties}}
 
 \item{observedDataId}{Id of the observed data for better handling error messages}
 }
 \value{
-List with `time`, `y` and `error` values
+List with \code{time}, \code{y} and \code{error} values
 }
 \description{
 Get the time profile observed data in appropriate unit from the results from the observed data file

@@ -7,18 +7,18 @@
 loadCalculatePKParametersTask(workflow, active = FALSE, settings = NULL)
 }
 \arguments{
-\item{workflow}{`Workflow` object or derived class}
+\item{workflow}{\code{Workflow} object or derived class}
 
-\item{active}{logical defining if `Task` will be run by workflow.
-Default value is `FALSE`}
+\item{active}{logical defining if \code{Task} will be run by workflow.
+Default value is \code{FALSE}}
 
-\item{settings}{specific settings for `calculatePKParameters` task}
+\item{settings}{specific settings for \code{calculatePKParameters} task}
 }
 \value{
-A `CalculatePKParametersTask` object
+A \code{CalculatePKParametersTask} object
 }
 \description{
-Define `calculatePKParameters` task and its settings
+Define \code{calculatePKParameters} task and its settings
 }
 \examples{
 \dontrun{

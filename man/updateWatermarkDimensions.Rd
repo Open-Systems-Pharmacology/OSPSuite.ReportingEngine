@@ -7,10 +7,10 @@
 updateWatermarkDimensions(plotObject)
 }
 \arguments{
-\item{plotObject}{A `ggplot` object}
+\item{plotObject}{A \code{ggplot} object}
 }
 \value{
-A `ggplot` object
+A \code{ggplot} object
 }
 \description{
 Update Watermark dimensions

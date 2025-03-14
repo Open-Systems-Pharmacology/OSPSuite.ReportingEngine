@@ -48,7 +48,7 @@ R6 class for SimulationTask settings
 \if{html}{\out{<a id="method-SimulationTask-new"></a>}}
 \if{latex}{\out{\hypertarget{method-SimulationTask-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `SimulationTask` object
+Create a \code{SimulationTask} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationTask$new(
   getTaskResults = NULL,
@@ -67,12 +67,12 @@ Create a `SimulationTask` object
 
 \item{\code{nameTaskResults}}{name of function that returns task results}
 
-\item{\code{...}}{parameters inherited from R6 class `Task` object}
+\item{\code{...}}{parameters inherited from R6 class \code{Task} object}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `SimulationTask` object
+A new \code{SimulationTask} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -87,7 +87,7 @@ Save results from task run.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{set}}{R6 class `SimulationStructure`}
+\item{\code{set}}{R6 class \code{SimulationStructure}}
 
 \item{\code{taskResults}}{list of results from task run.}
 }
@@ -106,7 +106,7 @@ Run task and save its output
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{list of `SimulationStructure` R6 class}
+\item{\code{structureSets}}{list of \code{SimulationStructure} R6 class}
 }
 \if{html}{\out{</div>}}
 }

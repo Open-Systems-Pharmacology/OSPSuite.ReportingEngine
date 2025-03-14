@@ -10,11 +10,11 @@ getReaderFunction(fileName, nlines = 2)
 \item{fileName}{Name of file to be read}
 
 \item{nlines}{Number of lines to look at for checking consistency within file.
-Note that, unlike `read.csv`, `count.fields` does not have options for handling encoding or escape characters.
-Thus, using `nlines` as low as possible reduces the chances of inconsistent column widths caused by such characters.}
+Note that, unlike \code{read.csv}, \code{count.fields} does not have options for handling encoding or escape characters.
+Thus, using \code{nlines} as low as possible reduces the chances of inconsistent column widths caused by such characters.}
 }
 \value{
-Reader function such as `read.csv`
+Reader function such as \code{read.csv}
 }
 \description{
 Get most appropriate reader function by guessing file separator

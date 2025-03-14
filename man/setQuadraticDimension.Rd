@@ -7,12 +7,12 @@
 setQuadraticDimension(plotObject, plotConfiguration = NULL)
 }
 \arguments{
-\item{plotObject}{A `ggplot` object}
+\item{plotObject}{A \code{ggplot} object}
 
-\item{plotConfiguration}{`PlotConfiguration` object defined in task settings}
+\item{plotConfiguration}{\code{PlotConfiguration} object defined in task settings}
 }
 \value{
-A `ggplot` object
+A \code{ggplot} object
 }
 \description{
 Set quadratic dimensions if plot configuration is not user-defined

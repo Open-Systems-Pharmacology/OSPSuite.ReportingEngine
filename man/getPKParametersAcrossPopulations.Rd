@@ -7,7 +7,7 @@
 getPKParametersAcrossPopulations(structureSets)
 }
 \arguments{
-\item{structureSets}{list of `SimulationStructures` objects}
+\item{structureSets}{list of \code{SimulationStructures} objects}
 }
 \value{
 list of data.frame and its metaData including the values of PK parameters across Population Simulation sets

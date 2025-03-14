@@ -13,23 +13,23 @@ addUserDefinedTask(
 )
 }
 \arguments{
-\item{workflow}{`Workflow` object or derived class}
+\item{workflow}{\code{Workflow} object or derived class}
 
-\item{taskFunction}{Function to be called by `Task` object.
-For `MeanModelWorkflow`, input arguments of `taskFunction` should include: `simulationSet`, and `settings`.
-For `PopulationWorkflow`, input arguments of `taskFunction` should include: `simulationSets`, `xParameters`, `yParameters` and `settings`}
+\item{taskFunction}{Function to be called by \code{Task} object.
+For \code{MeanModelWorkflow}, input arguments of \code{taskFunction} should include: \code{simulationSet}, and \code{settings}.
+For \code{PopulationWorkflow}, input arguments of \code{taskFunction} should include: \code{simulationSets}, \code{xParameters}, \code{yParameters} and \code{settings}}
 
 \item{taskName}{character name of task to initialize reporting of task}
 
 \item{active}{logical to set if task is run by workflow}
 
-\item{settings}{list of input arguments that can be used by `settings` input argument of `taskFunction`}
+\item{settings}{list of input arguments that can be used by \code{settings} input argument of \code{taskFunction}}
 }
 \value{
-Updated `Workflow` object
+Updated \code{Workflow} object
 }
 \description{
-Add a user-defined function as a task accessible in the `Workflow` field `$userDefinedTasks`
+Add a user-defined function as a task accessible in the \code{Workflow} field \verb{$userDefinedTasks}
 }
 \examples{
 \dontrun{

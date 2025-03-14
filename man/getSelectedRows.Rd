@@ -10,14 +10,14 @@ getSelectedRows(data, dataSelection)
 \item{data}{A data.frame}
 
 \item{dataSelection}{Character string or expression evaluated to select data
-The enum helper `DataSelectionKeys` provides keys for selected all or none of the data}
+The enum helper \code{DataSelectionKeys} provides keys for selected all or none of the data}
 }
 \value{
 A data.frame of selected data
 }
 \description{
 Get selected rows from data and its selection
-The function leverage `dplyr::filter` to select the rows
+The function leverage \code{dplyr::filter} to select the rows
 }
 \examples{
 data <- data.frame(

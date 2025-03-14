@@ -24,7 +24,7 @@ addTableChunk(
 
 \item{scientific}{logical defining if displayed numbers use scientific writing}
 
-\item{na}{character string replacing `NA` values in table}
+\item{na}{character string replacing \code{NA} values in table}
 }
 \description{
 Add a table in a .md document

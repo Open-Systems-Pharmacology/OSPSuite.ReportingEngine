@@ -69,9 +69,9 @@ Save results from task run.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{taskResults}}{list of `TaskResults` objects}
+\item{\code{taskResults}}{list of \code{TaskResults} objects}
 
-\item{\code{configurationPlan}}{A `ConfigurationPlan` object}
+\item{\code{configurationPlan}}{A \code{ConfigurationPlan} object}
 }
 \if{html}{\out{</div>}}
 }
@@ -88,7 +88,7 @@ Run task and save its output
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{configurationPlan}}{A `ConfigurationPlan` object}
+\item{\code{configurationPlan}}{A \code{ConfigurationPlan} object}
 }
 \if{html}{\out{</div>}}
 }

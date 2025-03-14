@@ -7,14 +7,14 @@
 getPopulationPKMetaData(population, simulation, parameterDisplayPaths)
 }
 \arguments{
-\item{population}{A `Population` object from the `{ospsuite}` package}
+\item{population}{A \code{Population} object from the \code{{ospsuite}} package}
 
-\item{simulation}{A `Simulation` object from the `{ospsuite}` package}
+\item{simulation}{A \code{Simulation} object from the \code{{ospsuite}} package}
 
 \item{parameterDisplayPaths}{A data.frame mapping parameter paths to their display paths}
 }
 \value{
-Array of list for each demography and PK parameter that includes `dimension`, `unit` and `class`
+Array of list for each demography and PK parameter that includes \code{dimension}, \code{unit} and \code{class}
 }
 \description{
 Get population PK meta data merging demography and PK meta data of a population

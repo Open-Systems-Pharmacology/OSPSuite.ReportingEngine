@@ -48,17 +48,17 @@ MeanModelWorkflow <- R6::R6Class(
     #' @description
     #' Run mean model workflow tasks for all simulation sets if tasks are activated
     #' The order of tasks is as follows:
-    #' # 1) Run simulations
-    #' # 2) Perform PK and sensitivity analyses
-    #' # 3) Perform plot tasks
-    #' ## 3.a) time profiles and residual plots
-    #' ## 3.b) absorption plots
-    #' ## 3.c) mass balance plots
-    #' ## 3.d) PK and sensitivity analyses tables and plots
-    #' # 4) Render report
+    #' 1) Run simulations
+    #' 2) Perform PK and sensitivity analyses
+    #' 3) Perform plot tasks<br>
+    #' a. time profiles and residual plots<br>
+    #' b. absorption plots<br>
+    #' c. mass balance plots<br>
+    #' d. PK and sensitivity analyses tables and plots
+    #' 4) Render report
     #' @return All results and plots as a structured output in the workflow folder
     runWorkflow = function() {
-      # Prevent crashes if folder was deleted before (re) running a worflow
+      # Prevent crashes if folder was deleted before (re) running a workflow
       dir.create(self$workflowFolder, showWarnings = FALSE, recursive = TRUE)
       # In case other logs were saved before running workflow
       setLogFolder(self$workflowFolder)

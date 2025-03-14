@@ -7,15 +7,15 @@
 getSimulationTimeRanges(simulation, path, simulationSet)
 }
 \arguments{
-\item{simulation}{A `Simulation` object}
+\item{simulation}{A \code{Simulation} object}
 
-\item{path}{Field `path` from `Output` object}
+\item{path}{Field \code{path} from \code{Output} object}
 
-\item{simulationSet}{A `SimulationSet` or `PopulationSimulationSet` object}
+\item{simulationSet}{A \code{SimulationSet} or \code{PopulationSimulationSet} object}
 }
 \value{
-Lists including `values` and `name` of time ranges.
-Also includes logical field `keep` to define if a specific application range is kept in report.
+Lists including \code{values} and \code{name} of time ranges.
+Also includes logical field \code{keep} to define if a specific application range is kept in report.
 }
 \description{
 Get time ranges for time profile plots according to applications and user defined settings

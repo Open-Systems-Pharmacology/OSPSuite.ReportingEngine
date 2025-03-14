@@ -11,9 +11,9 @@ getDefaultFileName(..., suffix, extension = "csv", sep = "-")
 
 \item{suffix}{Suffix to be added at the end of the file name}
 
-\item{extension}{file format. Default is `csv`}
+\item{extension}{file format. Default is \code{csv}}
 
-\item{sep}{separation between names and suffix. Default is `-`}
+\item{sep}{separation between names and suffix. Default is \code{-}}
 }
 \value{
 default filename adding default suffix and file extension

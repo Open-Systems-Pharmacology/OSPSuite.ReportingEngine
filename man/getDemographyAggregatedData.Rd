@@ -16,11 +16,11 @@ getDemographyAggregatedData(
 \arguments{
 \item{data}{A data.frame}
 
-\item{xParameterName}{Name of parameter in `data` used for aggregation in x axis of plot}
+\item{xParameterName}{Name of parameter in \code{data} used for aggregation in x axis of plot}
 
-\item{yParameterName}{Name of parameter in `data` aggregated in y axis of plot}
+\item{yParameterName}{Name of parameter in \code{data} aggregated in y axis of plot}
 
-\item{groupName}{Name of parameter in `data` aggregated for grouping}
+\item{groupName}{Name of parameter in \code{data} aggregated for grouping}
 
 \item{bins}{Either a numeric vector defining bin edges
 or a numeric value defining the number of bins.}

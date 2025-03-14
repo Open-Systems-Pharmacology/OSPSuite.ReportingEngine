@@ -7,8 +7,8 @@
 setDefaultTheme(theme = NULL)
 }
 \arguments{
-\item{theme}{`Theme` object from `tlf` package
-If `NULL`, the current theme is re-initialized to the reporting engine default}
+\item{theme}{\code{Theme} object from \code{tlf} package
+If \code{NULL}, the current theme is re-initialized to the reporting engine default}
 }
 \description{
 Set the default plot settings for a workflow

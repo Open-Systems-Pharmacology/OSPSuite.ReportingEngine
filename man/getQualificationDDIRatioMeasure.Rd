@@ -17,6 +17,6 @@ getQualificationDDIRatioMeasure(summaryDataFrame, pkParameterName, delta)
 A data.frame
 }
 \description{
-Get qualification measure of DDI ratio from field `DDIRatioPlots` of configuration plan
+Get qualification measure of DDI ratio from field \code{DDIRatioPlots} of configuration plan
 }
 \keyword{internal}

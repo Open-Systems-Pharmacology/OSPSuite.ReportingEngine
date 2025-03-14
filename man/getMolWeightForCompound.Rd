@@ -9,7 +9,7 @@ getMolWeightForCompound(compoundName, simulation)
 \arguments{
 \item{compoundName}{Name of a compound e.g. "Midazolam"}
 
-\item{simulation}{A `Simulation` object}
+\item{simulation}{A \code{Simulation} object}
 }
 \value{
 molecular weight in base unit or NA if not found

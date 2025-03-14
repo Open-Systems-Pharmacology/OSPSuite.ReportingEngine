@@ -13,16 +13,16 @@ getPlotConfigurationFromPlan(
 \arguments{
 \item{plotProperties}{Plot properties from configuration plan}
 
-\item{plotType}{Name of plot type to call the appropriate `PlotConfiguration` object.
-E.g. for pk ratio plots, use "PKRatio" to create a `PKRatioPlotConfiguration` object}
+\item{plotType}{Name of plot type to call the appropriate \code{PlotConfiguration} object.
+E.g. for pk ratio plots, use "PKRatio" to create a \code{PKRatioPlotConfiguration} object}
 
 \item{legendPosition}{Legend position in order to add scale factor in the final plot dimensions
 that accounts for possible shrinking of the plot panel due to the addition of the legend}
 }
 \value{
-A `PlotConfiguration` object
+A \code{PlotConfiguration} object
 }
 \description{
-Get the appropriate `PlotConfiguration` object with scaled dimensions for exporting it
+Get the appropriate \code{PlotConfiguration} object with scaled dimensions for exporting it
 }
 \keyword{internal}

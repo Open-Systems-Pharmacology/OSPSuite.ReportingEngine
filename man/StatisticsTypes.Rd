@@ -13,11 +13,11 @@ StatisticsTypes
 \description{
 List of available statistic types summarizing data for time profile plots
 \itemize{
-\item `"2.5th-97.5th Percentiles"` summarizes data using median, 2.5th and 97.5th percentiles
-\item `"5th-95th Percentiles"` summarizes data using median, 5th and 95th percentiles
-\item `"10th-90th Percentiles"` summarizes data using median, 10th and 90th percentiles
-\item `"Geometric mean"` summarizes data using geometric mean and mean */ geometric standard deviation
-\item `"Arithmetic mean"` summarizes data using arithmetic mean and mean +/- standard deviation
+\item \code{"2.5th-97.5th Percentiles"} summarizes data using median, 2.5th and 97.5th percentiles
+\item \code{"5th-95th Percentiles"} summarizes data using median, 5th and 95th percentiles
+\item \code{"10th-90th Percentiles"} summarizes data using median, 10th and 90th percentiles
+\item \code{"Geometric mean"} summarizes data using geometric mean and mean */ geometric standard deviation
+\item \code{"Arithmetic mean"} summarizes data using arithmetic mean and mean +/- standard deviation
 }
 }
 \seealso{

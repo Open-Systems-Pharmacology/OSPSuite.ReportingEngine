@@ -7,7 +7,7 @@
 checkMetaDataIsConsistent(metaData)
 }
 \arguments{
-\item{metaData}{A data.frame summarizing meta data of multiple `SimulationSet` and `Output` objects}
+\item{metaData}{A data.frame summarizing meta data of multiple \code{SimulationSet} and \code{Output} objects}
 }
 \description{
 Check consistency of metadata units, dimensions and residuals scale

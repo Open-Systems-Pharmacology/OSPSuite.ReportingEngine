@@ -9,11 +9,11 @@ R6 class representing workflow output
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{path}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
+\item{\code{path}}{path name for the simulation (e.g. \verb{Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)})}
 
-\item{\code{displayName}}{display name for `path`}
+\item{\code{displayName}}{display name for \code{path}}
 
-\item{\code{displayUnit}}{display unit for `path`}
+\item{\code{displayUnit}}{display unit for \code{path}}
 
 \item{\code{groupID}}{Grouping Identifier.
 Outputs with same identifier and unit are plotted together}
@@ -28,9 +28,9 @@ Outputs with same identifier and unit are plotted together}
 
 \item{\code{dataDisplayName}}{display name of the observed data}
 
-\item{\code{pkParameters}}{R6 class `PkParameterInfo` objects}
+\item{\code{pkParameters}}{R6 class \code{PkParameterInfo} objects}
 
-\item{\code{residualScale}}{Scale for calculation of residuals as included in enum `ResidualScales`}
+\item{\code{residualScale}}{Scale for calculation of residuals as included in enum \code{ResidualScales}}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,7 +45,7 @@ Outputs with same identifier and unit are plotted together}
 \if{html}{\out{<a id="method-Output-new"></a>}}
 \if{latex}{\out{\hypertarget{method-Output-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `Output` object.
+Create a new \code{Output} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Output$new(
   path,
@@ -65,35 +65,35 @@ Create a new `Output` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{path}}{path name for the simulation (e.g. `Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)`)}
+\item{\code{path}}{path name for the simulation (e.g. \verb{Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)})}
 
-\item{\code{displayName}}{display name for `path`}
+\item{\code{displayName}}{display name for \code{path}}
 
-\item{\code{displayUnit}}{display unit for `path`}
+\item{\code{displayUnit}}{display unit for \code{path}}
 
 \item{\code{groupID}}{Grouping Identifier.
 Outputs with same identifier and unit are plotted together}
 
-\item{\code{color}}{Displayed line/point color of the `Output` in plots}
+\item{\code{color}}{Displayed line/point color of the \code{Output} in plots}
 
-\item{\code{fill}}{Displayed range color of the `Output` in plots}
+\item{\code{fill}}{Displayed range color of the \code{Output} in plots}
 
 \item{\code{dataSelection}}{characters or expression to select subset the observed data
 By default, no data is selected.
-When using a character array, selections are concatenated with the `&` sign}
+When using a character array, selections are concatenated with the \code{&} sign}
 
 \item{\code{dataUnit}}{Unit of the observed data}
 
 \item{\code{dataDisplayName}}{display name of the observed data}
 
-\item{\code{pkParameters}}{R6 class `PkParameterInfo` objects or their names}
+\item{\code{pkParameters}}{R6 class \code{PkParameterInfo} objects or their names}
 
-\item{\code{residualScale}}{Scale for calculation of residuals as included in enum `ResidualScales`}
+\item{\code{residualScale}}{Scale for calculation of residuals as included in enum \code{ResidualScales}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `Output` object
+A new \code{Output} object
 }
 }
 \if{html}{\out{<hr>}}

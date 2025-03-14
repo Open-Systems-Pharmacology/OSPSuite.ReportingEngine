@@ -27,13 +27,13 @@ R6 class representing system information for Reporting Engine
 \if{html}{\out{<a id="method-ReportingEngineInfo-new"></a>}}
 \if{latex}{\out{\hypertarget{method-ReportingEngineInfo-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `ReportingEngineInfo` object.
+Create a new \code{ReportingEngineInfo} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ReportingEngineInfo$new()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-A new `ReportingEngineInfo` object
+A new \code{ReportingEngineInfo} object
 }
 }
 \if{html}{\out{<hr>}}

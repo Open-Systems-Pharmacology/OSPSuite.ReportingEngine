@@ -19,12 +19,12 @@ getResidualsPlotResultsInGroup(
 
 \item{outputId}{Output identifier to provide unique id name}
 
-\item{structureSet}{A `SimulationStructure` object or `NULL` if performing residuals across simulations}
+\item{structureSet}{A \code{SimulationStructure} object or \code{NULL} if performing residuals across simulations}
 
 \item{settings}{Optional settings for the plots. In particular, includes reference data for population time profile.}
 }
 \value{
-List of `plots`, their `captions` and `data` to export
+List of \code{plots}, their \code{captions} and \code{data} to export
 }
 \description{
 Get plots and their captions for residuals

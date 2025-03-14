@@ -13,7 +13,7 @@ displayConfigurationPlanPlotInfo(configurationPlanField)
 Array of name properties and their value
 }
 \description{
-Display information of a configuration plan `Plot` field
+Display information of a configuration plan \code{Plot} field
 }
 \examples{
 

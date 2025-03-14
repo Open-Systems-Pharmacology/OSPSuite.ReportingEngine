@@ -9,7 +9,7 @@ logErrorThenStop(message, logFolder = NULL)
 \arguments{
 \item{message}{message to display and then log}
 
-\item{logFolder}{**Deprecated** path where logs are saved}
+\item{logFolder}{\strong{Deprecated} path where logs are saved}
 }
 \description{
 Log the error with a message and then stop, displaying same message.

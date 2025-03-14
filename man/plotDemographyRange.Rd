@@ -15,11 +15,11 @@ plotDemographyRange(
 \arguments{
 \item{data}{data.frame}
 
-\item{metaData}{list of metaData about `data`}
+\item{metaData}{list of metaData about \code{data}}
 
-\item{dataMapping}{A `TimeProfileDataMapping` or `BoxWhiskerDataMapping` object}
+\item{dataMapping}{A \code{TimeProfileDataMapping} or \code{BoxWhiskerDataMapping} object}
 
-\item{plotConfiguration}{`PlotConfiguration`  object}
+\item{plotConfiguration}{\code{PlotConfiguration}  object}
 
 \item{parameterClass}{Class of the parameter, either "numeric" or "character"}
 }

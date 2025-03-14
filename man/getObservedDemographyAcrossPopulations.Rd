@@ -11,7 +11,7 @@ getObservedDemographyAcrossPopulations(
 )
 }
 \arguments{
-\item{structureSets}{List of `SimulationStructure` objects}
+\item{structureSets}{List of \code{SimulationStructure} objects}
 
 \item{demographyPaths}{Paths of demography variables to display}
 

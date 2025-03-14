@@ -7,12 +7,12 @@
 plotQualificationPKRatio(configurationPlan, settings)
 }
 \arguments{
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 
 \item{settings}{settings for the task}
 }
 \value{
-list with `plots` and `tables`
+list with \code{plots} and \code{tables}
 }
 \description{
 Plot PK Ratio plots for qualification workflow

@@ -29,7 +29,7 @@ R6 class for tracking and printing messages for the Excel template
 \if{html}{\out{<a id="method-ExcelMessaging-new"></a>}}
 \if{latex}{\out{\hypertarget{method-ExcelMessaging-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize an `ExcelMessaging` object
+Initialize an \code{ExcelMessaging} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ExcelMessaging$new(type)}\if{html}{\out{</div>}}
 }
@@ -42,7 +42,7 @@ Initialize an `ExcelMessaging` object
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `ExcelMessaging` object
+A new \code{ExcelMessaging} object
 }
 }
 \if{html}{\out{<hr>}}

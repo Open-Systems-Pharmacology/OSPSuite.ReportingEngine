@@ -11,12 +11,12 @@ getMassBalanceData(groupings, compoundNames, simulation, simulationResults)
 
 \item{compoundNames}{A vector of compound names}
 
-\item{simulation}{A `Simulation` object}
+\item{simulation}{A \code{Simulation} object}
 
-\item{simulationResults}{A `SimulationResults` object}
+\item{simulationResults}{A \code{SimulationResults} object}
 }
 \value{
-A data.frame that includes `Time`, `Amount` and `Legend` as variables
+A data.frame that includes \code{Time}, \code{Amount} and \code{Legend} as variables
 }
 \description{
 Get mass balance data for a set of compounds

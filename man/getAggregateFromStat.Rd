@@ -7,7 +7,7 @@
 getAggregateFromStat(statisticId, time, outputValues)
 }
 \arguments{
-\item{statisticId}{Statistic Id as defined in `ConfigurationPlan` used for data aggregation}
+\item{statisticId}{Statistic Id as defined in \code{ConfigurationPlan} used for data aggregation}
 
 \item{time}{Time values on which output values are aggregated}
 

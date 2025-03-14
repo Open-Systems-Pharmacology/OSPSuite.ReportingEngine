@@ -18,7 +18,7 @@ getDDISection(dataframe, metadata, sectionID, idPrefix, captionSuffix = NULL)
 \item{captionSuffix}{to append to qualification plan title}
 }
 \value{
-a `list` of DDI results for the current DDI section
+a \code{list} of DDI results for the current DDI section
 }
 \description{
 Plot observation vs prediction for DDI qualification workflow

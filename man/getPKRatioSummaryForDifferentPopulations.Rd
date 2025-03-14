@@ -7,9 +7,9 @@
 getPKRatioSummaryForDifferentPopulations(structureSet, referenceSet, settings)
 }
 \arguments{
-\item{structureSet}{A `SimulationStructure` object of the population to compare}
+\item{structureSet}{A \code{SimulationStructure} object of the population to compare}
 
-\item{referenceSet}{A `SimulationStructure` object of the reference population}
+\item{referenceSet}{A \code{SimulationStructure} object of the reference population}
 }
 \value{
 A data.frame of the PK Parameter ratios summary statistics

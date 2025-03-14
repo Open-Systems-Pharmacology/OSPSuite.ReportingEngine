@@ -3,7 +3,7 @@
 \docType{data}
 \name{pkDictionaryQualificationOSP}
 \alias{pkDictionaryQualificationOSP}
-\title{Dictionary for `ospsuite` PK parameters defined by Configuration Plan}
+\title{Dictionary for \code{ospsuite} PK parameters defined by Configuration Plan}
 \format{
 An object of class \code{list} of length 33.
 }
@@ -11,6 +11,6 @@ An object of class \code{list} of length 33.
 pkDictionaryQualificationOSP
 }
 \description{
-Dictionary for `ospsuite` PK parameters defined by Configuration Plan
+Dictionary for \code{ospsuite} PK parameters defined by Configuration Plan
 }
 \keyword{internal}

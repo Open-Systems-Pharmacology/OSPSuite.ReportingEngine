@@ -7,5 +7,5 @@
 resetRESettingsToDefault()
 }
 \description{
-Reset the global settings stored in `reEnv` to default values defined by the package.
+Reset the global settings stored in \code{reEnv} to default values defined by the package.
 }

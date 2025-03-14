@@ -7,16 +7,16 @@
 getGOFDataForMapping(outputMapping, configurationPlan, axesUnits)
 }
 \arguments{
-\item{outputMapping}{list of mapping elements from `OutputMappings` field in configuration plan}
+\item{outputMapping}{list of mapping elements from \code{OutputMappings} field in configuration plan}
 
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 
-\item{axesUnits}{list of axes properties obtained from `getGOFAxesUnits`}
+\item{axesUnits}{list of axes properties obtained from \code{getGOFAxesUnits}}
 }
 \value{
-A data.frame as obtained by `getResiduals` whose values are in base unit
+A data.frame as obtained by \code{getResiduals} whose values are in base unit
 }
 \description{
-Get data of goodness of fit from field `GOFMergedPlots` of configuration plan
+Get data of goodness of fit from field \code{GOFMergedPlots} of configuration plan
 }
 \keyword{internal}

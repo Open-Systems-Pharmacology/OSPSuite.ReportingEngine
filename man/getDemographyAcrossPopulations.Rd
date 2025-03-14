@@ -7,12 +7,12 @@
 getDemographyAcrossPopulations(structureSets, demographyPaths)
 }
 \arguments{
-\item{structureSets}{List of `SimulationStructure` objects}
+\item{structureSets}{List of \code{SimulationStructure} objects}
 
 \item{demographyPaths}{Paths of demography variables to display}
 }
 \value{
-A list of `data` and its `metaData`
+A list of \code{data} and its \code{metaData}
 }
 \description{
 Get Demography data across populations of simulation sets

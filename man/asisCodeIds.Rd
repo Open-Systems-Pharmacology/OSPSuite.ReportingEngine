@@ -12,6 +12,6 @@ asisCodeIds
 }
 \description{
 Some of the identifiers above need to be treated
-as is by [getIdentifierInfo()]
+as is by \code{\link[=getIdentifierInfo]{getIdentifierInfo()}}
 }
 \keyword{internal}

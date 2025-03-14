@@ -7,7 +7,7 @@
 setYParametersForDemographyPlot(workflow, parameters)
 }
 \arguments{
-\item{workflow}{`PopulationWorkflow` R6 class object}
+\item{workflow}{\code{PopulationWorkflow} R6 class object}
 
 \item{parameters}{list of demography parameters to be used as y-parameters}
 }

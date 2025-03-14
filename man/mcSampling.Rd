@@ -12,7 +12,7 @@ mcSampling(
 )
 }
 \arguments{
-\item{dataSize}{Number of rows/unique individuals in `data`}
+\item{dataSize}{Number of rows/unique individuals in \code{data}}
 
 \item{sampleSize}{Number of sampled individuals in each Monte Carlo repetition}
 
@@ -21,10 +21,10 @@ mcSampling(
 \item{seed}{Random Seed Number in order to get repeatable results}
 }
 \value{
-A list of `n` elements that include `sampleSize` integers sampled from `1:dataSize`
+A list of \code{n} elements that include \code{sampleSize} integers sampled from \code{1:dataSize}
 }
 \description{
 Perform repeatable Monte Carlo random sampling
-for a data.frame obtained from a `PKAnalyses` object
+for a data.frame obtained from a \code{PKAnalyses} object
 }
 \keyword{internal}

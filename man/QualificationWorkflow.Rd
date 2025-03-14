@@ -18,21 +18,21 @@ Other workflows:
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{configurationPlan}}{`ConfigurationPlan` object}
+\item{\code{configurationPlan}}{\code{ConfigurationPlan} object}
 
-\item{\code{simulate}}{`SimulationTask` object for time profile simulations}
+\item{\code{simulate}}{\code{SimulationTask} object for time profile simulations}
 
-\item{\code{calculatePKParameters}}{`CalculatePKParametersTask` object for PK parameters calculation}
+\item{\code{calculatePKParameters}}{\code{CalculatePKParametersTask} object for PK parameters calculation}
 
-\item{\code{plotTimeProfiles}}{`PlotTask` object for time profile plots}
+\item{\code{plotTimeProfiles}}{\code{PlotTask} object for time profile plots}
 
-\item{\code{plotComparisonTimeProfile}}{`PlotTask` object for comparison of time profiles plots}
+\item{\code{plotComparisonTimeProfile}}{\code{PlotTask} object for comparison of time profiles plots}
 
-\item{\code{plotGOFMerged}}{`PlotTask` object for goodness of fit plots}
+\item{\code{plotGOFMerged}}{\code{PlotTask} object for goodness of fit plots}
 
-\item{\code{plotPKRatio}}{`PlotTask` object for PK ratio plot}
+\item{\code{plotPKRatio}}{\code{PlotTask} object for PK ratio plot}
 
-\item{\code{plotDDIRatio}}{`PlotTask` object for DDI ratio plot}
+\item{\code{plotDDIRatio}}{\code{PlotTask} object for DDI ratio plot}
 }
 \if{html}{\out{</div>}}
 }
@@ -69,7 +69,7 @@ Other workflows:
 \if{html}{\out{<a id="method-QualificationWorkflow-new"></a>}}
 \if{latex}{\out{\hypertarget{method-QualificationWorkflow-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `QualificationWorkflow` object.
+Create a new \code{QualificationWorkflow} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$new(configurationPlan, ...)}\if{html}{\out{</div>}}
 }
@@ -77,14 +77,14 @@ Create a new `QualificationWorkflow` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{configurationPlan}}{A `ConfigurationPlan` object}
+\item{\code{configurationPlan}}{A \code{ConfigurationPlan} object}
 
-\item{\code{...}}{input parameters inherited from R6 class object `Workflow`.}
+\item{\code{...}}{input parameters inherited from R6 class object \code{Workflow}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `QualificationWorkflow` object
+A new \code{QualificationWorkflow} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -93,14 +93,16 @@ A new `QualificationWorkflow` object
 \subsection{Method \code{runWorkflow()}}{
 Run qualification workflow tasks for all simulation sets if tasks are activated
 The order of tasks is as follows:
-# 1) Run simulations
-# 2) Perform PK analyses
-# 3) Perform plot tasks
-## 3.a) time profiles and residual plots
-## 3.b) comparison time profiles plots
-## 3.c) PK ratio tables and plots
-## 3.d) DDI ratio tables and plots
-# 4) Render report
+\enumerate{
+\item Run simulations
+\item Perform PK analyses
+\item Perform plot tasks\if{html}{\out{<br>}}
+a. time profiles and residual plots\if{html}{\out{<br>}}
+b. comparison time profiles plots\if{html}{\out{<br>}}
+c. PK ratio tables and plots\if{html}{\out{<br>}}
+d. DDI ratio tables and plots
+\item Render report
+}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$runWorkflow()}\if{html}{\out{</div>}}
 }
@@ -113,8 +115,8 @@ All results and plots as a structured output in the workflow folder
 \if{html}{\out{<a id="method-QualificationWorkflow-updateConfigurationPlan"></a>}}
 \if{latex}{\out{\hypertarget{method-QualificationWorkflow-updateConfigurationPlan}{}}}
 \subsection{Method \code{updateConfigurationPlan()}}{
-Update the content of the workflow `configurationPlan`.
-Caution, updating the `configurationPlan` using this method won't update the workflow simulations and their results.
+Update the content of the workflow \code{configurationPlan}.
+Caution, updating the \code{configurationPlan} using this method won't update the workflow simulations and their results.
 Use the method only to bypass reloading a full workflow if only plot aesthetics or section content is changed.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationWorkflow$updateConfigurationPlan(configurationPlanFile)}\if{html}{\out{</div>}}

@@ -15,7 +15,7 @@ getResiduals(
 
 \item{simulatedData}{data.frame of time profile simulated data}
 
-\item{residualScale}{Scale for calculation of residuals as included in enum `ResidualScales`}
+\item{residualScale}{Scale for calculation of residuals as included in enum \code{ResidualScales}}
 }
 \value{
 residualsData data.frame with Time, Observed, Simulated, Residuals

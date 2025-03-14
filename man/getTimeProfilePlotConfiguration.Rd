@@ -15,7 +15,7 @@ getTimeProfilePlotConfiguration(
 )
 }
 \arguments{
-\item{workflowType}{Workflow type, either `"mean"` or `"population"`}
+\item{workflowType}{Workflow type, either \code{"mean"} or \code{"population"}}
 
 \item{group}{A data.frame mapping properties to output groups}
 
@@ -23,14 +23,14 @@ getTimeProfilePlotConfiguration(
 
 \item{metaData}{List of metaData defining dimensions and units in the data.frame}
 
-\item{dataMapping}{List mapping x, y and color variables to `data`}
+\item{dataMapping}{List mapping x, y and color variables to \code{data}}
 
-\item{plotConfiguration}{A user-defined `TimeProfilePlotConfiguration` object}
+\item{plotConfiguration}{A user-defined \code{TimeProfilePlotConfiguration} object}
 }
 \value{
-A `TimeProfilePlotConfiguration` object
+A \code{TimeProfilePlotConfiguration} object
 }
 \description{
-Define a `TimeProfilePlotConfiguration` object
+Define a \code{TimeProfilePlotConfiguration} object
 }
 \keyword{internal}

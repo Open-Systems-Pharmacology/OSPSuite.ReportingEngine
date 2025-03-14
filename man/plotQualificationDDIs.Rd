@@ -7,9 +7,9 @@
 plotQualificationDDIs(configurationPlan, settings)
 }
 \arguments{
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 
-\item{settings}{A `TaskSettings` object}
+\item{settings}{A \code{TaskSettings} object}
 }
 \value{
 list of qualification DDI ggplot objects

@@ -44,7 +44,7 @@ R6 class for defining how pk parameters are calculated and save
 \if{html}{\out{<a id="method-CalculatePKParametersTask-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-CalculatePKParametersTask-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save the task results related to a `structureSet`.
+Save the task results related to a \code{structureSet}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CalculatePKParametersTask$saveResults(structureSet, taskResults)}\if{html}{\out{</div>}}
 }
@@ -52,7 +52,7 @@ Save the task results related to a `structureSet`.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
+\item{\code{structureSet}}{A \code{SimulationStructure} object defining the properties of a simulation set}
 
 \item{\code{taskResults}}{list of results from task run.}
 }
@@ -71,7 +71,7 @@ Run task and save its output results
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{list of `SimulationStructure` objects}
+\item{\code{structureSets}}{list of \code{SimulationStructure} objects}
 }
 \if{html}{\out{</div>}}
 }

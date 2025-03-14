@@ -7,12 +7,12 @@
 plotQualificationTimeProfiles(configurationPlan, settings)
 }
 \arguments{
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 
-\item{settings}{`ConfigurationPlan` object}
+\item{settings}{\code{ConfigurationPlan} object}
 }
 \value{
-list with `plots` and `tables`
+list with \code{plots} and \code{tables}
 }
 \description{
 Plot time profile for qualification workflow

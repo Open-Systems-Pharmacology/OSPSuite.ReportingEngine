@@ -10,7 +10,7 @@ getMassBalanceDataMapping(plotType)
 \item{plotType}{One of the 5 plot types displayed by mass balance task}
 }
 \value{
-A `tlf` `DataMapping` object
+A \code{tlf} \code{DataMapping} object
 }
 \description{
 Get mass balance data mapping

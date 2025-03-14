@@ -13,9 +13,9 @@ R6 class representing Reporting Engine Mean Model Set
 
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
-\item{\code{outputs}}{list of `Output` R6 class objects}
+\item{\code{outputs}}{list of \code{Output} R6 class objects}
 
-\item{\code{dataSource}}{A `DataSource` object}
+\item{\code{dataSource}}{A \code{DataSource} object}
 
 \item{\code{dataSelection}}{character or expression used to select a subset of observed data}
 
@@ -43,7 +43,7 @@ reported time profiles and residual plots when applicable}
 \if{html}{\out{<a id="method-SimulationSet-new"></a>}}
 \if{latex}{\out{\hypertarget{method-SimulationSet-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `SimulationSet` object.
+Create a new \code{SimulationSet} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SimulationSet$new(
   simulationSetName,
@@ -66,17 +66,17 @@ Create a new `SimulationSet` object.
 
 \item{\code{simulationFile}}{names of pkml file to be used for the simulation}
 
-\item{\code{outputs}}{list of `Output` R6 class objects}
+\item{\code{outputs}}{list of \code{Output} R6 class objects}
 
-\item{\code{dataSource}}{A `DataSource` object}
+\item{\code{dataSource}}{A \code{DataSource} object}
 
 \item{\code{dataSelection}}{characters or expression to select subset the observed data
 By default, all the data is selected.
-When using a character array, selections are concatenated with the `&` sign}
+When using a character array, selections are concatenated with the \code{&} sign}
 
 \item{\code{timeUnit}}{display unit for time variable. Default is "h"}
 
-\item{\code{applicationRanges}}{names of application ranges to include in the report. Names are available in enum `ApplicationRanges`.}
+\item{\code{applicationRanges}}{names of application ranges to include in the report. Names are available in enum \code{ApplicationRanges}.}
 
 \item{\code{minimumSimulationEndTime}}{is the minimum length of time for which a simulation must be run}
 
@@ -87,7 +87,7 @@ When using a character array, selections are concatenated with the `&` sign}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `SimulationSet` object
+A new \code{SimulationSet} object
 }
 }
 \if{html}{\out{<hr>}}

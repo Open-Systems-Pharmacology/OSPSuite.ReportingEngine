@@ -13,7 +13,7 @@ checkHasRunOnAllCores(coreResults, inputName, inputType, runType = "load")
 
 \item{inputType}{Type of input to be loaded}
 
-\item{runType}{Type of run executed on `{Rmpi}` cores}
+\item{runType}{Type of run executed on \code{{Rmpi}} cores}
 }
 \description{
 Check if all cores executed an mpi.remote.exec command successfully.

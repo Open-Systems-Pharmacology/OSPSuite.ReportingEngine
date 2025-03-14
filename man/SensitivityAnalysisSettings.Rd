@@ -35,7 +35,7 @@ R6 class for Population Sensitivity Analysis Settings
 \if{html}{\out{<a id="method-SensitivityAnalysisSettings-new"></a>}}
 \if{latex}{\out{\hypertarget{method-SensitivityAnalysisSettings-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `SensitivityAnalysisSettings` object
+Create a \code{SensitivityAnalysisSettings} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityAnalysisSettings$new(
   variationRange = NULL,
@@ -62,7 +62,7 @@ Create a `SensitivityAnalysisSettings` object
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `SensitivityAnalysisSettings` object
+A new \code{SensitivityAnalysisSettings} object
 }
 }
 \if{html}{\out{<hr>}}

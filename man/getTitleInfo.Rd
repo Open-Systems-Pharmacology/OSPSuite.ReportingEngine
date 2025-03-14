@@ -14,7 +14,7 @@ getTitleInfo(fileContent, titlePattern = "#", titleLevels = 6)
 \item{titleLevels}{levels of titles in the report}
 }
 \value{
-List of title information including `line`, `content`, `reference`, `count`, `level`
+List of title information including \code{line}, \code{content}, \code{reference}, \code{count}, \code{level}
 }
 \description{
 Get section titles information from report content

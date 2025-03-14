@@ -13,6 +13,6 @@ getMechanismName(mechanism)
 Display name of mechanism to be used in DDI report
 }
 \description{
-Remove underscores from mechanism name read from DDI observed data file according to the dictionary defined in `reEnv$ddiRatioSubsetsDictionary`
+Remove underscores from mechanism name read from DDI observed data file according to the dictionary defined in \code{reEnv$ddiRatioSubsetsDictionary}
 }
 \keyword{internal}

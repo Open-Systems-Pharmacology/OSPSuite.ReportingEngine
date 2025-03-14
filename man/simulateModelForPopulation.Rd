@@ -7,7 +7,7 @@
 simulateModelForPopulation(structureSets, settings = NULL)
 }
 \arguments{
-\item{structureSets}{List of `SimulationStructure` objects contain paths of files to be used}
+\item{structureSets}{List of \code{SimulationStructure} objects contain paths of files to be used}
 
 \item{settings}{list of simulation settings}
 }

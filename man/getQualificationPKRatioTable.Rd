@@ -15,6 +15,6 @@ getQualificationPKRatioTable(data, metaData)
 A data.frame with correct numeric format
 }
 \description{
-Get data of pk ratio from field `PKRatioPlots` of configuration plan
+Get data of pk ratio from field \code{PKRatioPlots} of configuration plan
 }
 \keyword{internal}

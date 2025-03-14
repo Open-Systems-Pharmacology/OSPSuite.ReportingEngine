@@ -13,7 +13,7 @@ R6 class for sensitivity analysis plot settings
 
 \item{\code{maximalParametersPerSensitivityPlot}}{is the maximal number of parameters to display in a sensitivity plot}
 
-\item{\code{plotConfiguration}}{`PlotConfiguration` R6 class object from `tlf` library}
+\item{\code{plotConfiguration}}{\code{PlotConfiguration} R6 class object from \code{tlf} library}
 
 \item{\code{xAxisFontSize}}{for sensitivity plot.
 This Value will overwrite values defined by plot configuration object}
@@ -47,7 +47,7 @@ This Value will overwrite values defined by plot configuration object}
 \if{html}{\out{<a id="method-SensitivityPlotSettings-new"></a>}}
 \if{latex}{\out{\hypertarget{method-SensitivityPlotSettings-new}{}}}
 \subsection{Method \code{new()}}{
-Create a `SensitivityPlotSettings` object
+Create a \code{SensitivityPlotSettings} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SensitivityPlotSettings$new(
   totalSensitivityThreshold = NULL,
@@ -73,7 +73,7 @@ Create a `SensitivityPlotSettings` object
 
 \item{\code{maximalParametersPerSensitivityPlot}}{maximalParametersPerSensitivityPlot is the maximal number of parameters to display in a sensitivity plot}
 
-\item{\code{plotConfiguration}}{`PlotConfiguration` object from `tlf` library}
+\item{\code{plotConfiguration}}{\code{PlotConfiguration} object from \code{tlf} library}
 
 \item{\code{xAxisFontSize}}{Font size of x-axis labels for sensitivity plot}
 
@@ -87,12 +87,12 @@ Create a `SensitivityPlotSettings` object
 
 \item{\code{yLabel}}{Label of y-axis for sensitivity plot}
 
-\item{\code{colorPalette}}{Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot}
+\item{\code{colorPalette}}{Name of a color palette to be used by \code{ggplot2::scale_fill_brewer()} for sensitivity plot}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `SensitivityPlotSettings` object
+A new \code{SensitivityPlotSettings} object
 }
 }
 \if{html}{\out{<hr>}}

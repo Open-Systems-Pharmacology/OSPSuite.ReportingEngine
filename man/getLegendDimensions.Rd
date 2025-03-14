@@ -7,11 +7,11 @@
 getLegendDimensions(plotObject)
 }
 \arguments{
-\item{plotObject}{A `ggplot` object}
+\item{plotObject}{A \code{ggplot} object}
 }
 \value{
-A list of `width` and `height` if legend is found, 
-otherwise `NULL`
+A list of \code{width} and \code{height} if legend is found,
+otherwise \code{NULL}
 }
 \description{
 Get legend dimensions

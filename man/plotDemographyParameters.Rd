@@ -13,12 +13,12 @@ plotDemographyParameters(
 )
 }
 \arguments{
-\item{structureSets}{`SimulationStructure` R6 class object}
+\item{structureSets}{\code{SimulationStructure} R6 class object}
 
 \item{settings}{list of settings for the output table/plot}
 
 \item{workflowType}{workflowType Type of population workflow.
-Use enum `PopulationWorkflowTypes` to get list of workflow types.}
+Use enum \code{PopulationWorkflowTypes} to get list of workflow types.}
 
 \item{xParameters}{list of parameters to be plotted along x axis}
 

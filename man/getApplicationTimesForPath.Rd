@@ -7,7 +7,7 @@
 getApplicationTimesForPath(simulation, path)
 }
 \arguments{
-\item{simulation}{A `Simulation` object}
+\item{simulation}{A \code{Simulation} object}
 
 \item{path}{A simulation path}
 }

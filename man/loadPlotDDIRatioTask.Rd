@@ -7,15 +7,15 @@
 loadPlotDDIRatioTask(workflow, configurationPlan)
 }
 \arguments{
-\item{workflow}{`QualificationWorkflow` object}
+\item{workflow}{\code{QualificationWorkflow} object}
 
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 }
 \value{
-A `QualificationTask` object
+A \code{QualificationTask} object
 }
 \description{
-Define `plotDDIRatio` task and its settings
+Define \code{plotDDIRatio} task and its settings
 }
 \seealso{
 Other workflow tasks: 

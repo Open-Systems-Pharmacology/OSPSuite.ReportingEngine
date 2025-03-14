@@ -7,7 +7,7 @@
 plotQualificationGOFs(configurationPlan, settings)
 }
 \arguments{
-\item{configurationPlan}{A `ConfigurationPlan` object}
+\item{configurationPlan}{A \code{ConfigurationPlan} object}
 
 \item{settings}{settings for the task}
 }

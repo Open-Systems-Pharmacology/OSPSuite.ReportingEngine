@@ -63,7 +63,7 @@ Other workflow tasks:
 \if{html}{\out{<a id="method-GofPlotTask-saveResults"></a>}}
 \if{latex}{\out{\hypertarget{method-GofPlotTask-saveResults}{}}}
 \subsection{Method \code{saveResults()}}{
-Save the task results related to a `structureSet`.
+Save the task results related to a \code{structureSet}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GofPlotTask$saveResults(structureSet, taskResults)}\if{html}{\out{</div>}}
 }
@@ -71,9 +71,9 @@ Save the task results related to a `structureSet`.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSet}}{A `SimulationStructure` object defining the properties of a simulation set}
+\item{\code{structureSet}}{A \code{SimulationStructure} object defining the properties of a simulation set}
 
-\item{\code{taskResults}}{list of `TaskResults` objects}
+\item{\code{taskResults}}{list of \code{TaskResults} objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -90,7 +90,7 @@ Save the task results related to residuals across all simulations
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{taskResults}}{list of `TaskResults` objects}
+\item{\code{taskResults}}{list of \code{TaskResults} objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -107,7 +107,7 @@ Run task and save its output results
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{list of `SimulationStructure` objects}
+\item{\code{structureSets}}{list of \code{SimulationStructure} objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -124,18 +124,18 @@ Get plot results for residuals across all simulations
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{structureSets}}{A list of `SimulationStructure` objects defining the properties of a simulation set}
+\item{\code{structureSets}}{A list of \code{SimulationStructure} objects defining the properties of a simulation set}
 
 \item{\code{data}}{data.frame}
 
 \item{\code{metaData}}{A data.frame containing relevant information about the residuals}
 
-\item{\code{settings}}{List of settings such as `PlotConfiguration` R6 class objects for each goodness of fit plot}
+\item{\code{settings}}{List of settings such as \code{PlotConfiguration} R6 class objects for each goodness of fit plot}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A list of `TaskResults` objects
+A list of \code{TaskResults} objects
 }
 }
 \if{html}{\out{<hr>}}

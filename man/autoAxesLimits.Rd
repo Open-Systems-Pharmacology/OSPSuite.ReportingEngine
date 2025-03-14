@@ -10,7 +10,7 @@ autoAxesLimits(x, scale = tlf::Scaling$lin)
 \item{x}{Values from which the limits are calculated}
 
 \item{scale}{Name of the scale of the axis
-Use helper enum `Scaling` from `tlf` package to find scales.}
+Use helper enum \code{Scaling} from \code{tlf} package to find scales.}
 }
 \value{
 A list of units for goodness of fit results

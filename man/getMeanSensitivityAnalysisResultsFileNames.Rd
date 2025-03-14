@@ -7,7 +7,7 @@
 getMeanSensitivityAnalysisResultsFileNames(workflow)
 }
 \arguments{
-\item{workflow}{`MeanModelWorkflow` object or derived class}
+\item{workflow}{\code{MeanModelWorkflow} object or derived class}
 }
 \value{
 Names of the the expected sensitivity analysis result files

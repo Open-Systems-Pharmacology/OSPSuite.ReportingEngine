@@ -32,7 +32,7 @@ R6 class managing observed data in simulation sets
 \if{html}{\out{<a id="method-DataSource-new"></a>}}
 \if{latex}{\out{\hypertarget{method-DataSource-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `DataSource` object.
+Create a new \code{DataSource} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataSource$new(dataFile, metaDataFile, caption = NULL)}\if{html}{\out{</div>}}
 }
@@ -49,7 +49,7 @@ Create a new `DataSource` object.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `DataSource` object
+A new \code{DataSource} object
 }
 }
 \if{html}{\out{<hr>}}

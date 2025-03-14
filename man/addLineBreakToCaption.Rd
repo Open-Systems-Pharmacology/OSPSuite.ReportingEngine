@@ -16,7 +16,7 @@ addLineBreakToCaption(
 \item{maxLines}{Maximum number of lines directly setting the maximum number of line breaks allowed.}
 
 \item{width}{Maximum number of characters per line desired.
-Due to `maxLines`, the returned width can be wider than `width`.}
+Due to \code{maxLines}, the returned width can be wider than \code{width}.}
 }
 \value{
 A character vector of wrapped strings with line breaks at sensible places.

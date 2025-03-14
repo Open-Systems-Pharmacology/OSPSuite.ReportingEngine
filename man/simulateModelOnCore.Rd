@@ -13,9 +13,9 @@ simulateModelOnCore(
 )
 }
 \arguments{
-\item{simulation}{A `Simulation` object}
+\item{simulation}{A \code{Simulation} object}
 
-\item{population}{A `Population` object}
+\item{population}{A \code{Population} object}
 
 \item{debugLogFileName}{path to file where core debug logs are saved}
 

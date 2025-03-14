@@ -7,8 +7,8 @@
 getRESettings(settingName)
 }
 \arguments{
-\item{settingName}{setting name as defined in enum `reSettingsNames`}
+\item{settingName}{setting name as defined in enum \code{reSettingsNames}}
 }
 \description{
-Get properties from name of the default/global settings stored in `reEnv`.
+Get properties from name of the default/global settings stored in \code{reEnv}.
 }

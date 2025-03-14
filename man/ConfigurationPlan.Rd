@@ -18,7 +18,7 @@ Other qualification workflow:
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{plots}}{list defining `PlotConfiguration` settings for specific tasks}
+\item{\code{plots}}{list defining \code{PlotConfiguration} settings for specific tasks}
 
 \item{\code{inputs}}{data.frame or list mapping input files to their paths}
 
@@ -81,7 +81,7 @@ Get location of directory corresponding to a specific section Id
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The section path corresponding to the id in the configuration plan field `sections`
+The section path corresponding to the id in the configuration plan field \code{sections}
 }
 }
 \if{html}{\out{<hr>}}
@@ -121,7 +121,7 @@ Get location of .md file corresponding to a specific section Id
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The markdown file corresponding to the id in the configuration plan field `sections`
+The markdown file corresponding to the id in the configuration plan field \code{sections}
 }
 }
 \if{html}{\out{<hr>}}
@@ -212,7 +212,7 @@ Copy intro to intro markdown
 \if{html}{\out{<a id="method-ConfigurationPlan-copyContentFiles"></a>}}
 \if{latex}{\out{\hypertarget{method-ConfigurationPlan-copyContentFiles}{}}}
 \subsection{Method \code{copyContentFiles()}}{
-If available, copy all files and folders of `Content` directory into `<workflowFolder>`
+If available, copy all files and folders of \code{Content} directory into \verb{<workflowFolder>}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ConfigurationPlan$copyContentFiles()}\if{html}{\out{</div>}}
 }
@@ -235,7 +235,7 @@ Get location of observed data corresponding to a specific observedDataSet Id
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
+The observed data file path corresponding to the id in the configuration plan field \code{observedDataSet}
 }
 }
 \if{html}{\out{<hr>}}
@@ -255,7 +255,7 @@ Get molecular weight of observed data corresponding to a specific observedDataSe
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The observed data file path corresponding to the id in the configuration plan field `observedDataSet`
+The observed data file path corresponding to the id in the configuration plan field \code{observedDataSet}
 }
 }
 \if{html}{\out{<hr>}}
@@ -277,7 +277,7 @@ Get location of simulation file corresponding to a specific simulation and proje
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The simulation file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
+The simulation file path corresponding to the project and simulation in the configuration plan field \code{simulationMappings}
 }
 }
 \if{html}{\out{<hr>}}
@@ -299,7 +299,7 @@ Get location of population file corresponding to a specific simulation and proje
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The population file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
+The population file path corresponding to the project and simulation in the configuration plan field \code{simulationMappings}
 }
 }
 \if{html}{\out{<hr>}}
@@ -321,7 +321,7 @@ Get location of simulation result file corresponding to a specific simulation an
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The simulation results file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
+The simulation results file path corresponding to the project and simulation in the configuration plan field \code{simulationMappings}
 }
 }
 \if{html}{\out{<hr>}}
@@ -343,7 +343,7 @@ Get location of PK Analysis result file corresponding to a specific simulation a
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-The PKAnalysis results file path corresponding to the project and simulation in the configuration plan field `simulationMappings`
+The PKAnalysis results file path corresponding to the project and simulation in the configuration plan field \code{simulationMappings}
 }
 }
 \if{html}{\out{<hr>}}

@@ -7,7 +7,7 @@
 getReferencePopulationName(structureSets)
 }
 \arguments{
-\item{structureSets}{An array of `SimulationStructure` objects}
+\item{structureSets}{An array of \code{SimulationStructure} objects}
 }
 \description{
 Get Simulation Set Name from reference Population Simulation Set

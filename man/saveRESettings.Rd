@@ -3,14 +3,14 @@
 \name{saveRESettings}
 \alias{saveRESettings}
 \title{saveRESettings
-Save the current reporting engine global settings in a `.RData` file}
+Save the current reporting engine global settings in a \code{.RData} file}
 \usage{
 saveRESettings(file)
 }
 \arguments{
-\item{file}{`.RData` file containing the settings}
+\item{file}{\code{.RData} file containing the settings}
 }
 \description{
 saveRESettings
-Save the current reporting engine global settings in a `.RData` file
+Save the current reporting engine global settings in a \code{.RData} file
 }

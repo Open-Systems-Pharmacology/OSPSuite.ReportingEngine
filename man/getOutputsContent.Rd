@@ -14,9 +14,9 @@ getOutputsContent(excelFile, outputsTable, simulationOutputs)
 \item{simulationOutputs}{Names of Output objects used by simulation sets}
 }
 \value{
-Character vector defining the `Output` object
+Character vector defining the \code{Output} object
 }
 \description{
-Creates a character vector to be written in a workflow .R script defining `Output` object.
+Creates a character vector to be written in a workflow .R script defining \code{Output} object.
 }
 \keyword{internal}

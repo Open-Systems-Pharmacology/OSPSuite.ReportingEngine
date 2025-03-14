@@ -7,10 +7,10 @@
 isLoadedPopulation(population)
 }
 \arguments{
-\item{population}{A `Population` object}
+\item{population}{A \code{Population} object}
 }
 \value{
-Logical indicating if the `population` exists
+Logical indicating if the \code{population} exists
 }
 \description{
 Check that the population has been loaded

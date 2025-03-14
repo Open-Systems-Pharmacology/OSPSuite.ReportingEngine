@@ -11,14 +11,14 @@ loadPKAnalysesFromStructureSet(
 )
 }
 \arguments{
-\item{structureSet}{A `SimulationStructure` object}
+\item{structureSet}{A \code{SimulationStructure} object}
 
 \item{to}{Format of the loaded output`}
 }
 \value{
-A `PKAnalyses` object if `to="PKAnalyses"`
-A `data.frame` if `to="data.frame"`
-A `tibble` if `to="tibble"`
+A \code{PKAnalyses} object if \code{to="PKAnalyses"}
+A \code{data.frame} if \code{to="data.frame"}
+A \code{tibble} if \code{to="tibble"}
 }
 \description{
 loadPKAnalysesFromStructureSet

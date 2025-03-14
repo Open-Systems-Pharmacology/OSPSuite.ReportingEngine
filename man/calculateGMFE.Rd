@@ -15,6 +15,6 @@ calculateGMFE(x, y)
 GMFE
 }
 \description{
-Calculate Geometric Mean Fold Error between `x` and `y`.
+Calculate Geometric Mean Fold Error between \code{x} and \code{y}.
 Strictly positive pairs of values are kept in the calculation
 }

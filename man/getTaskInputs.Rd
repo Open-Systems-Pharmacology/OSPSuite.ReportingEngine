@@ -7,7 +7,7 @@
 getTaskInputs(task)
 }
 \arguments{
-\item{task}{`Task` object or derived class}
+\item{task}{\code{Task} object or derived class}
 }
 \value{
 Names of the files required to perform the task

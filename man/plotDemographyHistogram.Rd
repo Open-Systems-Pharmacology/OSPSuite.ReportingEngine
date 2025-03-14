@@ -16,11 +16,11 @@ plotDemographyHistogram(
 \arguments{
 \item{data}{data.frame}
 
-\item{metaData}{list of metaData about `data`}
+\item{metaData}{list of metaData about \code{data}}
 
-\item{dataMapping}{`HistogramDataMapping` class object}
+\item{dataMapping}{\code{HistogramDataMapping} class object}
 
-\item{plotConfiguration}{`PlotConfiguration` class object}
+\item{plotConfiguration}{\code{PlotConfiguration} class object}
 
 \item{bins}{Number of bins for continuous demography parameters}
 

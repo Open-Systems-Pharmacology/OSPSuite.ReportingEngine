@@ -7,7 +7,7 @@
 loadObservedDataFromSimulationSet(simulationSet)
 }
 \arguments{
-\item{simulationSet}{A `SimulationSet` object}
+\item{simulationSet}{A \code{SimulationSet} object}
 }
 \value{
 list of data and dataMapping

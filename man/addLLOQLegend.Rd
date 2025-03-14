@@ -17,6 +17,6 @@ addLLOQLegend(plotObject, captions, prefix = "LLOQ for")
 A list of aesthetic values
 }
 \description{
-Add LLOQ displayed legend to the legend of a `plotObject`
+Add LLOQ displayed legend to the legend of a \code{plotObject}
 }
 \keyword{internal}

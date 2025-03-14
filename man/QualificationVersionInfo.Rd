@@ -18,11 +18,11 @@ Other qualification workflow:
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{qualificationPlanRelease}}{Qualification Plan Release Version (string, e.g. `"1.1"`)}
+\item{\code{qualificationPlanRelease}}{Qualification Plan Release Version (string, e.g. \code{"1.1"})}
 
-\item{\code{osp}}{OSP version (string, e.g. `"10.0"`)}
+\item{\code{osp}}{OSP version (string, e.g. \code{"10.0"})}
 
-\item{\code{qualificationFramework}}{Qualification Framework version (string, e.g. `"3.0"`)}
+\item{\code{qualificationFramework}}{Qualification Framework version (string, e.g. \code{"3.0"})}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,7 +45,7 @@ Other qualification workflow:
 \if{html}{\out{<a id="method-QualificationVersionInfo-new"></a>}}
 \if{latex}{\out{\hypertarget{method-QualificationVersionInfo-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `QualificationVersionInfo` object.
+Create a new \code{QualificationVersionInfo} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationVersionInfo$new(
   qualificationPlanRelease = NULL,
@@ -57,16 +57,16 @@ Create a new `QualificationVersionInfo` object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{qualificationPlanRelease}}{Qualification Plan Release Version (string, e.g. `"1.1"`)}
+\item{\code{qualificationPlanRelease}}{Qualification Plan Release Version (string, e.g. \code{"1.1"})}
 
-\item{\code{osp}}{OSP version (string, e.g. `"10.0"`)}
+\item{\code{osp}}{OSP version (string, e.g. \code{"10.0"})}
 
-\item{\code{qualificationFramework}}{Qualification Framework version (string, e.g. `"3.0"`)}
+\item{\code{qualificationFramework}}{Qualification Framework version (string, e.g. \code{"3.0"})}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `QualificationVersionInfo` object
+A new \code{QualificationVersionInfo} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -86,7 +86,7 @@ A text with system information
 \if{html}{\out{<a id="method-QualificationVersionInfo-updateText"></a>}}
 \if{latex}{\out{\hypertarget{method-QualificationVersionInfo-updateText}{}}}
 \subsection{Method \code{updateText()}}{
-Update `text` if patterns of version info are found
+Update \code{text} if patterns of version info are found
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationVersionInfo$updateText(text)}\if{html}{\out{</div>}}
 }
@@ -107,8 +107,8 @@ Updated character string
 \if{latex}{\out{\hypertarget{method-QualificationVersionInfo-getQualificationPlanReleasePattern}{}}}
 \subsection{Method \code{getQualificationPlanReleasePattern()}}{
 Get the Qualification Plan Release Version pattern to be replaced in title page
-**Caution, the function `gsub` is used to replace the pattern**
-**Escape characters may be included in the pattern**
+\strong{Caution, the function \code{gsub} is used to replace the pattern}
+\strong{Escape characters may be included in the pattern}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationVersionInfo$getQualificationPlanReleasePattern()}\if{html}{\out{</div>}}
 }
@@ -122,8 +122,8 @@ A character
 \if{latex}{\out{\hypertarget{method-QualificationVersionInfo-getOSPPattern}{}}}
 \subsection{Method \code{getOSPPattern()}}{
 Get the OSP version pattern to be replaced in title page
-**Caution, the function `gsub` is used to replace the pattern**
-**Escape characters may be included in the pattern**
+\strong{Caution, the function \code{gsub} is used to replace the pattern}
+\strong{Escape characters may be included in the pattern}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationVersionInfo$getOSPPattern()}\if{html}{\out{</div>}}
 }
@@ -137,8 +137,8 @@ A character
 \if{latex}{\out{\hypertarget{method-QualificationVersionInfo-getQualificationFrameworkPattern}{}}}
 \subsection{Method \code{getQualificationFrameworkPattern()}}{
 Get the Qualification Framework version pattern to be replaced in title page
-**Caution, the function `gsub` is used to replace the pattern**
-**Escape characters may be included in the pattern**
+\strong{Caution, the function \code{gsub} is used to replace the pattern}
+\strong{Escape characters may be included in the pattern}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationVersionInfo$getQualificationFrameworkPattern()}\if{html}{\out{</div>}}
 }
@@ -152,8 +152,8 @@ A character
 \if{latex}{\out{\hypertarget{method-QualificationVersionInfo-setQualificationPlanReleasePattern}{}}}
 \subsection{Method \code{setQualificationPlanReleasePattern()}}{
 Set the Qualification Plan Release Version pattern to be replaced in title page
-**Caution, the function `gsub` is used to replace the pattern.**
-**You may need to include escape characters in `pattern`**
+\strong{Caution, the function \code{gsub} is used to replace the pattern.}
+\strong{You may need to include escape characters in \code{pattern}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationVersionInfo$setQualificationPlanReleasePattern(pattern)}\if{html}{\out{</div>}}
 }
@@ -171,8 +171,8 @@ Set the Qualification Plan Release Version pattern to be replaced in title page
 \if{latex}{\out{\hypertarget{method-QualificationVersionInfo-setOSPPattern}{}}}
 \subsection{Method \code{setOSPPattern()}}{
 Set the OSP version pattern to be replaced in title page
-**Caution, the function `gsub` is used to replace the pattern.**
-**You may need to include escape characters in `pattern`**
+\strong{Caution, the function \code{gsub} is used to replace the pattern.}
+\strong{You may need to include escape characters in \code{pattern}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationVersionInfo$setOSPPattern(pattern)}\if{html}{\out{</div>}}
 }
@@ -190,8 +190,8 @@ Set the OSP version pattern to be replaced in title page
 \if{latex}{\out{\hypertarget{method-QualificationVersionInfo-setQualificationFrameworkPattern}{}}}
 \subsection{Method \code{setQualificationFrameworkPattern()}}{
 Set the Qualification Framework version pattern to be replaced in title page
-**Caution, the function `gsub` is used to replace the pattern.**
-**You may need to include escape characters in `pattern`**
+\strong{Caution, the function \code{gsub} is used to replace the pattern.}
+\strong{You may need to include escape characters in \code{pattern}}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{QualificationVersionInfo$setQualificationFrameworkPattern(pattern)}\if{html}{\out{</div>}}
 }

@@ -14,11 +14,11 @@ plotAbsorptionTimeProfile(
 \arguments{
 \item{data}{data.frame}
 
-\item{metaData}{meta data on `data`}
+\item{metaData}{meta data on \code{data}}
 
-\item{dataMapping}{`XYGDataMapping` R6 class object from `tlf` library}
+\item{dataMapping}{\code{XYGDataMapping} R6 class object from \code{tlf} library}
 
-\item{plotConfiguration}{`PlotConfiguration` R6 class object from `tlf` library}
+\item{plotConfiguration}{\code{PlotConfiguration} R6 class object from \code{tlf} library}
 }
 \value{
 ggplot object of time profile for mean model workflow

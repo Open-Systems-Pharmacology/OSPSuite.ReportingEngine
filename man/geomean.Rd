@@ -9,7 +9,7 @@ geomean(x, na.rm = TRUE)
 \arguments{
 \item{x}{values}
 
-\item{na.rm}{logical defining removal of `NA` values}
+\item{na.rm}{logical defining removal of \code{NA} values}
 }
 \value{
 Geometric mean

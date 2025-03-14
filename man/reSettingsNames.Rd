@@ -11,8 +11,8 @@ An object of class \code{list} of length 39.
 reSettingsNames
 }
 \description{
-Names of the default/global settings stored in `reEnv`.
-Can be used with `getRESettings()`
+Names of the default/global settings stored in \code{reEnv}.
+Can be used with \code{getRESettings()}
 }
 \seealso{
 Other enum helpers: 

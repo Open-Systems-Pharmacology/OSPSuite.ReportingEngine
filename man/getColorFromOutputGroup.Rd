@@ -17,11 +17,11 @@ getColorFromOutputGroup(
 
 \item{data}{A data.frame}
 
-\item{dataMapping}{A `DataMapping` object}
+\item{dataMapping}{A \code{DataMapping} object}
 
-\item{legendVariable}{Name of legend variable in`group`}
+\item{legendVariable}{Name of legend variable in\code{group}}
 
-\item{colorVariable}{Name of color variable in`group`}
+\item{colorVariable}{Name of color variable in\code{group}}
 }
 \value{
 A sorted array of color values

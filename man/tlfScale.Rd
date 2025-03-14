@@ -10,9 +10,9 @@ tlfScale(configurationScale)
 \item{configurationScale}{Value of the configuration plan plot property}
 }
 \value{
-`scale` values that follows `tlf` package nomenclature
+\code{scale} values that follows \code{tlf} package nomenclature
 }
 \description{
-Translate value of `Scaling` property from configuration plan into tlf `scale`
+Translate value of \code{Scaling} property from configuration plan into tlf \code{scale}
 }
 \keyword{internal}

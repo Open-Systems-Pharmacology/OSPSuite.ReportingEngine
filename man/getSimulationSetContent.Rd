@@ -11,12 +11,12 @@ getSimulationSetContent(excelFile, simulationTable, workflowMode)
 
 \item{simulationTable}{Data.frame read from the Excel sheet "SimulationSets}
 
-\item{workflowMode}{Either `PopulationWorkflow` or `MeanModelWorkflow`}
+\item{workflowMode}{Either \code{PopulationWorkflow} or \code{MeanModelWorkflow}}
 }
 \value{
-Character vector defining the `SimulationSet` objects
+Character vector defining the \code{SimulationSet} objects
 }
 \description{
-Creates a character vector to be written in a workflow .R script defining `SimulationSet` objects.
+Creates a character vector to be written in a workflow .R script defining \code{SimulationSet} objects.
 }
 \keyword{internal}
