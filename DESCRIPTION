@@ -37,7 +37,7 @@ Imports:
     R6,
     ggplot2,
     jsonlite,
-    ospsuite.utils (>= 1.6.0.9000),
+    ospsuite.utils (>= 1.6.0),
     rSharp (>= 1.0.0),
     dplyr,
     tidyr,
