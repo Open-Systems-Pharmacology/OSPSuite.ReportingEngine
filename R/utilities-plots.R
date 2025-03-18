@@ -183,14 +183,14 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   fonts <- plotProperties$FontAndSize$Fonts
   # plotConfiguration initial font and size properties were defined from current theme
   # their scaling was not perform then to have it performed only at this level
-  plotConfiguration$labels$title$font$size <- reEnv$fontScaleFactor * (fonts$TitleSize %||% plotConfiguration$labels$title$font$size)
-  plotConfiguration$labels$subtitle$font$size <- reEnv$fontScaleFactor * (fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size)
-  plotConfiguration$labels$xlabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size)
-  plotConfiguration$labels$ylabel$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size)
-  plotConfiguration$xAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$xAxis$font$size)
-  plotConfiguration$yAxis$font$size <- reEnv$fontScaleFactor * (fonts$AxisSize %||% plotConfiguration$yAxis$font$size)
-  plotConfiguration$legend$font$size <- reEnv$fontScaleFactor * (fonts$LegendSize %||% plotConfiguration$legend$font$size)
-  plotConfiguration$background$watermark$font$size <- reEnv$fontScaleFactor * (fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size)
+  plotConfiguration$labels$title$font$size <- fonts$TitleSize %||% plotConfiguration$labels$title$font$size
+  plotConfiguration$labels$subtitle$font$size <- fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size
+  plotConfiguration$labels$xlabel$font$size <- fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size
+  plotConfiguration$labels$ylabel$font$size <- fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size
+  plotConfiguration$xAxis$font$size <- fonts$AxisSize %||% plotConfiguration$xAxis$font$size
+  plotConfiguration$yAxis$font$size <- fonts$AxisSize %||% plotConfiguration$yAxis$font$size
+  plotConfiguration$legend$font$size <- fonts$LegendSize %||% plotConfiguration$legend$font$size
+  plotConfiguration$background$watermark$font$size <- fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size
 
   # Set legend position
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
@@ -204,17 +204,14 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
     defaultWidth <- mean(c(defaultWidth, defaultHeight))
     defaultHeight <- defaultWidth
   }
-  # If chart size is defined, it is in pixel and updated accordingly
-  # Get conversion factor between pixels and inches, dev.size provides an array c(width, height)
-  unitConversionFactor <- grDevices::dev.size("in") / grDevices::dev.size("px")
   width <- ifNotNull(
     plotProperties$FontAndSize$ChartWidth,
-    plotProperties$FontAndSize$ChartWidth * unitConversionFactor[1],
+    plotProperties$FontAndSize$ChartWidth/reEnv$defaultPlotFormat$dpi,
     defaultWidth
   )
   height <- ifNotNull(
     plotProperties$FontAndSize$ChartHeight,
-    plotProperties$FontAndSize$ChartHeight * unitConversionFactor[2],
+    plotProperties$FontAndSize$ChartHeight/reEnv$defaultPlotFormat$dpi,
     defaultHeight
   )
   # Get dimensions of exported based on legend position and default/specific plot properties
