@@ -11,7 +11,6 @@ permissions: read-all
 jobs:
   lint:
     runs-on: ubuntu-latest
-    continue-on-error: true
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -48,3 +47,4 @@ jobs:
         shell: Rscript {0}
         env:
           LINTR_ERROR_ON_LINT: true
+        continue-on-error: true
