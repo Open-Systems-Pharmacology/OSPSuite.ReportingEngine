@@ -4,10 +4,10 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [develop, main]
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   bump-dev-version: # only do that when actually merging in main/develop branch
