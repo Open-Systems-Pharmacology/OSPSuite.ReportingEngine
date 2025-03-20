@@ -25,7 +25,8 @@ jobs:
           extra-packages: any::lintr, local::.
           needs: lint
 
-      - name: Lint
+      - id: lint
+        name: Lint
         run: |
           lintr::lint_package(
             linters=lintr::linters_with_defaults(
@@ -47,4 +48,7 @@ jobs:
         shell: Rscript {0}
         env:
           LINTR_ERROR_ON_LINT: true
-        continue-on-error: true
+          
+      - name: Set status
+        if: ${{ failure() }}
+        run: echo "::set-status neutral"

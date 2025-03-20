@@ -31,6 +31,7 @@ jobs:
 
 
   pkgdown:
+    permissions: read-all
     if: ${{ !cancelled() }}
     uses:  Open-Systems-Pharmacology/Workflows/.github/workflows/pkgdown.yaml@main
 
