@@ -8,37 +8,7 @@ on:
 
 jobs:
   test-coverage:
-    runs-on: windows-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup
-        uses: r-lib/actions/setup-r@v2
-        with:
-          use-public-rspm: true
-      - name: Setup Pandoc for word conversion
-        uses: r-lib/actions/setup-pandoc@v2
-      - name: Install ospsuite ecosystem and cran packages
-        run: |
-          Rscript .github/workflows/install_dependencies.R
-      - name: Test coverage
-        run: |
-          covr::codecov(
-            quiet = FALSE,
-            clean = FALSE,
-            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
-          )
-        shell: Rscript {0}
-        continue-on-error: true
-      - name: Show testthat output
-        run: |
-          cat ${{ runner.temp }}/package/ospsuite.reportingengine/ospsuite.reportingengine-tests/testthat.Rout*
-        shell: cmd
-      - name: Upload test results
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-test-failures
-          path: ${{ runner.temp }}/package
+    if: ${{ !cancelled() }}
+    uses: Open-Systems-Pharmacology/Workflows/.github/workflows/test-coverage.yaml@main
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
