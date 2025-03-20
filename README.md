@@ -8,10 +8,9 @@ The `{ospsuite.reportingengine}` package provides a framework in R to design and
   [![](https://img.shields.io/github/downloads/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/latest/total?label=%E2%AD%B3%20Downloads%20latest%20release)](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/releases/latest)
   [![](https://img.shields.io/github/downloads/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/total?label=%E2%AD%B3%20Downloads%20total)](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/releases)
 
-  [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/Open-Systems-Pharmacology/OSPSuite.ReportingEngine?branch=develop&svg=true)](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/develop)
+  [![build](https://img.shields.io/github/actions/workflow/status/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/main-workflow.yaml?logo=github&logoColor=white&label=Build)](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/actions/workflows/main-workflow.yaml)
   [![codecov](https://codecov.io/gh/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/branch/develop/graph/badge.svg)](https://codecov.io/gh/Open-Systems-Pharmacology/OSPSuite.ReportingEngine)
   [![Lint Test](https://img.shields.io/github/actions/workflow/status/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/lint.yaml?logo=githubactions&logoColor=white&label=lint)](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/actions/workflows/lint.yaml)
-  [![Linux Test](https://img.shields.io/github/actions/workflow/status/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/LinuxImages.yml?logo=githubactions&logoColor=white&label=linux%20tests)](https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/actions/workflows/LinuxImages.yml)
 
 <!-- badges: end -->
 
