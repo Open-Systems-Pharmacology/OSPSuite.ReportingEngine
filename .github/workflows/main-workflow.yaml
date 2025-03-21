@@ -19,7 +19,6 @@ permissions:
   repository-projects: read
   statuses: read
   security-events: read
-  id-token: read
   
 jobs:
   bump-dev-version: # only do that when actually merging in main/develop branch
