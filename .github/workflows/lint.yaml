@@ -6,7 +6,7 @@ on:
 
 name: lint.yaml
 
-permissions: read-all
+permissions: write-all
 
 jobs:
   lint:
