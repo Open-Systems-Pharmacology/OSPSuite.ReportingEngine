@@ -13,7 +13,6 @@ permissions:
   deployments: read
   discussions: read
   issues: read
-  models: read
   packages: read
   pages: read
   pull-requests: read
