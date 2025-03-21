@@ -6,11 +6,11 @@ on:
 
 name: lint.yaml
 
-permissions: write-all
-
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
