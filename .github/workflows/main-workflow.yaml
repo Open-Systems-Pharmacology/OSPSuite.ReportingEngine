@@ -5,8 +5,23 @@ on:
     branches: [main]
   pull_request:
 
-permissions:
+permissions: 
   contents: write
+  actions: read
+  attestations: read
+  checks: read
+  deployments: read
+  discussions: read
+  issues: read
+  packages: read
+  pages: read
+  pull-requests: read
+  repository-projects: read
+  statuses: read
+  security-events: read
+  # read does not seem to exist for id-token
+  id-token: write
+  models: read
 
 jobs:
   bump-dev-version: # only do that when actually merging in main/develop branch
@@ -19,6 +34,7 @@ jobs:
 
   R-CMD-Check:
     if: ${{ !cancelled() }}
+    permissions: read-all
     uses: Open-Systems-Pharmacology/Workflows/.github/workflows/R-CMD-check-build.yaml@main
 
   pkgdown:
