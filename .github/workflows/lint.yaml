@@ -32,7 +32,7 @@ jobs:
                 styles = c("camelCase","CamelCase","symbols"), 
                 regexes = c(na="na.rm", randomSeed=".Random.seed", tracelib="re.t", linuxCores="cfs_")
               ),
-              return_linter = lintr::return_linter(return_style = "explicit"),
+              return_linter = NULL,
               line_length_linter = NULL, 
               object_length_linter = NULL, 
               brace_linter = NULL, 
