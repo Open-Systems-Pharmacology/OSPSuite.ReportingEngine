@@ -32,20 +32,14 @@ jobs:
     secrets:
       private-key: ${{ secrets.VERSION_BUMPER_SECRET }}
 
-  install-chrome:
-    runs-on: [windows-latest, ubuntu-latest]
-    if: ${{ !cancelled() }}
-    steps: 
-      - uses: browser-actions/setup-chrome@v1
-
   R-CMD-Check:
-    needs: [bump-dev-version, install-chrome]
+    needs: bump-dev-version
     if: ${{ !cancelled() }}
     permissions: read-all
     uses: Open-Systems-Pharmacology/Workflows/.github/workflows/R-CMD-check-build.yaml@main
 
   pkgdown:
-    needs: [bump-dev-version, install-chrome]
+    needs: bump-dev-version
     if: ${{ !cancelled() }}
     uses:  Open-Systems-Pharmacology/Workflows/.github/workflows/pkgdown.yaml@main
 
