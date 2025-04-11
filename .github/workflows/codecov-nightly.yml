@@ -6,6 +6,8 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+permissions: read-all
+
 jobs:
   test-coverage:
     uses: Open-Systems-Pharmacology/Workflows/.github/workflows/test-coverage.yaml@main
