@@ -1,10 +1,20 @@
-# Check Chromote availability
-tryCatch({
-  testChrome <- chromote::Chromote$new()
-  testChrome$close()
-}, error = function(e) {
-  message("Warning: Chrome failed to initialize. Ensure Chrome is installed and accessible.")
-})
+isWindows <- Sys.info()["sysname"] %in% "Windows"
+
+if(isWindows) {
+  # This line install the java script app that takes snapshots of reports
+  # Add option force=TRUE to prevent webshot to crash if the install path is not found
+  webshot::install_phantomjs(force = TRUE)
+} else{
+  # Check Chromote availability
+  tryCatch({
+    testChrome <- chromote::Chromote$new()
+    testChrome$close()
+  }, error = function(e) {
+    message("Warning: Chrome failed to initialize. Ensure Chrome is installed and accessible.")
+  }) 
+}
+
+
 
 #' @title includeReportFromWorkflow
 #' @description Render a `workflow` report and display its content as raw html
@@ -35,10 +45,17 @@ includeReportFromWorkflow <- function(workflow) {
     "figures",
     paste0("report-snapshot-", length(list.files("figures", pattern = "png")) + 1, ".png")
   )
-  webshot2::webshot(
+  if(isWindows){
+    webshot::webshot(
       url = sub(".md", ".html", workflow$reportFilePath),
       file = reportSnapshotFile
     )
+  } else{
+    webshot2::webshot(
+      url = sub(".md", ".html", workflow$reportFilePath),
+      file = reportSnapshotFile
+    )
+  }
   
   # Display report as an image folded under "> Report" sub section
   return(
