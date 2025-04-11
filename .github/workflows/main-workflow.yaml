@@ -33,13 +33,19 @@ jobs:
       private-key: ${{ secrets.VERSION_BUMPER_SECRET }}
 
   R-CMD-Check:
+    runs-on: [windows-latest, ubuntu-latest]
     needs: bump-dev-version
     if: ${{ !cancelled() }}
     permissions: read-all
-    uses: Open-Systems-Pharmacology/Workflows/.github/workflows/R-CMD-check-build.yaml@main
+    steps:
+      - uses: browser-actions/setup-chrome@v1
+      - uses: Open-Systems-Pharmacology/Workflows/.github/workflows/R-CMD-check-build.yaml@main
 
   pkgdown:
+    runs-on: ubuntu-latest
     needs: bump-dev-version
     if: ${{ !cancelled() }}
-    uses:  Open-Systems-Pharmacology/Workflows/.github/workflows/pkgdown.yaml@main
+    steps:
+      - uses: browser-actions/setup-chrome@v1
+      - uses:  Open-Systems-Pharmacology/Workflows/.github/workflows/pkgdown.yaml@main
 
