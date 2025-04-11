@@ -4,7 +4,17 @@ if(isWindows) {
   # This line install the java script app that takes snapshots of reports
   # Add option force=TRUE to prevent webshot to crash if the install path is not found
   webshot::install_phantomjs(force = TRUE)
+} else{
+  # Check Chromote availability
+  tryCatch({
+    testChrome <- chromote::Chromote$new()
+    testChrome$close()
+  }, error = function(e) {
+    message("Warning: Chrome failed to initialize. Ensure Chrome is installed and accessible.")
+  }) 
 }
+
+
 
 #' @title includeReportFromWorkflow
 #' @description Render a `workflow` report and display its content as raw html
