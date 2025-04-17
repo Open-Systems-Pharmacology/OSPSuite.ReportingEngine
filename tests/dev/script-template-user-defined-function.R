@@ -76,7 +76,6 @@ plotAUCRatios <- function(structureSets,
                           workflowType = PopulationWorkflowTypes$parallelComparison,
                           xParameters,
                           yParameters) {
-
   # Recover the PK parameters from calculatePKParameters task
   pkParametersAcrossPopulations <- getPkParametersAcrossPopulations(structureSets)
   pkParametersDataAcrossPopulations <- pkParametersAcrossPopulations$data

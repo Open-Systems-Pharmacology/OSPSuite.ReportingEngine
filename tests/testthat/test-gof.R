@@ -1,49 +1,49 @@
 # GOF MetaData are lists the fields defined below
 testMetaDataA <- list(
-    Time = list(dimension = "Time", unit = "h"),
-    Concentration = list(dimension = "Concentration (mass)", unit = "mg/L"),
-    Path = "Test|Path|A",
-    legend = "Test Legend A",
-    residualsLegend = "Test Residuals Legend A",
-    residualScale = ResidualScales$Logarithmic,
-    group = "Group 1",
-    color = "red",
-    fill = "red"
+  Time = list(dimension = "Time", unit = "h"),
+  Concentration = list(dimension = "Concentration (mass)", unit = "mg/L"),
+  Path = "Test|Path|A",
+  legend = "Test Legend A",
+  residualsLegend = "Test Residuals Legend A",
+  residualScale = ResidualScales$Logarithmic,
+  group = "Group 1",
+  color = "red",
+  fill = "red"
 )
 testMetaDataB <- list(
-    Time = list(dimension = "Time", unit = "h"),
-    Concentration = list(dimension = "Concentration (mass)", unit = "mg/L"),
-    Path = "Test|Path|B",
-    legend = "Test Legend B",
-    residualsLegend = "Test Residuals Legend B",
-    residualScale = ResidualScales$Logarithmic,
-    group = "Group 1",
-    color = "blue",
-    fill = "blue"
+  Time = list(dimension = "Time", unit = "h"),
+  Concentration = list(dimension = "Concentration (mass)", unit = "mg/L"),
+  Path = "Test|Path|B",
+  legend = "Test Legend B",
+  residualsLegend = "Test Residuals Legend B",
+  residualScale = ResidualScales$Logarithmic,
+  group = "Group 1",
+  color = "blue",
+  fill = "blue"
 )
 # Group C: different residuals scale
 testMetaDataC <- list(
-    Time = list(dimension = "Time", unit = "h"),
-    Concentration = list(dimension = "Concentration (mass)", unit = "mg/L"),
-    Path = "Test|Path|C",
-    legend = "Test Legend C",
-    residualsLegend = "Test Residuals Legend C",
-    residualScale = ResidualScales$Linear,
-    group = "Group 1",
-    color = "green",
-    fill = "green"
+  Time = list(dimension = "Time", unit = "h"),
+  Concentration = list(dimension = "Concentration (mass)", unit = "mg/L"),
+  Path = "Test|Path|C",
+  legend = "Test Legend C",
+  residualsLegend = "Test Residuals Legend C",
+  residualScale = ResidualScales$Linear,
+  group = "Group 1",
+  color = "green",
+  fill = "green"
 )
 # Group D: different dimension/unit
 testMetaDataD <- list(
-    Time = list(dimension = "Time", unit = "h"),
-    Concentration = list(dimension = "Fraction", unit = ""),
-    Path = "Test|Path|D",
-    legend = "Test Legend D",
-    residualsLegend = "Test Residuals Legend D",
-    residualScale = ResidualScales$Logarithmic,
-    group = "Group 1",
-    color = "yellow",
-    fill = "yellow"
+  Time = list(dimension = "Time", unit = "h"),
+  Concentration = list(dimension = "Fraction", unit = ""),
+  Path = "Test|Path|D",
+  legend = "Test Legend D",
+  residualsLegend = "Test Residuals Legend D",
+  residualScale = ResidualScales$Logarithmic,
+  group = "Group 1",
+  color = "yellow",
+  fill = "yellow"
 )
 # Group D: different dimension/unit, scale and group
 testMetaDataE <- list(
@@ -87,5 +87,3 @@ test_that("getOutputGroups warns appropriately about meta data consistency withi
   expect_warning(ospsuite.reportingengine:::getOutputGroups(unitMetaDataFrame))
   expect_warning(ospsuite.reportingengine:::getOutputGroups(scaleMetaDataFrame))
 })
-
-

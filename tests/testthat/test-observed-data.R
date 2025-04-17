@@ -56,7 +56,7 @@ test_that("readObservedDataFile: throws an error for unexistant files", {
 test_that("readObservedDataFile throws an error for non UTF-8 files", {
   expect_error(
     readObservedDataFile(getTestDataFilePath("input-data/non-utf8.txt"))
-    )
+  )
 })
 
 test_that("readObservedDataFile throw an error if columns are inconsistent", {

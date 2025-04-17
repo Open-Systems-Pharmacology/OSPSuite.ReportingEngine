@@ -32,7 +32,7 @@ defineExpectedTimeProfileData <- parse(text = paste0(
   c("All-Obs", "lloq", "All-Obs"), '-timeProfileData.csv")'
 ))
 defineExpectedResidualsData <- parse(text = paste0(
-  "expectedResidualsData", scenarios, ' <- getTestDataFilePath("mean-gof/', 
+  "expectedResidualsData", scenarios, ' <- getTestDataFilePath("mean-gof/',
   c("All-Obs", "lloq", "All-Obs"), '-residuals.csv")'
 ))
 

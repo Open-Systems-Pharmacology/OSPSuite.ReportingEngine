@@ -30,8 +30,8 @@ setDefaultPlotFormat <- function(format = NULL, width = NULL, height = NULL, uni
   # add legend space to plot dimensions does not support pixels as units
   if (isIncluded(units, "px")) {
     units <- "in"
-    reEnv$defaultPlotFormat$width <- reEnv$defaultPlotFormat$width/reEnv$defaultPlotFormat$dpi
-    reEnv$defaultPlotFormat$height <- reEnv$defaultPlotFormat$height/reEnv$defaultPlotFormat$dpi
+    reEnv$defaultPlotFormat$width <- reEnv$defaultPlotFormat$width / reEnv$defaultPlotFormat$dpi
+    reEnv$defaultPlotFormat$height <- reEnv$defaultPlotFormat$height / reEnv$defaultPlotFormat$dpi
   }
   reEnv$defaultPlotFormat$units <- units %||% reEnv$defaultPlotFormat$units
   tlf::setDefaultExportParameters(

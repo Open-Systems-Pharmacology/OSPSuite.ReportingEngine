@@ -206,12 +206,12 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   }
   width <- ifNotNull(
     plotProperties$FontAndSize$ChartWidth,
-    plotProperties$FontAndSize$ChartWidth/reEnv$defaultPlotFormat$dpi,
+    plotProperties$FontAndSize$ChartWidth / reEnv$defaultPlotFormat$dpi,
     defaultWidth
   )
   height <- ifNotNull(
     plotProperties$FontAndSize$ChartHeight,
-    plotProperties$FontAndSize$ChartHeight/reEnv$defaultPlotFormat$dpi,
+    plotProperties$FontAndSize$ChartHeight / reEnv$defaultPlotFormat$dpi,
     defaultHeight
   )
   # Get dimensions of exported based on legend position and default/specific plot properties
