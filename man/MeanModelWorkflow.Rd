@@ -13,7 +13,7 @@ Other workflows:
 }
 \concept{workflows}
 \section{Super class}{
-\code{ospsuite.reportingengine::Workflow} -> \code{MeanModelWorkflow}
+\code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{MeanModelWorkflow}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

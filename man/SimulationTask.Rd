@@ -8,7 +8,7 @@ R6 class for SimulationTask settings
 }
 \keyword{internal}
 \section{Super class}{
-\code{ospsuite.reportingengine::Task} -> \code{SimulationTask}
+\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{SimulationTask}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

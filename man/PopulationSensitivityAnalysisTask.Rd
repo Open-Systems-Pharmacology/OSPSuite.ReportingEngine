@@ -32,7 +32,7 @@ Other workflow tasks:
 }
 \concept{workflow tasks}
 \section{Super classes}{
-\code{ospsuite.reportingengine::Task} -> \code{ospsuite.reportingengine::SensitivityAnalysisTask} -> \code{PopulationSensitivityAnalysisTask}
+\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{\link[ospsuite.reportingengine:SensitivityAnalysisTask]{ospsuite.reportingengine::SensitivityAnalysisTask}} -> \code{PopulationSensitivityAnalysisTask}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

@@ -13,7 +13,7 @@ Other workflows:
 }
 \concept{workflows}
 \section{Super class}{
-\code{ospsuite.reportingengine::Workflow} -> \code{QualificationWorkflow}
+\code{\link[ospsuite.reportingengine:Workflow]{ospsuite.reportingengine::Workflow}} -> \code{QualificationWorkflow}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

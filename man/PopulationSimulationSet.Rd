@@ -7,7 +7,7 @@
 R6 class representing Reporting Engine Population Model Set
 }
 \section{Super class}{
-\code{ospsuite.reportingengine::SimulationSet} -> \code{PopulationSimulationSet}
+\code{\link[ospsuite.reportingengine:SimulationSet]{ospsuite.reportingengine::SimulationSet}} -> \code{PopulationSimulationSet}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
