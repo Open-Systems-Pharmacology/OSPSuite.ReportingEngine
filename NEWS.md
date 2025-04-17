@@ -1,5 +1,9 @@
 # ospsuite.reportingengine (development version)
 
+## Minor improvements and bug fixes
+
+- Fixed an error where population workflow would break in R 4.5.0 due to an error in `trimFileName()` (\#1327)
+
 # ospsuite.reportingengine 2.2.0
 
 ## New features

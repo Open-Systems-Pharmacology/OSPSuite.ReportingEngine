@@ -84,7 +84,6 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
   if (!is.null(extension)) {
     fileName <- sub(
       pattern = paste0("[.].*", extension),
-      "[.].*$",
       replacement = "",
       x = fileName
     )
