@@ -251,10 +251,11 @@ reEnv$defaultTimeProfileStatistics <- getStatisticsFromType(StatisticsTypes$`5th
 #' @family enum helpers
 reSettingsNames <- enum(names(reEnv))
 
-# Save a sync version of re-env as an .RData file
-newEnv <- reEnv
-save(
-  "newEnv",
-  file = file.path(system.file(package = "ospsuite.reportingengine"), "extdata", "re-env.RData")
-)
-rm(list = "newEnv")
+# Code chunk to be run only if reEnv is updated
+# Saves a sync version of reEnv as an re-env.RData file
+# That users can load to get default reporting engine settings
+if (FALSE) {
+  newEnv <- reEnv
+  save("newEnv", file = file.path(system.file(package = "ospsuite.reportingengine"), "extdata", "re-env.RData"))
+  rm(list = "newEnv")
+}
