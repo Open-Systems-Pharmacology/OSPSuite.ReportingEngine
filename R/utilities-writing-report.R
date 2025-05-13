@@ -193,6 +193,7 @@ renderReport <- function(fileName, createWordReport = FALSE, numberSections = TR
   }
   addMarkdownToc(fileName)
   mergeMarkdownFiles(inputFiles = c(intro, fileName), outputFile = fileName)
+  trimFile(fileName)
   re.tEndAction(actionToken = actionToken2)
   return(invisible())
 }
@@ -762,6 +763,29 @@ updateTableNumbers <- function(fileContent) {
     anchorId = "table",
     captionBelow = FALSE
   ))
+}
+
+#' @title trimFile
+#' @description
+#' Trim all the duplicated blank lines in a markdown report file as well as pre-title blank space
+#' @param fileName path of .md file to trim
+#' @export
+#' @family reporting
+trimFile <- function(fileName) {
+  fileContent <- readLines(fileName, encoding = "UTF-8")
+  # Trim all the duplicated blank lines
+  emptyLines <- fileContent %in% ""
+  emptyPreviousLines <- c(FALSE, head(emptyLines, -1))
+  toRemove <- emptyLines & emptyPreviousLines
+  newFileContent <- fileContent[!toRemove]
+  # If report starts with blank space, only one blank line remains at this point
+  if (head(newFileContent, 1) %in% "") {
+    newFileContent <- tail(newFileContent, -1)
+  }
+  fileObject <- file(fileName, encoding = "UTF-8")
+  write(newReportContent, file = fileObject, sep = "\n")
+  close(fileObject)
+  return(invisible())
 }
 
 #' @title copyReport

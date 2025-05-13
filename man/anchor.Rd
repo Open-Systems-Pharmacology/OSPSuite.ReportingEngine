@@ -32,6 +32,7 @@ Other reporting:
 \code{\link{mergeMarkdownFiles}()},
 \code{\link{renderReport}()},
 \code{\link{renderWordReport}()},
-\code{\link{resetReport}()}
+\code{\link{resetReport}()},
+\code{\link{trimFile}()}
 }
 \concept{reporting}

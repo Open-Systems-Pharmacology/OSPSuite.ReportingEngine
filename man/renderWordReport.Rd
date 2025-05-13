@@ -35,6 +35,7 @@ Other reporting:
 \code{\link{hasAnchor}()},
 \code{\link{mergeMarkdownFiles}()},
 \code{\link{renderReport}()},
-\code{\link{resetReport}()}
+\code{\link{resetReport}()},
+\code{\link{trimFile}()}
 }
 \concept{reporting}

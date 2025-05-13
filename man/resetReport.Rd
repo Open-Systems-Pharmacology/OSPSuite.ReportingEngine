@@ -30,6 +30,7 @@ Other reporting:
 \code{\link{hasAnchor}()},
 \code{\link{mergeMarkdownFiles}()},
 \code{\link{renderReport}()},
-\code{\link{renderWordReport}()}
+\code{\link{renderWordReport}()},
+\code{\link{trimFile}()}
 }
 \concept{reporting}
