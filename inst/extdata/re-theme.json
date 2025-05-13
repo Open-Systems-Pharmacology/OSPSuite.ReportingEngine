@@ -83,6 +83,14 @@
       "fontFamily": "",
       "angle": 0,
       "align": "right"
+    },
+    "y2Axis": {
+      "color": "black",
+      "size": 11,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "left"
     }
   },
   "background": {
