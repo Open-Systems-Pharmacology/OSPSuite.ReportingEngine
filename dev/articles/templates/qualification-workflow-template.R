@@ -7,7 +7,7 @@
 #' @param createWordReport Logical defining if a `docx` version of the report should also be created.
 #' Note that `pandoc` installation is required for this feature
 #' [https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc]
-#' @param maxSimulationsPerCore An integer that set the maximimum number of simulations per core
+#' @param maxSimulationsPerCore An integer that sets the maximum number of simulations per core
 #' @param versionInfo A `QualificationVersionInfo` object to update title page with Qualification Version Information
 #' @param wordConversionTemplate File name of docx template document passed to Pandoc for the conversion of the md report into docx
 #' Default template is available using `system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")`
@@ -15,7 +15,7 @@
 #' # Create a Qualification Report without any option and running v9.1.1 of Qualification Runner
 #' createQualificationReport("C:/Software/QualificationRunner9.1.1")
 #' 
-#' # Create a Qualification Report and turn of the creation of a doc version
+#' # Create a Qualification Report and turn off the creation of a doc version
 #' createQualificationReport("C:/Software/QualificationRunner9.1.1", createWordReport = FALSE)
 #' 
 #' # Create a Qualification Report and set the number of simulations to be run per core
@@ -73,11 +73,11 @@ createQualificationReport <- function(qualificationRunnerFolder,
   configurationPlanFile <- file.path(reInputFolder, paste0(configurationPlanName, ".json"))
 
   #' Option to record the time require to run the workflow.
-  #' The timer will calculate calculation time form internal `Sys.time` function
+  #' The timer will calculate calculation time from internal `Sys.time()` function
   recordWorkflowTime <- TRUE
 
   #' Set watermark that will appear in all generated plots
-  #' Default is no watermark. `Label` objects from `tlf` package can be used to specifiy watermark font.
+  #' Default is no watermark. `Label` objects from `tlf` package can be used to specify watermark font
   watermark <- ""
 
   #' If not set, report created will be named `report.md` and located in the worflow folder namely `reOutputFolder`
@@ -141,7 +141,7 @@ createQualificationReport <- function(qualificationRunnerFolder,
   #' Set watermark. If set, it will appear in all generated plots
   workflow$setWatermark(watermark)
 
-  #' Set the maximimum number of simulations per core if defined
+  #' Set the maximum number of simulations per core if defined
   if(!is.null(maxSimulationsPerCore)){
     workflow$simulate$settings$maxSimulationsPerCore <- maxSimulationsPerCore
   }
@@ -155,7 +155,7 @@ createQualificationReport <- function(qualificationRunnerFolder,
   #' workflow$inactivateTasks("plotPKRatio")
   #' workflow$inactivateTasks("plotDDIRatio")
   
-  #' Run the `QualificatitonWorklfow`
+  #' Run the `QualificationWorkflow`
   workflow$runWorkflow()
 
   #' Print timer tracked time if option `recordWorkflowTime` is set to TRUE

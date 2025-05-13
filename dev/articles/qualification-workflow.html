@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -336,7 +336,7 @@ and named <code>createQualificationReport</code>.</p>
 <span><span class="co">#' @param createWordReport Logical defining if a `docx` version of the report should also be created.</span></span>
 <span><span class="co">#' Note that `pandoc` installation is required for this feature</span></span>
 <span><span class="co">#' [https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc]</span></span>
-<span><span class="co">#' @param maxSimulationsPerCore An integer that set the maximimum number of simulations per core</span></span>
+<span><span class="co">#' @param maxSimulationsPerCore An integer that sets the maximum number of simulations per core</span></span>
 <span><span class="co">#' @param versionInfo A `QualificationVersionInfo` object to update title page with Qualification Version Information</span></span>
 <span><span class="co">#' @param wordConversionTemplate File name of docx template document passed to Pandoc for the conversion of the md report into docx</span></span>
 <span><span class="co">#' Default template is available using `system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")`</span></span>
@@ -344,7 +344,7 @@ and named <code>createQualificationReport</code>.</p>
 <span><span class="co">#' # Create a Qualification Report without any option and running v9.1.1 of Qualification Runner</span></span>
 <span><span class="co">#' createQualificationReport("C:/Software/QualificationRunner9.1.1")</span></span>
 <span><span class="co">#' </span></span>
-<span><span class="co">#' # Create a Qualification Report and turn of the creation of a doc version</span></span>
+<span><span class="co">#' # Create a Qualification Report and turn off the creation of a doc version</span></span>
 <span><span class="co">#' createQualificationReport("C:/Software/QualificationRunner9.1.1", createWordReport = FALSE)</span></span>
 <span><span class="co">#' </span></span>
 <span><span class="co">#' # Create a Qualification Report and set the number of simulations to be run per core</span></span>
@@ -402,11 +402,11 @@ and named <code>createQualificationReport</code>.</p>
 <span>  <span class="va">configurationPlanFile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">reInputFolder</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">configurationPlanName</span>, <span class="st">".json"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co">#' Option to record the time require to run the workflow.</span></span>
-<span>  <span class="co">#' The timer will calculate calculation time form internal `Sys.time` function</span></span>
+<span>  <span class="co">#' The timer will calculate calculation time from internal `Sys.time()` function</span></span>
 <span>  <span class="va">recordWorkflowTime</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
 <span></span>
 <span>  <span class="co">#' Set watermark that will appear in all generated plots</span></span>
-<span>  <span class="co">#' Default is no watermark. `Label` objects from `tlf` package can be used to specifiy watermark font.</span></span>
+<span>  <span class="co">#' Default is no watermark. `Label` objects from `tlf` package can be used to specify watermark font</span></span>
 <span>  <span class="va">watermark</span> <span class="op">&lt;-</span> <span class="st">""</span></span>
 <span></span>
 <span>  <span class="co">#' If not set, report created will be named `report.md` and located in the worflow folder namely `reOutputFolder`</span></span>
@@ -470,7 +470,7 @@ and named <code>createQualificationReport</code>.</p>
 <span>  <span class="co">#' Set watermark. If set, it will appear in all generated plots</span></span>
 <span>  <span class="va">workflow</span><span class="op">$</span><span class="fu">setWatermark</span><span class="op">(</span><span class="va">watermark</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="co">#' Set the maximimum number of simulations per core if defined</span></span>
+<span>  <span class="co">#' Set the maximum number of simulations per core if defined</span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">maxSimulationsPerCore</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="va">workflow</span><span class="op">$</span><span class="va">simulate</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">maxSimulationsPerCore</span> <span class="op">&lt;-</span> <span class="va">maxSimulationsPerCore</span></span>
 <span>  <span class="op">}</span></span>
@@ -484,7 +484,7 @@ and named <code>createQualificationReport</code>.</p>
 <span>  <span class="co">#' workflow$inactivateTasks("plotPKRatio")</span></span>
 <span>  <span class="co">#' workflow$inactivateTasks("plotDDIRatio")</span></span>
 <span>  </span>
-<span>  <span class="co">#' Run the `QualificatitonWorklfow`</span></span>
+<span>  <span class="co">#' Run the `QualificationWorkflow`</span></span>
 <span>  <span class="va">workflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co">#' Print timer tracked time if option `recordWorkflowTime` is set to TRUE</span></span>
@@ -591,7 +591,7 @@ exponent notations as illustrated in the example below:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>
