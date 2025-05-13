@@ -783,7 +783,7 @@ trimFile <- function(fileName) {
     newFileContent <- tail(newFileContent, -1)
   }
   fileObject <- file(fileName, encoding = "UTF-8")
-  write(newReportContent, file = fileObject, sep = "\n")
+  write(newFileContent, file = fileObject, sep = "\n")
   close(fileObject)
   return(invisible())
 }
