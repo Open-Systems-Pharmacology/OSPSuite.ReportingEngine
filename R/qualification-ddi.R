@@ -90,7 +90,12 @@ getQualificationDDIPlotData <- function(configurationPlan) {
                     unit = plotComponent$TimeUnit
                   )
                 }
+                
                 pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
+                useAUC_inf <- all(isIncluded(plotComponent$EndTime, "Inf"), isIncluded(pkParameter, "AUC"))
+                if (useAUC_inf){
+                  pkParameterName <- generateDDIPlotPKParameterName("AUC_inf", startTime, endTime)
+                }
 
                 pkAnalysisResultsPath <- configurationPlan$getPKAnalysisResultsPath(
                   project = projectName,

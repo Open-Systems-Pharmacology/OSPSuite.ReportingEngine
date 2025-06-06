@@ -145,7 +145,6 @@ getDDIOutputsDataframe <- function(configurationPlan) {
               unit = plotComponent$TimeUnit
             )
           }
-
           if (is.numeric(plotComponent$EndTime)) {
             endTime <- ospsuite::toBaseUnit(
               quantityOrDimension = ospDimensions$Time,
@@ -153,9 +152,17 @@ getDDIOutputsDataframe <- function(configurationPlan) {
               unit = plotComponent$TimeUnit
             )
           }
-
           newPKParameterNames <- NULL
           for (pkParameter in pkParameters) {
+            # Configuration plan AUC default to AUC_tEnd
+            # If end time is Inf, needs to use AUC_inf instead
+            renameParameters <- all(
+              isIncluded(plotComponent$EndTime, "Inf"),
+              isIncluded(pkParameter, "AUC")
+            )
+            if (renameParameters){
+              pkParameter <- "AUC_inf"
+            }
             newPKParameterNames <- c(
               newPKParameterNames,
               addNewPkParameter(pkParameter, startTime, endTime)
