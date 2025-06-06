@@ -183,8 +183,8 @@ addOutputToComparisonTimeProfile <- function(outputMapping, simulationDuration, 
 
       plotObject <- tlf::addErrorbar(
         x = observedTime,
-        ymin = observedError$ymin[selectedObservedTimeValues],
-        ymax = observedError$ymax[selectedObservedTimeValues],
+        ymin = observedError$ymin,
+        ymax = observedError$ymax,
         caption = prettyCaption(paste(outputMapping$Caption, "Observed Data"), plotObject),
         color = outputMapping$Color,
         size = outputMapping$Size,
