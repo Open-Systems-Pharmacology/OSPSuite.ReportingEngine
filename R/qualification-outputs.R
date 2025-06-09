@@ -156,11 +156,15 @@ getDDIOutputsDataframe <- function(configurationPlan) {
           for (pkParameter in pkParameters) {
             # Configuration plan AUC default to AUC_tEnd
             # If end time is Inf, needs to use AUC_inf instead
-            renameParameters <- all(
-              isIncluded(plotComponent$EndTime, "Inf"),
+            useAUCinf <- all(
+              any(
+                isIncluded(plotComponent$EndTime, "Inf"),
+                isEmpty(plotComponent$EndTime),
+                is.na(plotComponent$EndTime)
+              ), 
               isIncluded(pkParameter, "AUC")
             )
-            if (renameParameters){
+            if (useAUCinf){
               pkParameter <- "AUC_inf"
             }
             newPKParameterNames <- c(

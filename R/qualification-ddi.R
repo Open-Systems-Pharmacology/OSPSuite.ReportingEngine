@@ -92,8 +92,15 @@ getQualificationDDIPlotData <- function(configurationPlan) {
                 }
                 
                 pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
-                useAUC_inf <- all(isIncluded(plotComponent$EndTime, "Inf"), isIncluded(pkParameter, "AUC"))
-                if (useAUC_inf){
+                useAUCinf <- all(
+                  any(
+                    isIncluded(plotComponent$EndTime, "Inf"),
+                    isEmpty(plotComponent$EndTime),
+                    is.na(plotComponent$EndTime)
+                  ), 
+                  isIncluded(pkParameter, "AUC")
+                  )
+                if (useAUCinf){
                   pkParameterName <- generateDDIPlotPKParameterName("AUC_inf", startTime, endTime)
                 }
 
