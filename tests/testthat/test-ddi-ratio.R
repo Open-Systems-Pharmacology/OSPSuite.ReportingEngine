@@ -119,3 +119,69 @@ test_that("Guest et al. measure works as expected", {
   # Undefined is same as delta = 1
   expect_equal(ddiMeasure, ddiMeasureNULL)
 })
+
+ddiPlan <- getTestDataFilePath("qualification/configuration-plan-ddi-ratio.json")
+  
+ospsuite::removeAllUserDefinedPKParameters()
+ddiConfig <- ospsuite.reportingengine::loadConfigurationPlan(ddiPlan, "test-ddi")
+
+test_that("getDDIOutputsDataframe generates appropriate data.frame and user-defined PK parameters", {
+  ddiOutputs <- ospsuite.reportingengine:::getDDIOutputsDataframe(ddiConfig)
+  expect_equal(ddiOutputs$project, rep(c("P1", "P2"), each = 2))
+  expect_equal(ddiOutputs$simulation, rep(c("S1", "S2"), each = 2))
+  expect_equal(ddiOutputs$pkParameter, rep(c("AUC_tEnd_tStartTime_60", "C_max_tStartTime_60"), 2))
+  expect_equal(ddiOutputs$startTime, rep(60, 4))
+  expect_equal(ddiOutputs$endTime, rep(NA, 4))
+  expect_equal(
+    ddiOutputs$outputPath, 
+    rep(c(
+      "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)", 
+      "Organism|A|Concentration in container"), 
+      each = 2
+    )
+    )
+  expect_true(all(ddiOutputs$pkParameter %in% ospsuite::allPKParameterNames()))
+})
+
+# Use previous naming convention before ospsuite.reportingengine
+ospsuite::removeAllUserDefinedPKParameters()
+ddiConfig$plots$DDIRatioPlots[[1]]$PKParameters <- c("AUC", "CMAX")
+test_that("Previous naming convention use AUC_inf no or infinite time used", {
+  # End Time is NULL in the default values
+  ddiOutputs <- ospsuite.reportingengine:::getDDIOutputsDataframe(ddiConfig)
+  expect_equal(
+    ddiOutputs$pkParameter,
+    rep(c("AUC_inf_tStartTime_60", "C_max_tStartTime_60"), 2)
+    )
+  expect_true(all(ddiOutputs$pkParameter %in% ospsuite::allPKParameterNames()))
+  # End Time is "Inf"
+  ospsuite::removeAllUserDefinedPKParameters()
+  for(groupIndex in 1:2){
+    for(ddiIndex in 1:2){
+    ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationDDI$EndTime <- "Inf"
+    ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationControl$EndTime <- "Inf"
+    }
+  }
+  ddiOutputs <- ospsuite.reportingengine:::getDDIOutputsDataframe(ddiConfig)
+  expect_equal(
+    ddiOutputs$pkParameter,
+    rep(c("AUC_inf_tStartTime_60", "C_max_tStartTime_60"), 2)
+  )
+  expect_true(all(ddiOutputs$pkParameter %in% ospsuite::allPKParameterNames()))
+  # End Time is 72h
+  ospsuite::removeAllUserDefinedPKParameters()
+  for(groupIndex in 1:2){
+    for(ddiIndex in 1:2){
+      ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationDDI$EndTime <- 3
+      ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationControl$EndTime <- 3
+    }
+  }
+  ddiOutputs <- ospsuite.reportingengine:::getDDIOutputsDataframe(ddiConfig)
+  expect_equal(
+    ddiOutputs$pkParameter,
+    rep(c("AUC_tEnd_tStartTime_60_tEndTime_180", "C_max_tStartTime_60_tEndTime_180"), 2)
+  )
+  expect_true(all(ddiOutputs$pkParameter %in% ospsuite::allPKParameterNames()))
+})
+
+ospsuite::removeAllUserDefinedPKParameters()
