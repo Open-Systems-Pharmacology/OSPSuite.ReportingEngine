@@ -168,7 +168,7 @@ test_that("Previous naming convention use AUC_inf no or infinite time used", {
     rep(c("AUC_inf_tStartTime_60", "C_max_tStartTime_60"), 2)
   )
   expect_true(all(ddiOutputs$pkParameter %in% ospsuite::allPKParameterNames()))
-  # End Time is 72h
+  # End Time is 3h=180min
   ospsuite::removeAllUserDefinedPKParameters()
   for(groupIndex in 1:2){
     for(ddiIndex in 1:2){
