@@ -717,7 +717,7 @@ checkPKParameterEndTime <- function(pkParameterName, endTime) {
     c("AUC_inf", "AUC_inf_norm", "CL", "Thalf", "MRT", "Vd", "Vss", "FractionAucLastToInf")
   )
   if (all(!isEmpty(endTime), extrapolatedParameter)) {
-    warning(messages$numericEndTime(pkParameterName, endTime), call. = FALSE)
+    warning(messages$warningNumericEndTime(pkParameterName, endTime), call. = FALSE)
     return(invisible(NULL))
   }
   return(invisible(NULL))
