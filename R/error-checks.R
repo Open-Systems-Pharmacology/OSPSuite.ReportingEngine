@@ -691,3 +691,34 @@ checkMetaDataIsConsistent <- function(metaData) {
   }
   return()
 }
+
+#' @title checkPKParameterEndTime
+#' @description
+#' Check consistency of PK Parameter end time
+#' @param pkParameterName PK Parameter name. See `ospsuite::allPKParameterNames()` for more details
+#' @param endTime Qualification `EndTime` field
+#' @keywords internal
+checkPKParameterEndTime <- function(pkParameterName, endTime) {
+  if (isIncluded(pkParameterName, "AUC")) {
+    logInfo(messages$ddiAUCSelection(endTime))
+    return(invisible(NULL))
+  }
+  parameterFromSimTime <- any(
+    grepl(pattern = "tEnd", pkParameterName),
+    grepl(pattern = "tDLast", pkParameterName),
+    grepl(pattern = "tD1", pkParameterName)
+  )
+  if (all(isEmpty(endTime), parameterFromSimTime)) {
+    logInfo(messages$infEndTime(pkParameterName))
+    return(invisible(NULL))
+  }
+  extrapolatedParameter <- isIncluded(
+    pkParameterName,
+    c("AUC_inf", "AUC_inf_norm", "CL", "Thalf", "MRT", "Vd", "Vss", "FractionAucLastToInf")
+  )
+  if (all(!isEmpty(endTime), extrapolatedParameter)) {
+    warning(messages$numericEndTime(pkParameterName, endTime), call. = FALSE)
+    return(invisible(NULL))
+  }
+  return(invisible(NULL))
+}

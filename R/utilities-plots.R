@@ -192,11 +192,11 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
   plotConfiguration$legend$font$size <- fonts$LegendSize %||% plotConfiguration$legend$font$size
   plotConfiguration$background$watermark$font$size <- fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size
   # Fix issue #1333: use same font between axes
-  if(isOfType(plotConfiguration, "TimeProfilePlotConfiguration")){
+  if (isOfType(plotConfiguration, "TimeProfilePlotConfiguration")) {
     plotConfiguration$y2Axis$font$size <- fonts$AxisSize %||% plotConfiguration$y2Axis$font$size
     plotConfiguration$labels$y2label$font$size <- fonts$AxisSize %||% plotConfiguration$labels$y2label$font$size
   }
-  
+
   # Set legend position
   validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
   plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition

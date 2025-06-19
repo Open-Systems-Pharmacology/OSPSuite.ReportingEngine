@@ -121,7 +121,7 @@ test_that("Guest et al. measure works as expected", {
 })
 
 ddiPlan <- getTestDataFilePath("qualification/configuration-plan-ddi-ratio.json")
-  
+
 ospsuite::removeAllUserDefinedPKParameters()
 ddiConfig <- ospsuite.reportingengine::loadConfigurationPlan(ddiPlan, "test-ddi")
 
@@ -133,13 +133,15 @@ test_that("getDDIOutputsDataframe generates appropriate data.frame and user-defi
   expect_equal(ddiOutputs$startTime, rep(60, 4))
   expect_equal(ddiOutputs$endTime, rep(NA, 4))
   expect_equal(
-    ddiOutputs$outputPath, 
-    rep(c(
-      "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)", 
-      "Organism|A|Concentration in container"), 
+    ddiOutputs$outputPath,
+    rep(
+      c(
+        "Organism|PeripheralVenousBlood|Raltegravir|Plasma (Peripheral Venous Blood)",
+        "Organism|A|Concentration in container"
+      ),
       each = 2
     )
-    )
+  )
   expect_true(all(ddiOutputs$pkParameter %in% ospsuite::allPKParameterNames()))
 })
 
@@ -152,14 +154,14 @@ test_that("Previous naming convention use AUC_inf no or infinite time used", {
   expect_equal(
     ddiOutputs$pkParameter,
     rep(c("AUC_inf_tStartTime_60", "C_max_tStartTime_60"), 2)
-    )
+  )
   expect_true(all(ddiOutputs$pkParameter %in% ospsuite::allPKParameterNames()))
   # End Time is "Inf"
   ospsuite::removeAllUserDefinedPKParameters()
-  for(groupIndex in 1:2){
-    for(ddiIndex in 1:2){
-    ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationDDI$EndTime <- "Inf"
-    ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationControl$EndTime <- "Inf"
+  for (groupIndex in 1:2) {
+    for (ddiIndex in 1:2) {
+      ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationDDI$EndTime <- "Inf"
+      ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationControl$EndTime <- "Inf"
     }
   }
   ddiOutputs <- ospsuite.reportingengine:::getDDIOutputsDataframe(ddiConfig)
@@ -170,8 +172,8 @@ test_that("Previous naming convention use AUC_inf no or infinite time used", {
   expect_true(all(ddiOutputs$pkParameter %in% ospsuite::allPKParameterNames()))
   # End Time is 3h=180min
   ospsuite::removeAllUserDefinedPKParameters()
-  for(groupIndex in 1:2){
-    for(ddiIndex in 1:2){
+  for (groupIndex in 1:2) {
+    for (ddiIndex in 1:2) {
       ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationDDI$EndTime <- 3
       ddiConfig$plots$DDIRatioPlots[[1]]$Groups[[groupIndex]]$DDIRatios[[ddiIndex]]$SimulationControl$EndTime <- 3
     }
@@ -185,3 +187,5 @@ test_that("Previous naming convention use AUC_inf no or infinite time used", {
 })
 
 ospsuite::removeAllUserDefinedPKParameters()
+
+unlink("test-ddi", recursive = TRUE)

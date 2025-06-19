@@ -72,37 +72,14 @@ getQualificationDDIPlotData <- function(configurationPlan) {
                 projectName <- plotComponent$Project
                 simulationName <- plotComponent$Simulation
 
-                startTime <- NULL
-                endTime <- NULL
-
-                if (is.numeric(plotComponent$StartTime)) {
-                  startTime <- ospsuite::toBaseUnit(
-                    quantityOrDimension = ospDimensions$Time,
-                    values = plotComponent$StartTime,
-                    unit = plotComponent$TimeUnit
-                  )
-                }
-
-                if (is.numeric(plotComponent$EndTime)) {
-                  endTime <- ospsuite::toBaseUnit(
-                    quantityOrDimension = ospDimensions$Time,
-                    values = plotComponent$EndTime,
-                    unit = plotComponent$TimeUnit
-                  )
-                }
-                
-                pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
-                useAUCinf <- all(
-                  any(
-                    isIncluded(plotComponent$EndTime, "Inf"),
-                    isEmpty(plotComponent$EndTime),
-                    is.na(plotComponent$EndTime)
-                  ), 
-                  isIncluded(pkParameter, "AUC")
-                  )
-                if (useAUCinf){
-                  pkParameterName <- generateDDIPlotPKParameterName("AUC_inf", startTime, endTime)
-                }
+                startTime <- getTimeFromPlan(plotComponent, "StartTime")
+                endTime <- getTimeFromPlan(plotComponent, "EndTime")
+                useAUCinf <- all(isEmpty(endTime), isIncluded(pkParameter, "AUC"))
+                pkParameterName <- generateDDIPlotPKParameterName(
+                  ifelse(useAUCinf, "AUC_inf", pkParameter),
+                  startTime,
+                  endTime
+                )
 
                 pkAnalysisResultsPath <- configurationPlan$getPKAnalysisResultsPath(
                   project = projectName,

@@ -134,37 +134,16 @@ getDDIOutputsDataframe <- function(configurationPlan) {
         outputPath <- ddiRatio$Output
         for (simulationType in c("SimulationControl", "SimulationDDI")) {
           plotComponent <- ddiRatio[[simulationType]]
+          startTime <- getTimeFromPlan(plotComponent, "StartTime")
+          endTime <- getTimeFromPlan(plotComponent, "EndTime")
 
-          startTime <- NULL
-          endTime <- NULL
-
-          if (is.numeric(plotComponent$StartTime)) {
-            startTime <- ospsuite::toBaseUnit(
-              quantityOrDimension = ospDimensions$Time,
-              values = plotComponent$StartTime,
-              unit = plotComponent$TimeUnit
-            )
-          }
-          if (is.numeric(plotComponent$EndTime)) {
-            endTime <- ospsuite::toBaseUnit(
-              quantityOrDimension = ospDimensions$Time,
-              values = plotComponent$EndTime,
-              unit = plotComponent$TimeUnit
-            )
-          }
           newPKParameterNames <- NULL
           for (pkParameter in pkParameters) {
+            checkPKParameterEndTime(pkParameter, endTime)
             # Configuration plan AUC default to AUC_tEnd
             # If end time is Inf, needs to use AUC_inf instead
-            useAUCinf <- all(
-              any(
-                isIncluded(plotComponent$EndTime, "Inf"),
-                isEmpty(plotComponent$EndTime),
-                is.na(plotComponent$EndTime)
-              ), 
-              isIncluded(pkParameter, "AUC")
-            )
-            if (useAUCinf){
+            useAUCinf <- all(isEmpty(endTime), isIncluded(pkParameter, "AUC"))
+            if (useAUCinf) {
               pkParameter <- "AUC_inf"
             }
             newPKParameterNames <- c(
@@ -285,3 +264,23 @@ pkDictionaryQualificationOSP <- c(
     CMAX = "C_max"
   )
 )
+
+#' @title getTimeFromPlan
+#' @description
+#' Get endTime value in base unit from configuration plan field
+#' @param configurationPlanField The configuration plan field listing `endTime` value and unit
+#' @param fieldName The name of the field to extract the time from (e.g., "EndTime")
+#' @return `endTime` value in base unit
+#' @keywords internal
+getTimeFromPlan <- function(configurationPlanField, fieldName) {
+  timeIsNumeric <- is.numeric(configurationPlanField[[fieldName]])
+  if (!timeIsNumeric) {
+    return(NULL)
+  }
+  timeValue <- ospsuite::toBaseUnit(
+    quantityOrDimension = ospDimensions$Time,
+    values = configurationPlanField[[fieldName]],
+    unit = configurationPlanField$TimeUnit
+  )
+  return(timeValue)
+}

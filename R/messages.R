@@ -314,6 +314,15 @@ messages <- list(
       highlight(output), "' were lower or equal to 0."
     )
   },
+  warningNumericEndTime = function(pkParameterName, endTime) {
+    paste(
+      "PK Parameter:", highlight(pkParameterName),
+      "and endTime:", paste(endTime, ospsuite::getBaseUnit("Time")),
+      "found in configuration plan.",
+      highlight(pkParameterName),
+      "calculation uses extrapolation from the terminal 10% of simulated points."
+    )
+  },
 
   #----- Info messages ----
   runStarting = function(runName, subRun = NULL) {
@@ -344,6 +353,29 @@ messages <- list(
       " from reference '", highlight(referenceSimulationSetName), "'.\n",
       "Ratio comparison will use ", highlight(ifelse(isSamePopulation, "Individual PK Ratios", "Monte Carlo Sampling")),
       " for analyzing statistics."
+    )
+  },
+  ddiAUCSelection = function(endTime) {
+    paste(
+      "PKParameter:", highlight("AUC"), "and endTime:",
+      highlight(ifelse(
+        isEmpty(endTime),
+        "Infinite or NULL",
+        paste(endTime, ospsuite::getBaseUnit("Time"))
+      )),
+      "found in configuration plan.",
+      "Defaulting to following ospsuite PKParameter:",
+      highlight(ifelse(isEmpty(endTime), "AUC_inf", "AUC_tEnd"))
+    )
+  },
+  infEndTime = function(pkParameterName) {
+    paste(
+      "endTime:",
+      highlight("Infinite or NULL"),
+      "found in configuration plan along with PK Pararemeter:",
+      highlight(pkParameterName),
+      "sensitive to simulated time range.",
+      "The simulation end time will be used in the PK parameter calculation."
     )
   },
 
