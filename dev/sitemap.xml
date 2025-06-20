@@ -108,6 +108,7 @@
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkHasRunOnAllCores.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkIsSamePopulation.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkMetaDataIsConsistent.html</loc></url>
+<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkPKParameterEndTime.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkSamePopulationIds.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkTaskInputsExist.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/copyReport.html</loc></url>
@@ -268,6 +269,7 @@
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getSplitPositions.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getStatisticsFromType.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getTaskInputs.html</loc></url>
+<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getTimeFromPlan.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getTimeProfileObservedDataFromResults.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getTimeProfileOutputsDataframe.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getTimeProfilePlotConfiguration.html</loc></url>
