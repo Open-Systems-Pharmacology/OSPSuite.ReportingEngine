@@ -253,9 +253,10 @@ getRESettings <- function(settingName) {
 #' @export
 saveRESettings <- function(file) {
   validateIsFileExtension(file, "RData")
-  assign("newEnv", reEnv)
+  newEnv <- reEnv
   save("newEnv", file = file)
-  return(invisible(NULL))
+  # Prevent lintr warning by invisibly exporting names of RE settings
+  return(invisible(names(newEnv)))
 }
 
 #' @title loadRESettings
