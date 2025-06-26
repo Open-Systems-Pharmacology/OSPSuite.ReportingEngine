@@ -266,7 +266,7 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
   oldSeed <- .Random.seed
   # Using assign based on https://github.com/r-lib/lintr/issues/787 advice
   on.exit({
-    assign(".Random.seed", oldSeed)
+    assign(".Random.seed", oldSeed, envir = parent.frame())
   })
   set.seed(seed)
 

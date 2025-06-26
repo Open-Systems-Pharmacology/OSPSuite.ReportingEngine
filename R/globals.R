@@ -31,6 +31,6 @@ rmpiVariables <- c(
   "population",
   "sim"
 )
-lintVariables <- c("newEnv", ".Random.seed")
+lintVariables <- c(".Random.seed")
 
 utils::globalVariables(c(dplyrVariables, rmpiVariables, lintVariables))

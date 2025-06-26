@@ -253,7 +253,7 @@ getRESettings <- function(settingName) {
 #' @export
 saveRESettings <- function(file) {
   validateIsFileExtension(file, "RData")
-  newEnv <- reEnv
+  assign("newEnv", reEnv)
   save("newEnv", file = file)
   return(invisible(NULL))
 }
