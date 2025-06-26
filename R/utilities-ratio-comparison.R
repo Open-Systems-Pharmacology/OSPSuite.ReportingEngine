@@ -261,11 +261,12 @@ mcSampling <- function(dataSize, sampleSize, n = getDefaultMCRepetitions(), seed
   # .Random.seed is created when
   # calling a random number generator for the first time
   # The next line aims at ensuring that a .Random.seed object exists
-  createRandom <- stats::runif(1)
+  invisible(stats::runif(1))
   # Use pre-defined seed to get repeatable results
   oldSeed <- .Random.seed
+  # Using assign based on https://github.com/r-lib/lintr/issues/787 advice
   on.exit({
-    .Random.seed <<- oldSeed
+    assign(".Random.seed", oldSeed)
   })
   set.seed(seed)
 
