@@ -460,7 +460,7 @@ getLegendDimensions <- function(plotObject) {
   cowplot::set_null_device("png")
   # Get grob from plot = list of plot properties
   legendGrob <- getLegendGrob(legendPlotObject)
-  if (isEmpty(legendGrobIndex)) {
+  if (isEmpty(legendGrob)) {
     return(NULL)
   }
   # grid package is already required and installed by ggplot2
