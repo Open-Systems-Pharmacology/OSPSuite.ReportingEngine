@@ -414,6 +414,30 @@ updateWatermarkDimensions <- function(plotObject) {
   return(plotObject)
 }
 
+getLegendGrob <- function(plotObject){
+  if(utils::packageVersion("cowplot") >= "1.2.0"){
+    return(cowplot::get_legend(plotObject))
+  }
+  # Get grob from plot = list of plot properties
+  allLegendGrobs <- cowplot::get_plot_component(
+    plotObject,
+    pattern = "guide-box",
+    return_all = TRUE
+  )
+  # No legend grob found
+  if (isEmpty(allLegendGrobs)) {
+    return(NULL)
+  }
+  # Look for legend grob that stores the dimensions of the legend
+  legendGrobIndex <- head(which(sapply(allLegendGrobs, function(grob) grob$name) %in% "guide-box"), 1)
+  # If no legend, index is empty
+  if (isEmpty(legendGrobIndex)) {
+    return(NULL)
+  }
+  legendGrob <- allLegendGrobs[[legendGrobIndex]]
+  return(legendGrob)
+}
+
 #' @title getLegendDimensions
 #' @description
 #' Get legend dimensions
@@ -435,18 +459,10 @@ getLegendDimensions <- function(plotObject) {
   # See https://wilkelab.org/cowplot/reference/set_null_device.html for more details
   cowplot::set_null_device("png")
   # Get grob from plot = list of plot properties
-  allLegendGrobs <- cowplot::get_plot_component(
-    legendPlotObject,
-    pattern = "guide-box",
-    return_all = TRUE
-  )
-  # Look for legend grob that stores the dimensions of the legend
-  legendGrobIndex <- head(which(sapply(allLegendGrobs, function(grob) grob$name) %in% "guide-box"), 1)
-  # If no legend, index is empty
+  legendGrob <- getLegendGrob(legendPlotObject)
   if (isEmpty(legendGrobIndex)) {
     return(NULL)
   }
-  legendGrob <- allLegendGrobs[[legendGrobIndex]]
   # grid package is already required and installed by ggplot2
   legendWidth <- as.numeric(grid::convertUnit(
     max(legendGrob$widths),
