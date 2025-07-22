@@ -451,6 +451,20 @@ checkPKRatioObservedRecord <- function(selectedRow, observedDataRecordId) {
   return(FALSE)
 }
 
+validateObservedPKRatioUnit <- function(pkUnit, pkDimension, pkID, pkParameterName) {
+  if (isUnitFromDimension(pkUnit, pkDimension)) {
+    return(invisible())
+  }
+  stop(
+    messages$warningPKRatioWrongUnit(
+      id = pkID,
+      pkParameterName = pkParameterName,
+      sourceUnit = pkUnit
+    ),
+    call. = FALSE
+  )
+}
+
 validateGuestParameters <- function(guestParameters, pkParameters) {
   # Repurpose validateIsIncluded
   # and update error message
