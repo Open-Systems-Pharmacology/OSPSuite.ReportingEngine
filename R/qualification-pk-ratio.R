@@ -100,7 +100,7 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
   qualificationMeasure <- data.frame(
     " " = c("Points total", "Points within 1.5 fold", "Points within 2 fold"),
     "Number" = c(
-      length(ratios),
+      sum(!is.na(ratios)),
       measureValuesBetween(ratios, 1 / 1.5, 1.5, method = "count"),
       measureValuesBetween(ratios, 1 / 2, 2, method = "count")
     ),
