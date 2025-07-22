@@ -18,3 +18,7 @@ GMFE
 Calculate Geometric Mean Fold Error between \code{x} and \code{y}.
 Strictly positive pairs of values are kept in the calculation
 }
+\examples{
+# GMFE
+calculateGMFE(c(1,2, 2.1, 3.3), c(1.3, 1.9, 3.0))
+}

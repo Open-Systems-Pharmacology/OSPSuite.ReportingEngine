@@ -310,8 +310,11 @@ parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE
 #' @param y y values to compare
 #' @return GMFE
 #' @export
+#' @examples
+#' # GMFE
+#' calculateGMFE(c(1,2, 2.1, 3.3), c(1.3, 1.9, 3.0))
 calculateGMFE <- function(x, y) {
-  positiveValues <- (y > 0 & x > 0)
+  positiveValues <- (y > 0 & x > 0 & !is.na(y) & !is.na(x))
   log10Error <- log10(y[positiveValues]) - log10(x[positiveValues])
   return(10^(sum(abs(log10Error)) / length(log10Error)))
 }
