@@ -32,7 +32,7 @@ Other workflow tasks:
 }
 \concept{workflow tasks}
 \section{Super class}{
-\code{\link[ospsuite.reportingengine:Task]{ospsuite.reportingengine::Task}} -> \code{PlotTask}
+\code{ospsuite.reportingengine::Task} -> \code{PlotTask}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
