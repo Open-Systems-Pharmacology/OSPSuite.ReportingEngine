@@ -1,0 +1,523 @@
+{
+  "fonts": {
+    "title": {
+      "color": "black",
+      "size": 12,
+      "fontFace": "bold",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "center"
+    },
+    "subtitle": {
+      "color": "black",
+      "size": 12,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "center"
+    },
+    "xlabel": {
+      "color": "black",
+      "size": 10,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "center",
+      "margin": [10, 10, 10, 10]
+    },
+    "ylabel": {
+      "color": "black",
+      "size": 10,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 90,
+      "align": "center",
+      "margin": [10, 10, 10, 10]
+    },
+    "y2label": {
+      "color": "black",
+      "size": 10,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": -90,
+      "align": "center",
+      "margin": [10, 10, 10, 10]
+    },
+    "watermark": {
+      "color": "grey",
+      "size": 40,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 30,
+      "align": "center"
+    },
+    "legend": {
+      "color": "black",
+      "size": 9,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "left",
+      "margin": [8, 5, 2, 5]
+    },
+    "legendTitle": {
+      "color": "black",
+      "size": 9,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "center"
+    },
+    "xAxis": {
+      "color": "black",
+      "size": 11,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "center"
+    },
+    "yAxis": {
+      "color": "black",
+      "size": 11,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "right"
+    },
+    "y2Axis": {
+      "color": "black",
+      "size": 11,
+      "fontFace": "plain",
+      "fontFamily": "",
+      "angle": 0,
+      "align": "left"
+    }
+  },
+  "background": {
+    "watermark": "",
+    "legendPosition": "outsideTop",
+    "plot": {
+      "fill": "white",
+      "color": "black",
+      "size": 0.5,
+      "linetype": "blank"
+    },
+    "panel": {
+      "fill": "white",
+      "color": "black",
+      "size": "0.5",
+      "linetype": "solid"
+    },
+    "xAxis": {
+      "color": "black",
+      "size": "0.5",
+      "linetype": "solid"
+    },
+    "yAxis": {
+      "color": "black",
+      "size": "0.5",
+      "linetype": "solid"
+    },
+    "y2Axis": {
+      "color": "black",
+      "size": "0.5",
+      "linetype": "solid"
+    },
+    "xGrid": {
+      "color": "grey",
+      "size": "0.25",
+      "linetype": "dotted"
+    },
+    "yGrid": {
+      "color": "grey",
+      "size": "0.25",
+      "linetype": "dotted"
+    },
+    "y2Grid": {
+      "color": "grey",
+      "size": "0.25",
+      "linetype": "dotted"
+    },
+    "legend": {
+      "fill": "white",
+      "color": "white",
+      "size": "0.5",
+      "linetype": "blank"
+    }
+  },
+  "aestheticMaps": {
+    "color": [
+      "#5050FF",
+      "#CE3D32",
+      "#749B58",
+      "#F0E685",
+      "#466983",
+      "#BA6338",
+      "#5DB1DD",
+      "#802268",
+      "#6BD76B",
+      "#D595A7",
+      "#924822",
+      "#837B8D",
+      "#C75127",
+      "#D58F5C",
+      "#7A65A5",
+      "#E4AF69",
+      "#3B1B53",
+      "#CDDEB7",
+      "#612A79",
+      "#AE1F63"
+    ],
+    "fill": [
+      "#5050FF",
+      "#CE3D32",
+      "#749B58",
+      "#F0E685",
+      "#466983",
+      "#BA6338",
+      "#5DB1DD",
+      "#802268",
+      "#6BD76B",
+      "#D595A7",
+      "#924822",
+      "#837B8D",
+      "#C75127",
+      "#D58F5C",
+      "#7A65A5",
+      "#E4AF69",
+      "#3B1B53",
+      "#CDDEB7",
+      "#612A79",
+      "#AE1F63"
+    ],
+    "shape": [
+      "circle",
+      "diamond",
+      "square",
+      "star",
+      "plus",
+      "cross",
+      "triangle"
+    ],
+    "linetype": [
+      "solid",
+      "longdash",
+      "dotted",
+      "dashed",
+      "twodash",
+      "dotdash"
+    ],
+    "size": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "alpha": [
+      0.75,
+      0.5,
+      0.25
+    ]
+  },
+  "plotConfigurations": {
+    "addScatter": {
+      "color": "black",
+      "fill": "NA",
+      "shape": "circle",
+      "linetype": "blank",
+      "size": 3,
+      "alpha": 1
+    },
+    "addLine": {
+      "color": "black",
+      "fill": "NA",
+      "shape": "blank",
+      "linetype": "solid",
+      "size": 0.5,
+      "alpha": 1
+    },
+    "addRibbon": {
+      "color": "black",
+      "fill": "#0078D7",
+      "shape": "blank",
+      "linetype": "blank",
+      "size": 1,
+      "alpha": 0.6
+    },
+    "addErrorbar": {
+      "color": "black",
+      "fill": "NA",
+      "shape": "blank",
+      "linetype": "solid",
+      "size": 0.5,
+      "alpha": 1
+    },
+    "plotPKRatio": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "circle",
+        "linetype": "blank",
+        "size": 3,
+        "alpha": 1
+      },
+      "lines": {
+        "color": [
+          "black",
+          "dodgerblue",
+          "firebrick"
+        ],
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": [
+          "solid",
+          "dashed",
+          "dashed"
+        ],
+        "size": 0.5,
+        "alpha": 1
+      },
+      "errorbars": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotDDIRatio": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "circle",
+        "linetype": "blank",
+        "size": 3,
+        "alpha": 1
+      },
+      "lines": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": [
+          "solid",
+          "dotted",
+          "solid"
+        ],
+        "size": 0.5,
+        "alpha": 1
+      },
+      "errorbars": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotTimeProfile": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "reset",
+        "linetype": "blank",
+        "size": 3,
+        "alpha": 1
+      },
+      "lines": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      },
+      "ribbons": {
+        "color": "reset",
+        "fill": "reset",
+        "shape": "blank",
+        "linetype": "blank",
+        "size": 0.5,
+        "alpha": 0.6
+      },
+      "errorbars": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotObsVsPred": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "circle",
+        "linetype": "blank",
+        "size": 3,
+        "alpha": 1
+      },
+      "lines": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      },
+      "errorbars": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotResVsTime": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "circle",
+        "linetype": "blank",
+        "size": 3,
+        "alpha": 1
+      },
+      "lines": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      },
+      "errorbars": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotResVsPred": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "circle",
+        "linetype": "blank",
+        "size": 3,
+        "alpha": 1
+      },
+      "lines": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      },
+      "errorbars": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotQQ": {
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "next",
+        "linetype": "blank",
+        "size": 3,
+        "alpha": 1
+      },
+      "lines": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      }
+    },
+    "plotBoxWhisker": {
+      "points": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "circle",
+        "linetype": "blank",
+        "size": 1,
+        "alpha": 1
+      },
+      "ribbons": {
+        "color": "black",
+        "fill": "reset",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": "first"
+      }
+    },
+    "plotTornado": {
+      "lines": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "longdash",
+        "size": 0.5,
+        "alpha": 1
+      },
+      "points": {
+        "color": "reset",
+        "fill": "NA",
+        "shape": "reset",
+        "linetype": "blank",
+        "size": 3,
+        "alpha": 1
+      },
+      "ribbons": {
+        "color": "reset",
+        "fill": "reset",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": "first"
+      }
+    },
+    "plotHistogram": {
+      "lines": {
+        "color": "black",
+        "fill": "NA",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": 1
+      },
+      "ribbons": {
+        "color": "black",
+        "fill": "reset",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": "first"
+      }
+    },
+    "plotPieChart": {
+      "ribbons": {
+        "color": "white",
+        "fill": "reset",
+        "shape": "blank",
+        "linetype": "solid",
+        "size": 0.5,
+        "alpha": "first"
+      }
+    }
+  }
+}

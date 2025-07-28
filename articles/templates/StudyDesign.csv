@@ -1,0 +1,8 @@
+Organism|Weight,Organism|Weight,Gender,Applications|IV Bolus|DrugMass
+kg,kg,,nmol
+SOURCE_MIN,SOURCE_MAX,SOURCE_EQUALS,TARGET
+20,40,MALE,2
+20,40,FEMALE,2.5
+40,60,MALE,10
+40,60,FEMALE,14
+60,,,20
