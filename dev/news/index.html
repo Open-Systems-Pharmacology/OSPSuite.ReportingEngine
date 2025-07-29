@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.3.0.9011</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,9 +49,19 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="ospsuitereportingengine-development-version">ospsuite.reportingengine (development version)<a class="anchor" aria-label="anchor" href="#ospsuitereportingengine-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.3.11" id="ospsuitereportingengine-2311">ospsuite.reportingengine 2.3.11<a class="anchor" aria-label="anchor" href="#ospsuitereportingengine-2311"></a></h2>
 <div class="section level3">
-<h3 id="minor-improvements-and-bug-fixes-development-version">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-development-version"></a></h3>
-<ul><li>Fixed an error where population workflow would break in R 4.5.0 due to an error in <code><a href="../reference/trimFileName.html">trimFileName()</a></code> (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1327" class="external-link">#1327</a>)</li>
+<h3 id="minor-improvements-and-bug-fixes-2-3-11">Minor improvements and bug fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-bug-fixes-2-3-11"></a></h3>
+<ul><li>Fixed an error in <code><a href="../reference/trimFileName.html">trimFileName()</a></code> that caused the population workflow to break in R 4.5.0. (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1327" class="external-link">#1327</a>)</li>
+<li>Inconsistent exported image size fixed (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1299" class="external-link">#1299</a>)</li>
+<li>Fixed typos in <strong>qualification-workflow-template.R</strong> (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1334" class="external-link">#1334</a>)</li>
+<li>Fixed different axis font sizes when using two y-axes (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1333" class="external-link">#1333</a>)</li>
+<li>Removed an unnecessary warning when the time offset is 0 (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1289" class="external-link">#1289</a>)</li>
+<li>Fixed incorrect values in DDI ratio plots when the PK parameter is <code>AUC</code> and the end time is <code>Inf</code> (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1342" class="external-link">#1342</a>)</li>
+<li>Fixed SD ranges not being displayed correctly in some comparison time profiles with time shift (<a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1343" class="external-link">#1343</a>)</li>
+<li>Updated compatibility with <strong>cowplot</strong> version &gt;= 1.2.0 to fix alignment issues in multi-panel plots</li>
 </ul></div>
 </div>
     <div class="section level2">
