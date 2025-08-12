@@ -285,7 +285,7 @@ parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) 
 #' @export
 #' @examples
 #' # GMFE
-#' calculateGMFE(c(1,2, 2.1, 3.3), c(1.3, 1.9, 3.0))
+#' calculateGMFE(c(1, 2, 2.1), c(1.3, 1.9, 3.0))
 calculateGMFE <- function(x, y) {
   positiveValues <- (y > 0 & x > 0 & !is.na(y) & !is.na(x))
   log10Error <- log10(y[positiveValues]) - log10(x[positiveValues])
