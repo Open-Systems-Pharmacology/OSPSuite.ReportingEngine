@@ -296,7 +296,6 @@
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isLoadedSimulation.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isObservedData.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isValidatedSystem.html</loc></url>
-<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/lastPathElement.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadCalculatePKParametersTask.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadCalculateSensitivityTask.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadConfigurationPlan.html</loc></url>
@@ -332,14 +331,12 @@
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/lookupPKParameterDisplayName.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/mapStudyDesignSources.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/mapStudyDesignTargets.html</loc></url>
-<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/massMoleConversion.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/mcSampling.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/measureValuesBetween.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/mergeMarkdownFiles.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/newOutputColor.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/outputNamesFromIdentifier.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/parseObservationsDataFrame.html</loc></url>
-<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/parseVariableFromObject.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/parseVariableToObject.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/pkDictionaryQualificationOSP.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/pkParameterTableAsRelativeChange.html</loc></url>
@@ -389,7 +386,6 @@
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/runParallelSensitivityAnalysis.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/runPopulationSensitivityAnalysis.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/runSensitivity.html</loc></url>
-<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/saveFigure.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/saveLogs.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/saveLogsToJson.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/saveRESettings.html</loc></url>
