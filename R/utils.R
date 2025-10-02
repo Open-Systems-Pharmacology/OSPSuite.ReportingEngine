@@ -138,19 +138,6 @@ generateResultFileNames <- function(numberOfCores, folderName, fileName, separat
   return(allResultsFileNames)
 }
 
-#' @title lastPathElement
-#' @param path simulation path
-#' @return last path element as character string
-#' @export
-#' @import ospsuite
-#' @import utils
-lastPathElement <- function(path) {
-  pathArray <- ospsuite::toPathArray(path)
-  lastElement <- utils::tail(pathArray, 1)
-
-  return(lastElement)
-}
-
 #' @title replaceInfWithNA
 #' @param data numeric vector
 #' @return numeric vector
@@ -289,20 +276,6 @@ parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) 
   return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName)))
 }
 
-#' @title parseVariableFromObject
-#' @description Create an expression of type `variableName <- objectName$variableName`
-#' @param objectName Name of the object whose field is updated
-#' @param variableName Name of the variable and field of `objectName`
-#' @param keepIfNull logical `variableName <- objectName$variableName \%||\% variableName`
-#' @return An expression to `eval()`
-#' @keywords internal
-parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE) {
-  if (keepIfNull) {
-    return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))
-  }
-  return(parse(text = paste0(variableName, " <- ", objectName, "$", variableName)))
-}
-
 #' @title calculateGMFE
 #' @description Calculate Geometric Mean Fold Error between `x` and `y`.
 #' Strictly positive pairs of values are kept in the calculation
@@ -310,8 +283,11 @@ parseVariableFromObject <- function(objectName, variableName, keepIfNull = FALSE
 #' @param y y values to compare
 #' @return GMFE
 #' @export
+#' @examples
+#' # GMFE
+#' calculateGMFE(c(1, 2, 2.1), c(1.3, 1.9, 3.0))
 calculateGMFE <- function(x, y) {
-  positiveValues <- (y > 0 & x > 0)
+  positiveValues <- (y > 0 & x > 0 & !is.na(y) & !is.na(x))
   log10Error <- log10(y[positiveValues]) - log10(x[positiveValues])
   return(10^(sum(abs(log10Error)) / length(log10Error)))
 }
@@ -324,31 +300,6 @@ calculateGMFE <- function(x, y) {
 #' @keywords internal
 getObjectNameAsString <- function(object) {
   return(deparse(substitute(object)))
-}
-
-#' @title saveFigure
-#' @description Save figure and catches
-#' @param plotObject A `ggplot` object
-#' @param fileName Name of the file in which `plotObject` is saved
-#' @param simulationSetName Name of the simulation set for `PlotTask` results
-#' @keywords internal
-saveFigure <- function(plotObject, fileName, simulationSetName = NULL) {
-  tryCatch(
-    {
-      ggplot2::ggsave(
-        filename = fileName,
-        plot = plotObject,
-        width = reEnv$defaultPlotFormat$width,
-        height = reEnv$defaultPlotFormat$height,
-        dpi = reEnv$defaultPlotFormat$dpi,
-        units = reEnv$defaultPlotFormat$units
-      )
-    },
-    error = function(e) {
-      stop(messages$ggsaveError(fileName, simulationSetName, e))
-    }
-  )
-  return(invisible())
 }
 
 #' @title getObjectNamesInGlobalEnv

@@ -332,24 +332,6 @@ parseObservationsDataFrame <- function(observationsDataFrame) {
   return(dataFrameFields)
 }
 
-
-
-#' @title massMoleConversion
-#' @description Function to map `Concentration (mass)` or `Mass` dimensions to `Concentration (molar)` and `Amount` respectively.
-#' @param dimension is string that is from among the valid OSP dimensions
-#' @return If `dimension` is `Concentration (mass)` or `Mass`, then return `Concentration (molar)` or `Amount` respectively, otherwise return `dimension`.
-#' @keywords internal
-massMoleConversion <- function(dimension) {
-  massMoleConversionList <- list()
-  massMoleConversionList[[ospDimensions$Mass]] <- ospsuite::ospDimensions$Amount
-  massMoleConversionList[[ospDimensions$`Concentration (mass)`]] <- ospsuite::ospDimensions$`Concentration (molar)`
-  return(ifelse(test = dimension %in% c(ospsuite::ospDimensions$Mass, ospsuite::ospDimensions$`Concentration (mass)`),
-    yes = massMoleConversionList[[dimension]],
-    no = dimension
-  ))
-}
-
-
 #' @title getAxesSettings
 #' @description Read axes settings for plots.
 #' @param axesSettingsFromConfigurationPlot is a field from the `configurationPlan$plots` list

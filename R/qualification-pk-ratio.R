@@ -100,7 +100,7 @@ getQualificationPKRatioMeasure <- function(pkParameterName, data, metaData) {
   qualificationMeasure <- data.frame(
     " " = c("Points total", "Points within 1.5 fold", "Points within 2 fold"),
     "Number" = c(
-      length(ratios),
+      sum(!is.na(ratios)),
       measureValuesBetween(ratios, 1 / 1.5, 1.5, method = "count"),
       measureValuesBetween(ratios, 1 / 2, 2, method = "count")
     ),
@@ -294,26 +294,21 @@ getPKRatioForMapping <- function(pkRatioMapping, pkParameterNames, configuration
     unitColumn <- paste(pkParameterName, reEnv$pkRatioDictionary$unitColumn, sep = " ")
     if (checkPKRatioObservedVariable(unitColumn, observedData)) {
       pkParameterObservedUnit <- observedData[selectedRow, unitColumn]
-      if (isUnitFromDimension(pkParameterObservedUnit, pkParameter$dimension)) {
-        pkParameterObservedValue <- ospsuite::toUnit(
-          quantityOrDimension = pkParameter$dimension,
-          values = pkParameterObservedValue,
-          targetUnit = settings$units[[pkParameterName]],
-          sourceUnit = pkParameterObservedUnit,
-          molWeight = simulation$molWeightFor(pkRatioMapping$Output)
-        )
-      } else {
-        # Warn unit is wrong
-        warning(
-          messages$warningPKRatioWrongUnit(
-            id = observedData[[reEnv$pkRatioDictionary$id]][selectedRow],
-            pkParameterName = pkParameterName,
-            sourceUnit = pkParameterObservedUnit
-          ),
-          call. = FALSE
-        )
-        pkParameterObservedValue <- NA
-      }
+      # Throw an error if wrong unit
+      validateObservedPKRatioUnit(
+        pkUnit = pkParameterObservedUnit,
+        pkDimension = pkParameter$dimension,
+        pkID = observedData[[reEnv$pkRatioDictionary$id]][selectedRow],
+        pkParameterName = pkParameterName
+      )
+
+      pkParameterObservedValue <- ospsuite::toUnit(
+        quantityOrDimension = pkParameter$dimension,
+        values = pkParameterObservedValue,
+        targetUnit = settings$units[[pkParameterName]],
+        sourceUnit = pkParameterObservedUnit,
+        molWeight = simulation$molWeightFor(pkRatioMapping$Output)
+      )
     }
     # Values and ratio
     data[1, paste0("pred", pkParameterName)] <- pkParameterSimulatedValue
