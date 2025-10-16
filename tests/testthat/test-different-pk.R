@@ -124,5 +124,5 @@ updatePKParameter("C_max", displayName = "C_max", displayUnit = "µmol/l")
 updatePKParameter("AUC_tEnd", displayName = "AUC_tEnd", displayUnit = "µmol*min/l")
 
 # Clear test workflow folders
-unlink(workflowPediatric$workflowFolder, recursive = TRUE)
-unlink(workflowParallel$workflowFolder, recursive = TRUE)
+#unlink(workflowPediatric$workflowFolder, recursive = TRUE)
+#unlink(workflowParallel$workflowFolder, recursive = TRUE)

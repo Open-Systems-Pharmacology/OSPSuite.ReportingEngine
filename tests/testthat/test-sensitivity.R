@@ -6,7 +6,7 @@ populationFile <- getTestDataFilePath("input-data/Pop500_p1p2p3.csv")
 refMeanOutputFolder <- getTestDataFilePath("mean-sensitivity")
 refPopOutputFolder <- getTestDataFilePath("pop-sensitivity")
 
-workflowFolder <- "Sensitivity-Tests"
+workflowFolder <- "Mean-Sensitivity-Tests"
 
 # Mean model workflow
 setA <- SimulationSet$new(
@@ -67,7 +67,8 @@ test_that("Mean sensitiviy results are equal to reference", {
 })
 
 # Clear test workflow folders
-unlink(workflowA$workflowFolder, recursive = TRUE)
+#unlink(workflowA$workflowFolder, recursive = TRUE)
+workflowFolder <- "Pop-Sensitivity-Tests"
 
 # Population model workflow
 setA <- PopulationSimulationSet$new(
@@ -136,4 +137,4 @@ test_that("Population sensitiviy results are equal to reference", {
 })
 
 # Clear test workflow folders
-unlink(workflowA$workflowFolder, recursive = TRUE)
+#unlink(workflowA$workflowFolder, recursive = TRUE)
