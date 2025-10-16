@@ -177,6 +177,7 @@ logCatch <- function(expr) {
             "Ignoring unknown parameters",
             "was deprecated in ggplot2",
             "NaNs produced",
+            "no font could be found for family",
             "(font family)*(not found)*(font database)",
             # warning thrown because of non-ASCII unicode characters
             "mbcsToSbcs"
