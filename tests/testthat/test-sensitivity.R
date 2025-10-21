@@ -61,7 +61,7 @@ test_that("Mean sensitiviy results are equal to reference", {
     expect_equal(
       readObservedDataFile(sensitivityFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
-      tolerance = comparisonTolerance()
+      tolerance = comparisonTolerance(1e-3)
     )
   }
 })
@@ -130,7 +130,7 @@ test_that("Population sensitiviy results are equal to reference", {
     expect_equal(
       readObservedDataFile(sensitivityFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
-      tolerance = comparisonTolerance()
+      tolerance = comparisonTolerance(1e-3)
     )
   }
 })

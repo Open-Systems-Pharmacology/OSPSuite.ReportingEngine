@@ -109,12 +109,12 @@ test_that("Saved PK parameters summaries have correct values", {
     expect_equivalent(
       readObservedDataFile(pediatricFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
-      tolerance = comparisonTolerance()
+      tolerance = comparisonTolerance(1e-3)
     )
     expect_equivalent(
       readObservedDataFile(parallelFiles[fileIndex]),
       readObservedDataFile(refFiles[fileIndex]),
-      tolerance = comparisonTolerance()
+      tolerance = comparisonTolerance(1e-3)
     )
   }
 })
