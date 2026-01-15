@@ -7,16 +7,25 @@
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @return SA results for individual or population
 #' @import ospsuite
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
-runSensitivity <- function(structureSet,
-                           settings,
-                           individualId = NULL,
-                           resultsFileName = NULL) {
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
+runSensitivity <- function(
+  structureSet,
+  settings,
+  individualId = NULL,
+  resultsFileName = NULL
+) {
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$simulationSet$simulationFile
+  )
+  sim <- loadSimulationWithUpdatedPaths(
+    structureSet$simulationSet,
+    loadFromCache = TRUE
+  )
 
-  allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(simulation = sim)
+  allVariableParameterPaths <- ospsuite::potentialVariableParameterPathsFor(
+    simulation = sim
+  )
 
   # If no parameters to vary specified, vary all parameters valid for sensitivity analysis
   if (is.null(settings$variableParameterPaths)) {
@@ -24,10 +33,19 @@ runSensitivity <- function(structureSet,
   } else {
     # if a variableParameterPaths input is provided, ensure that all
     # its elements exist within allVariableParameterPaths.  If not, give an error.
-    validParameterPaths <- intersect(settings$variableParameterPaths, allVariableParameterPaths)
-    validateHasValidParameterPathsForSensitivity(validParameterPaths, structureSet$simulationSet$simulationSetName)
+    validParameterPaths <- intersect(
+      settings$variableParameterPaths,
+      allVariableParameterPaths
+    )
+    validateHasValidParameterPathsForSensitivity(
+      validParameterPaths,
+      structureSet$simulationSet$simulationSetName
+    )
 
-    invalidParameterPaths <- setdiff(settings$variableParameterPaths, validParameterPaths)
+    invalidParameterPaths <- setdiff(
+      settings$variableParameterPaths,
+      validParameterPaths
+    )
     settings$variableParameterPaths <- validParameterPaths
 
     if (!isEmpty(invalidParameterPaths)) {
@@ -56,19 +74,31 @@ runSensitivity <- function(structureSet,
   # If there is a population file and no individualId then do SA for entire population
   # If there is no population file and individualId then do SA for mean model
   # If there is no population file and no individualId then do SA for mean model.
-  if (!is.null(structureSet$simulationSet$populationFile)) { # Determine if SA is to be done for a single individual or more
-    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$populationFile)
+  if (!is.null(structureSet$simulationSet$populationFile)) {
+    # Determine if SA is to be done for a single individual or more
+    re.tStoreFileMetadata(
+      access = "read",
+      filePath = structureSet$simulationSet$populationFile
+    )
     popObject <- loadPopulation(structureSet$simulationSet$populationFile)
     resultsFileName <- resultsFileName %||% "sensitivityAnalysisResults"
     individualSeq <- individualId %||% seq(0, popObject$count - 1)
     individualSensitivityAnalysisResults <- list()
     for (ind in individualSeq) {
-      logInfo(messages$runStarting(paste("Sensitivity Analysis of individual Id", ind)))
+      logInfo(messages$runStarting(paste(
+        "Sensitivity Analysis of individual Id",
+        ind
+      )))
 
-      individualSensitivityAnalysisResults[[getIndividualSAResultsFileName(ind, resultsFileName)]] <- individualSensitivityAnalysis(
+      individualSensitivityAnalysisResults[[getIndividualSAResultsFileName(
+        ind,
+        resultsFileName
+      )]] <- individualSensitivityAnalysis(
         structureSet = structureSet,
         settings = settings,
-        individualParameters = popObject$getParameterValuesForIndividual(individualId = ind)
+        individualParameters = popObject$getParameterValuesForIndividual(
+          individualId = ind
+        )
       )
     }
   } else {
@@ -99,9 +129,11 @@ runSensitivity <- function(structureSet,
 #' @return SA results for an individual
 #' @import ospsuite
 #' @keywords internal
-individualSensitivityAnalysis <- function(structureSet,
-                                          settings,
-                                          individualParameters) {
+individualSensitivityAnalysis <- function(
+  structureSet,
+  settings,
+  individualParameters
+) {
   # Determine if SA is to be done on a single core or more
   if (settings$numberOfCores > 1) {
     individualSensitivityAnalysisResults <- runParallelSensitivityAnalysis(
@@ -116,9 +148,15 @@ individualSensitivityAnalysis <- function(structureSet,
     settings$allowedCores <- getAllowedCores()
 
     # Load simulation to determine number of parameters valid for sensitivity analysis
-    sim <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
+    sim <- loadSimulationWithUpdatedPaths(
+      structureSet$simulationSet,
+      loadFromCache = TRUE
+    )
     updateSimulationIndividualParameters(simulation = sim, individualParameters)
-    individualSensitivityAnalysisResults <- analyzeSensitivity(simulation = sim, settings = settings)
+    individualSensitivityAnalysisResults <- analyzeSensitivity(
+      simulation = sim,
+      settings = settings
+    )
   }
   return(individualSensitivityAnalysisResults)
 }
@@ -134,9 +172,11 @@ individualSensitivityAnalysis <- function(structureSet,
 #' @return SA results for population
 #' @import ospsuite
 #' @keywords internal
-runParallelSensitivityAnalysis <- function(structureSet,
-                                           settings = settings,
-                                           individualParameters) {
+runParallelSensitivityAnalysis <- function(
+  structureSet,
+  settings = settings,
+  individualParameters
+) {
   totalNumberParameters <- length(settings$variableParameterPaths)
 
   variationRange <- settings$variationRange
@@ -154,8 +194,15 @@ runParallelSensitivityAnalysis <- function(structureSet,
 
   # Split the parameters of the model according to sortVec
   listSplitParameters <- split(x = settings$variableParameterPaths, sortVec)
-  tempLogFileNamePrefix <- file.path(reEnv$log$folder, "logDebug-core-sensitivity-analysis")
-  tempLogFileNames <- paste0(tempLogFileNamePrefix, seq_len(settings$numberOfCores), ".txt")
+  tempLogFileNamePrefix <- file.path(
+    reEnv$log$folder,
+    "logDebug-core-sensitivity-analysis"
+  )
+  tempLogFileNames <- paste0(
+    tempLogFileNamePrefix,
+    seq_len(settings$numberOfCores),
+    ".txt"
+  )
 
   # Generate a list containing names of SA CSV result files that will be output by each core
   allResultsFileNames <- generateResultFileNames(
@@ -184,18 +231,22 @@ runParallelSensitivityAnalysis <- function(structureSet,
   updateIndividualParametersOnCores(individualParameters = individualParameters)
 
   logInfo(messages$runStarting("Sensitivity Analysis on cores"))
-  Rmpi::mpi.remote.exec(partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
-    simulation = sim,
-    variableParameterPaths = listSplitParameters[[Rmpi::mpi.comm.rank()]],
-    variationRange = variationRange,
-    numberOfCores = 1, # Number of local cores, set to 1 when parallelizing.
-    debugLogFileName = tempLogFileNames[Rmpi::mpi.comm.rank()],
-    nodeName = paste("Core", Rmpi::mpi.comm.rank()),
-    showProgress = showProgress
-  ))
+  Rmpi::mpi.remote.exec(
+    partialIndividualSensitivityAnalysisResults <- analyzeCoreSensitivity(
+      simulation = sim,
+      variableParameterPaths = listSplitParameters[[Rmpi::mpi.comm.rank()]],
+      variationRange = variationRange,
+      numberOfCores = 1, # Number of local cores, set to 1 when parallelizing.
+      debugLogFileName = tempLogFileNames[Rmpi::mpi.comm.rank()],
+      nodeName = paste("Core", Rmpi::mpi.comm.rank()),
+      showProgress = showProgress
+    )
+  )
   # Validate that all sensitivity analyses ran successfully
   validateHasRunOnAllCores(
-    coreResults = Rmpi::mpi.remote.exec(!is.null(partialIndividualSensitivityAnalysisResults)),
+    coreResults = Rmpi::mpi.remote.exec(
+      !is.null(partialIndividualSensitivityAnalysisResults)
+    ),
     inputName = structureSet$simulationSet$simulationSetName,
     inputType = "Sensitivity Analyses for",
     runType = "task"
@@ -213,7 +264,9 @@ runParallelSensitivityAnalysis <- function(structureSet,
     }
   )
   validateHasRunOnAllCores(
-    coreResults = Rmpi::mpi.remote.exec(!file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])),
+    coreResults = Rmpi::mpi.remote.exec(
+      !file.exists(allResultsFileNames[Rmpi::mpi.comm.rank()])
+    ),
     inputName = allResultsFileNames,
     inputType = "Clean up of temporary files",
     runType = "task"
@@ -234,7 +287,10 @@ runParallelSensitivityAnalysis <- function(structureSet,
 
   # Merge temporary results files
   allSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
-    simulation = loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE),
+    simulation = loadSimulationWithUpdatedPaths(
+      structureSet$simulationSet,
+      loadFromCache = TRUE
+    ),
     filePaths = allResultsFileNames
   )
   file.remove(allResultsFileNames)
@@ -251,10 +307,12 @@ runParallelSensitivityAnalysis <- function(structureSet,
 #' @return sensitivity analysis results
 #' @import ospsuite
 #' @export
-analyzeSensitivity <- function(simulation,
-                               settings = settings) {
+analyzeSensitivity <- function(simulation, settings = settings) {
   t0 <- tic()
-  sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = settings$variationRange)
+  sensitivityAnalysis <- SensitivityAnalysis$new(
+    simulation = simulation,
+    variationRange = settings$variationRange
+  )
   sensitivityAnalysis$addParameterPaths(settings$variableParameterPaths)
 
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
@@ -264,7 +322,11 @@ analyzeSensitivity <- function(simulation,
 
   logInfo(messages$runStarting(
     "Sensitivity Analysis",
-    paste0("path(s) '", paste(settings$variableParameterPaths, collapse = "', '"), "'")
+    paste0(
+      "path(s) '",
+      paste(settings$variableParameterPaths, collapse = "', '"),
+      "'"
+    )
   ))
 
   sensitivityAnalysisResults <- ospsuite::runSensitivityAnalysis(
@@ -289,14 +351,19 @@ analyzeSensitivity <- function(simulation,
 #' @param showProgress option to print progress of simulation to console
 #' @return sensitivity analysis results
 #' @export
-analyzeCoreSensitivity <- function(simulation,
-                                   variableParameterPaths = NULL,
-                                   variationRange = 0.1,
-                                   numberOfCores = NULL,
-                                   debugLogFileName = defaultFileNames$logDebugFile(),
-                                   nodeName = NULL,
-                                   showProgress = FALSE) {
-  sensitivityAnalysis <- SensitivityAnalysis$new(simulation = simulation, variationRange = variationRange)
+analyzeCoreSensitivity <- function(
+  simulation,
+  variableParameterPaths = NULL,
+  variationRange = 0.1,
+  numberOfCores = NULL,
+  debugLogFileName = defaultFileNames$logDebugFile(),
+  nodeName = NULL,
+  showProgress = FALSE
+) {
+  sensitivityAnalysis <- SensitivityAnalysis$new(
+    simulation = simulation,
+    variationRange = variationRange
+  )
   sensitivityAnalysis$addParameterPaths(variableParameterPaths)
   sensitivityAnalysisRunOptions <- SensitivityAnalysisRunOptions$new(
     showProgress = showProgress,
@@ -339,7 +406,10 @@ analyzeCoreSensitivity <- function(simulation,
 getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
   rowNums <- NULL
   for (i in seq_along(quantileVec)) {
-    rowNums[i] <- which.min(abs(pkAnalysisResultsDataframe$Value - quantile(pkAnalysisResultsDataframe$Value, quantileVec[i], na.rm = TRUE)))
+    rowNums[i] <- which.min(abs(
+      pkAnalysisResultsDataframe$Value -
+        quantile(pkAnalysisResultsDataframe$Value, quantileVec[i], na.rm = TRUE)
+    ))
   }
   ids <- as.numeric(pkAnalysisResultsDataframe$IndividualId[rowNums])
   values <- pkAnalysisResultsDataframe$Value[rowNums]
@@ -353,8 +423,15 @@ getQuantileIndividualIds <- function(pkAnalysisResultsDataframe, quantileVec) {
 #' @param settings list of settings for the population sensitivity analysis
 #' @keywords internal
 runPopulationSensitivityAnalysis <- function(structureSet, settings) {
-  resultsFileName <- trimFileName(defaultFileNames$sensitivityAnalysisResultsFile(structureSet$simulationSet$simulationSetName), extension = "csv")
-  popSAResultsIndexFile <- trimFileName(structureSet$popSensitivityAnalysisResultsIndexFile)
+  resultsFileName <- trimFileName(
+    defaultFileNames$sensitivityAnalysisResultsFile(
+      structureSet$simulationSet$simulationSetName
+    ),
+    extension = "csv"
+  )
+  popSAResultsIndexFile <- trimFileName(
+    structureSet$popSensitivityAnalysisResultsIndexFile
+  )
 
   sensitivityAnalysesResultsIndexFileDF <- getSAFileIndex(
     structureSet = structureSet,
@@ -389,9 +466,19 @@ runPopulationSensitivityAnalysis <- function(structureSet, settings) {
 #' @import ospsuite
 #' @keywords internal
 getPKResultsDataFrame <- function(structureSet) {
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
-  pkResultsDataFrame <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$simulationSet$simulationFile
+  )
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$pkAnalysisResultsFileNames
+  )
+  pkResultsDataFrame <- loadPKAnalysesFromStructureSet(
+    structureSet = structureSet,
+    to = "data.frame",
+    useCache = TRUE
+  )
 
   selectedPKData <- NULL
   for (output in structureSet$simulationSet$outputs) {
@@ -407,8 +494,12 @@ getPKResultsDataFrame <- function(structureSet) {
       }
     ))
 
-    selectedRows <- (pkResultsDataFrame$QuantityPath %in% output$path) & (pkResultsDataFrame$Parameter %in% pkParametersInOutput)
-    selectedPKData <- rbind.data.frame(pkResultsDataFrame[selectedRows, ], selectedPKData)
+    selectedRows <- (pkResultsDataFrame$QuantityPath %in% output$path) &
+      (pkResultsDataFrame$Parameter %in% pkParametersInOutput)
+    selectedPKData <- rbind.data.frame(
+      pkResultsDataFrame[selectedRows, ],
+      selectedPKData
+    )
   }
   return(selectedPKData)
 }
@@ -421,9 +512,7 @@ getPKResultsDataFrame <- function(structureSet) {
 #' @param settings list of settings for the population sensitivity analysis
 #' @param resultsFileName root name of population sensitivity analysis results CSV files
 #' @keywords internal
-getSAFileIndex <- function(structureSet,
-                           settings,
-                           resultsFileName) {
+getSAFileIndex <- function(structureSet, settings, resultsFileName) {
   quantileVec <- settings$quantileVec
 
   allPKResultsDataframe <- getPKResultsDataFrame(structureSet)
@@ -431,14 +520,24 @@ getSAFileIndex <- function(structureSet,
   outputs <- unique(allPKResultsDataframe$QuantityPath)
 
   for (output in outputs) {
-    pkParameters <- unique(allPKResultsDataframe$Parameter[allPKResultsDataframe$QuantityPath == output])
+    pkParameters <- unique(allPKResultsDataframe$Parameter[
+      allPKResultsDataframe$QuantityPath == output
+    ])
     for (pkParameter in pkParameters) {
-      singleOuputSinglePKDataframe <- allPKResultsDataframe[(allPKResultsDataframe["QuantityPath"] == output) & (allPKResultsDataframe["Parameter"] == pkParameter), ]
-      quantileResults <- getQuantileIndividualIds(singleOuputSinglePKDataframe, quantileVec)
+      singleOuputSinglePKDataframe <- allPKResultsDataframe[
+        (allPKResultsDataframe["QuantityPath"] == output) &
+          (allPKResultsDataframe["Parameter"] == pkParameter),
+      ]
+      quantileResults <- getQuantileIndividualIds(
+        singleOuputSinglePKDataframe,
+        quantileVec
+      )
 
       if (!isOfLength(quantileResults$ids, length(quantileVec))) {
         logError(messages$warningNoFinitePKParametersForSomeIndividuals(
-          pkParameter, output, structureSet$simulationSet$simulationSetName
+          pkParameter,
+          output,
+          structureSet$simulationSet$simulationSetName
         ))
         next
       }
@@ -449,9 +548,16 @@ getSAFileIndex <- function(structureSet,
         "Value" = quantileResults$values,
         "Unit" = quantileResults$units,
         "IndividualId" = quantileResults$ids,
-        "Filename" = sapply(X = quantileResults$ids, FUN = getIndividualSAResultsFileName, resultsFileName)
+        "Filename" = sapply(
+          X = quantileResults$ids,
+          FUN = getIndividualSAResultsFileName,
+          resultsFileName
+        )
       )
-      sensitivityAnalysesResultsIndexFileDF <- rbind.data.frame(sensitivityAnalysesResultsIndexFileDF, saResultsByOutput)
+      sensitivityAnalysesResultsIndexFileDF <- rbind.data.frame(
+        sensitivityAnalysesResultsIndexFileDF,
+        saResultsByOutput
+      )
     }
   }
 
@@ -478,10 +584,19 @@ getIndividualSAResultsFileName <- function(individualId, resultsFileName) {
 #' @import ospsuite.utils
 #' @keywords internal
 plotMeanSensitivity <- function(structureSet, settings) {
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$simulationSet$simulationFile
+  )
+  simulation <- loadSimulationWithUpdatedPaths(
+    structureSet$simulationSet,
+    loadFromCache = TRUE
+  )
 
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$sensitivityAnalysisResultsFileNames)
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$sensitivityAnalysisResultsFileNames
+  )
   saResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
     simulation = simulation,
     structureSet$sensitivityAnalysisResultsFileNames
@@ -495,21 +610,32 @@ plotMeanSensitivity <- function(structureSet, settings) {
     color = "parameter"
   )
   # Plot Configuration overwritten by SensitivityPlotSettings object: settings
-  sensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::TornadoPlotConfiguration$new()
-  sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$labels$xlabel$font$size
-  sensitivityPlotConfiguration$labels$ylabel$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$labels$ylabel$font$size
-  sensitivityPlotConfiguration$xAxis$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$xAxis$font$size
-  sensitivityPlotConfiguration$yAxis$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$yAxis$font$size
-  sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||% sensitivityPlotConfiguration$labels$xlabel$text
-  sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||% sensitivityPlotConfiguration$labels$ylabel$text
-  sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
+  sensitivityPlotConfiguration <- settings$plotConfiguration %||%
+    tlf::TornadoPlotConfiguration$new()
+  sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||%
+    sensitivityPlotConfiguration$labels$xlabel$font$size
+  sensitivityPlotConfiguration$labels$ylabel$font$size <- settings$yAxisFontSize %||%
+    sensitivityPlotConfiguration$labels$ylabel$font$size
+  sensitivityPlotConfiguration$xAxis$font$size <- settings$xAxisFontSize %||%
+    sensitivityPlotConfiguration$xAxis$font$size
+  sensitivityPlotConfiguration$yAxis$font$size <- settings$yAxisFontSize %||%
+    sensitivityPlotConfiguration$yAxis$font$size
+  sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||%
+    sensitivityPlotConfiguration$labels$xlabel$text
+  sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||%
+    sensitivityPlotConfiguration$labels$ylabel$text
+  sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||%
+    sensitivityPlotConfiguration$colorPalette
 
   sensitivityResults <- list()
   for (output in structureSet$simulationSet$outputs) {
     validateIsIncluded(output$path, saResults$allQuantityPaths)
     for (pkParameter in output$pkParameters) {
       if (!isIncluded(pkParameter$pkParameter, saResults$allPKParameterNames)) {
-        logError(messages$errorNotIncluded(pkParameter$pkParameter, saResults$allPKParameterNames))
+        logError(messages$errorNotIncluded(
+          pkParameter$pkParameter,
+          saResults$allPKParameterNames
+        ))
         next
       }
 
@@ -524,9 +650,12 @@ plotMeanSensitivity <- function(structureSet, settings) {
       pkSensitivities <- pkSensitivities[-c(indx1:indx2)]
 
       sensitivityData <- data.frame(
-        parameter = as.character(sapply(pkSensitivities, function(pkSensitivity) {
-          pkSensitivity$parameterName
-        })),
+        parameter = as.character(sapply(
+          pkSensitivities,
+          function(pkSensitivity) {
+            pkSensitivity$parameterName
+          }
+        )),
         value = as.numeric(sapply(pkSensitivities, function(pkSensitivity) {
           pkSensitivity$value
         })),
@@ -546,16 +675,29 @@ plotMeanSensitivity <- function(structureSet, settings) {
         bar = TRUE
       )
       # Remove legend which is redundant from y axis
-      sensitivityPlot <- tlf::setLegendPosition(sensitivityPlot, position = tlf::LegendPositions$none)
-      sensitivityPlot <- setQuadraticDimension(sensitivityPlot, plotConfiguration = settings$plotConfiguration)
+      sensitivityPlot <- tlf::setLegendPosition(
+        sensitivityPlot,
+        position = tlf::LegendPositions$none
+      )
+      sensitivityPlot <- setQuadraticDimension(
+        sensitivityPlot,
+        plotConfiguration = settings$plotConfiguration
+      )
 
       pkParameterCaption <- pkParameter$displayName %||% pkParameter$pkParameter
 
-      resultID <- defaultFileNames$resultID(length(sensitivityResults) + 1, "sensitivity", pkParameter$pkParameter)
+      resultID <- defaultFileNames$resultID(
+        length(sensitivityResults) + 1,
+        "sensitivity",
+        pkParameter$pkParameter
+      )
       sensitivityResults[[resultID]] <- saveTaskResults(
         id = resultID,
         plot = sensitivityPlot,
-        plotCaption = captions$plotSensitivity$mean(pkParameterCaption, output$displayName)
+        plotCaption = captions$plotSensitivity$mean(
+          pkParameterCaption,
+          output$displayName
+        )
       )
     }
   }
@@ -586,11 +728,13 @@ lookupPKParameterDisplayName <- function(output, pkParameter) {
 #' @return a structured list of plots for each possible combination of pathID output-pkParameter that is found in sensitivity results index file
 #' @import ospsuite
 #' @keywords internal
-plotPopulationSensitivity <- function(structureSets,
-                                      settings,
-                                      workflowType = PopulationWorkflowTypes$parallelComparison,
-                                      xParameters = NULL,
-                                      yParameters = NULL) {
+plotPopulationSensitivity <- function(
+  structureSets,
+  settings,
+  workflowType = PopulationWorkflowTypes$parallelComparison,
+  xParameters = NULL,
+  yParameters = NULL
+) {
   validateIsIncluded(workflowType, PopulationWorkflowTypes)
   validateIsOfType(structureSets, "list")
   validateIsOfType(c(structureSets), "SimulationStructure")
@@ -601,20 +745,36 @@ plotPopulationSensitivity <- function(structureSets,
   simulationSetDescriptor <- structureSets[[1]]$simulationSetDescriptor
 
   for (structureSet in structureSets) {
-    sensitivityResultsFolder <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder)
+    sensitivityResultsFolder <- file.path(
+      structureSet$workflowFolder,
+      structureSet$sensitivityAnalysisResultsFolder
+    )
 
-    re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-    simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
+    re.tStoreFileMetadata(
+      access = "read",
+      filePath = structureSet$simulationSet$simulationFile
+    )
+    simulation <- loadSimulationWithUpdatedPaths(
+      structureSet$simulationSet,
+      loadFromCache = TRUE
+    )
 
-    re.tStoreFileMetadata(access = "read", filePath = structureSet$popSensitivityAnalysisResultsIndexFile)
+    re.tStoreFileMetadata(
+      access = "read",
+      filePath = structureSet$popSensitivityAnalysisResultsIndexFile
+    )
     if (!(file.exists(structureSet$popSensitivityAnalysisResultsIndexFile))) {
       next
     }
-    indexDf <- readObservedDataFile(fileName = structureSet$popSensitivityAnalysisResultsIndexFile)
+    indexDf <- readObservedDataFile(
+      fileName = structureSet$popSensitivityAnalysisResultsIndexFile
+    )
 
     populationName <- structureSet$simulationSet$simulationSetName
 
-    saResultIndexFiles[[populationName]] <- structureSet$popSensitivityAnalysisResultsIndexFile
+    saResultIndexFiles[[
+      populationName
+    ]] <- structureSet$popSensitivityAnalysisResultsIndexFile
     simulationList[[populationName]] <- simulation
 
     for (output in structureSet$simulationSet$outputs) {
@@ -640,7 +800,10 @@ plotPopulationSensitivity <- function(structureSets,
           next
         }
 
-        pkDisplayName <- lookupPKParameterDisplayName(output = output, pkParameter = pk)
+        pkDisplayName <- lookupPKParameterDisplayName(
+          output = output,
+          pkParameter = pk
+        )
 
         populationNameCol <- rep(populationName, nrow(dfForPkAndOp))
         outputDisplayNameCol <- rep(outputDisplayName, nrow(dfForPkAndOp))
@@ -667,19 +830,31 @@ plotPopulationSensitivity <- function(structureSets,
   # allPopsDf is a dataframe that holds the results of all sensitivity analyses for all populations
   # add any missing sensitivity results omitted when applying threshold in getPopSensDfForPkAndOutput
   # get set of unique combinations of outputs and pkParameters.  A plot is built for each combination.
-  uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c("QuantityPath", "PKParameter")])
+  uniqueQuantitiesAndPKParameters <- unique(allPopsDf[, c(
+    "QuantityPath",
+    "PKParameter"
+  )])
 
   for (n in seq_len(nrow(uniqueQuantitiesAndPKParameters))) {
     outputPath <- uniqueQuantitiesAndPKParameters$QuantityPath[n]
     pk <- uniqueQuantitiesAndPKParameters$PKParameter[n]
 
-    sensitivityThisOpPk <- allPopsDf[(allPopsDf$QuantityPath %in% outputPath) & (allPopsDf$PKParameter %in% pk), ]
+    sensitivityThisOpPk <- allPopsDf[
+      (allPopsDf$QuantityPath %in% outputPath) &
+        (allPopsDf$PKParameter %in% pk),
+    ]
 
     # get list of all perturbation parameters used in this plot
     allParamsForThisOpPk <- unique(sensitivityThisOpPk$Parameter)
 
     # get the sensitivity results dataframe for this combination of output and pkParameter
-    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c("Quantile", "IndividualId", "Population", "OutputDisplayName", "PKDisplayName")])
+    individualCombinationsThisOpPk <- unique(sensitivityThisOpPk[, c(
+      "Quantile",
+      "IndividualId",
+      "Population",
+      "OutputDisplayName",
+      "PKDisplayName"
+    )])
 
     # loop thru each individual in current combination of output and pkParameter
     for (m in seq_len(nrow(individualCombinationsThisOpPk))) {
@@ -690,10 +865,19 @@ plotPopulationSensitivity <- function(structureSets,
       pkDN <- individualCombinationsThisOpPk$PKDisplayName[m]
 
       # get list of all perturbation parameters for this one individual that are used in the plot for this combination of output and pkParameter
-      allParamsForThisIndividual <- unique(sensitivityThisOpPk[(sensitivityThisOpPk$Quantile %in% qu) & (sensitivityThisOpPk$IndividualId %in% id) & (sensitivityThisOpPk$Population %in% pop), ]$Parameter)
+      allParamsForThisIndividual <- unique(
+        sensitivityThisOpPk[
+          (sensitivityThisOpPk$Quantile %in% qu) &
+            (sensitivityThisOpPk$IndividualId %in% id) &
+            (sensitivityThisOpPk$Population %in% pop),
+        ]$Parameter
+      )
 
       # create list of the parameters missing for this individual but otherwise shown in this plot for this combination of output and pkParameter
-      missingParameters <- setdiff(allParamsForThisOpPk, allParamsForThisIndividual)
+      missingParameters <- setdiff(
+        allParamsForThisOpPk,
+        allParamsForThisIndividual
+      )
 
       # loop thru the missing parameters for the current individual
       for (parNumber in seq_along(missingParameters)) {
@@ -701,11 +885,22 @@ plotPopulationSensitivity <- function(structureSets,
         indx <- readObservedDataFile(fileName = saResultIndexFiles[[pop]])
 
         # get the name of the individual's sensitivity result file
-        saResFileName <- indx[(indx$Output %in% outputPath) & (indx$pkParameter %in% pk) & (indx$Quantile %in% qu), ]$Filename
+        saResFileName <- indx[
+          (indx$Output %in% outputPath) &
+            (indx$pkParameter %in% pk) &
+            (indx$Quantile %in% qu),
+        ]$Filename
 
         # import SA results for individual
-        individualSAResultsFilePath <- file.path(structureSet$workflowFolder, structureSet$sensitivityAnalysisResultsFolder, saResFileName)
-        re.tStoreFileMetadata(access = "read", filePath = individualSAResultsFilePath)
+        individualSAResultsFilePath <- file.path(
+          structureSet$workflowFolder,
+          structureSet$sensitivityAnalysisResultsFolder,
+          saResFileName
+        )
+        re.tStoreFileMetadata(
+          access = "read",
+          filePath = individualSAResultsFilePath
+        )
         individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
           simulation = simulationList[[pop]],
           filePaths = individualSAResultsFilePath
@@ -751,7 +946,8 @@ plotPopulationSensitivity <- function(structureSets,
 
   # Translate quantile numeric values into sorted percentile names
   # to ensure binning by Percentiles is appropriate
-  allPopsDf$Percentile <- factor(as.character(100 * allPopsDf$Quantile),
+  allPopsDf$Percentile <- factor(
+    as.character(100 * allPopsDf$Quantile),
     levels = sort(unique(100 * allPopsDf$Quantile))
   )
 
@@ -766,33 +962,54 @@ plotPopulationSensitivity <- function(structureSets,
 
   # Plot Configuration overwritten by SensitivityPlotSettings object: settings
   # Bar option to FALSE makes a tornado plot with dots instead
-  sensitivityPlotConfiguration <- settings$plotConfiguration %||% tlf::TornadoPlotConfiguration$new(bar = FALSE)
-  sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$labels$xlabel$font$size
-  sensitivityPlotConfiguration$labels$ylabel$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$labels$ylabel$font$size
-  sensitivityPlotConfiguration$xAxis$font$size <- settings$xAxisFontSize %||% sensitivityPlotConfiguration$xAxis$font$size
-  sensitivityPlotConfiguration$yAxis$font$size <- settings$yAxisFontSize %||% sensitivityPlotConfiguration$yAxis$font$size
-  sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||% sensitivityPlotConfiguration$labels$xlabel$text
-  sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||% sensitivityPlotConfiguration$labels$ylabel$text
-  sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||% sensitivityPlotConfiguration$colorPalette
+  sensitivityPlotConfiguration <- settings$plotConfiguration %||%
+    tlf::TornadoPlotConfiguration$new(bar = FALSE)
+  sensitivityPlotConfiguration$labels$xlabel$font$size <- settings$xAxisFontSize %||%
+    sensitivityPlotConfiguration$labels$xlabel$font$size
+  sensitivityPlotConfiguration$labels$ylabel$font$size <- settings$yAxisFontSize %||%
+    sensitivityPlotConfiguration$labels$ylabel$font$size
+  sensitivityPlotConfiguration$xAxis$font$size <- settings$xAxisFontSize %||%
+    sensitivityPlotConfiguration$xAxis$font$size
+  sensitivityPlotConfiguration$yAxis$font$size <- settings$yAxisFontSize %||%
+    sensitivityPlotConfiguration$yAxis$font$size
+  sensitivityPlotConfiguration$labels$xlabel$text <- settings$xLabel %||%
+    sensitivityPlotConfiguration$labels$xlabel$text
+  sensitivityPlotConfiguration$labels$ylabel$text <- settings$yLabel %||%
+    sensitivityPlotConfiguration$labels$ylabel$text
+  sensitivityPlotConfiguration$colorPalette <- settings$colorPalette %||%
+    sensitivityPlotConfiguration$colorPalette
 
   # Create plots and captions per unique output path and PK parameter
   for (outputIndex in seq_len(nrow(uniqueQuantitiesAndPKParameters))) {
     selectedPath <- uniqueQuantitiesAndPKParameters$QuantityPath[outputIndex]
-    selectedPKParameter <- uniqueQuantitiesAndPKParameters$PKParameter[outputIndex]
+    selectedPKParameter <- uniqueQuantitiesAndPKParameters$PKParameter[
+      outputIndex
+    ]
 
-    outputRows <- allPopsDf$QuantityPath == selectedPath & allPopsDf$PKParameter == selectedPKParameter
+    outputRows <- allPopsDf$QuantityPath == selectedPath &
+      allPopsDf$PKParameter == selectedPKParameter
     outputSensitivityData <- allPopsDf[outputRows, ]
 
     # Because of option `maximalParametersPerSensitivityPlot` available from settings
     # Parameters must first be ranked and selected according to their sensitivity
     # This must be done using levels because sensitivities are split between simulation sets and percentiles
-    outputSensitivityData <- outputSensitivityData[order(-abs(outputSensitivityData$Value)), ]
-    outputSensitivityData$Parameter <- factor(x = outputSensitivityData$Parameter, levels = rev(unique(outputSensitivityData$Parameter)))
+    outputSensitivityData <- outputSensitivityData[
+      order(-abs(outputSensitivityData$Value)),
+    ]
+    outputSensitivityData$Parameter <- factor(
+      x = outputSensitivityData$Parameter,
+      levels = rev(unique(outputSensitivityData$Parameter))
+    )
 
     # Select most sensitive parameters
     allAvailableParameters <- levels(outputSensitivityData$Parameter)
-    selectedParameters <- rev(allAvailableParameters)[seq_len(min(settings$maximalParametersPerSensitivityPlot, length(allAvailableParameters)))]
-    selectedSensitivityData <- outputSensitivityData[outputSensitivityData$Parameter %in% selectedParameters, ]
+    selectedParameters <- rev(allAvailableParameters)[seq_len(min(
+      settings$maximalParametersPerSensitivityPlot,
+      length(allAvailableParameters)
+    ))]
+    selectedSensitivityData <- outputSensitivityData[
+      outputSensitivityData$Parameter %in% selectedParameters,
+    ]
 
     tornadoPlot <- tlf::plotTornado(
       data = selectedSensitivityData,
@@ -803,7 +1020,10 @@ plotPopulationSensitivity <- function(structureSets,
       bar = FALSE
     )
     # Right aligning to prevent cropping of legend title
-    tornadoPlot <- tlf::setLegendPosition(tornadoPlot, position = tlf::LegendPositions$outsideTopRight)
+    tornadoPlot <- tlf::setLegendPosition(
+      tornadoPlot,
+      position = tlf::LegendPositions$outsideTopRight
+    )
     # In tlf, Legend titles are the same between mappings
     # Needs to use ggplot2 directly
     tornadoPlot <- tornadoPlot +
@@ -817,9 +1037,16 @@ plotPopulationSensitivity <- function(structureSets,
           title.theme = sensitivityPlotConfiguration$legend$font$createPlotTextFont()
         )
       )
-    tornadoPlot <- setQuadraticDimension(tornadoPlot, plotConfiguration = settings$plotConfiguration)
+    tornadoPlot <- setQuadraticDimension(
+      tornadoPlot,
+      plotConfiguration = settings$plotConfiguration
+    )
 
-    resultID <- defaultFileNames$resultID(length(sensitivityResults) + 1, "sensitivity", selectedPKParameter)
+    resultID <- defaultFileNames$resultID(
+      length(sensitivityResults) + 1,
+      "sensitivity",
+      selectedPKParameter
+    )
     sensitivityResults[[resultID]] <- saveTaskResults(
       id = resultID,
       plot = tornadoPlot,
@@ -846,12 +1073,14 @@ plotPopulationSensitivity <- function(structureSets,
 #' @return sortedFilteredIndividualsDfForPKParameter dataframe of population-wide sensitivity results for pkParameter and output
 #' @import ospsuite
 #' @keywords internal
-getPopSensDfForPkAndOutput <- function(simulation,
-                                       sensitivityResultsFolder,
-                                       indexDf,
-                                       output,
-                                       pkParameter,
-                                       totalSensitivityThreshold) {
+getPopSensDfForPkAndOutput <- function(
+  simulation,
+  sensitivityResultsFolder,
+  indexDf,
+  output,
+  pkParameter,
+  totalSensitivityThreshold
+) {
   pkOutputIndexDf <- getPkOutputIndexDf(indexDf, pkParameter, output)
   individualsDfForPKParameter <- NULL
 
@@ -872,8 +1101,14 @@ getPopSensDfForPkAndOutput <- function(simulation,
 
       # import SA results for individual corresponding to current quantile
 
-      individualSAResultsFilePath <- file.path(sensitivityResultsFolder, saResultsFileName)
-      re.tStoreFileMetadata(access = "read", filePath = individualSAResultsFilePath)
+      individualSAResultsFilePath <- file.path(
+        sensitivityResultsFolder,
+        saResultsFileName
+      )
+      re.tStoreFileMetadata(
+        access = "read",
+        filePath = individualSAResultsFilePath
+      )
       individualSAResults <- ospsuite::importSensitivityAnalysisResultsFromCSV(
         simulation = simulation,
         filePaths = individualSAResultsFilePath
@@ -882,8 +1117,13 @@ getPopSensDfForPkAndOutput <- function(simulation,
       # verify that pkParameter is included in sensitivity results for current individual.  If not, skip to next individual
       if (!isIncluded(pkParameter, individualSAResults$allPKParameterNames)) {
         logError(paste(
-          "For individualID", individualId, ":",
-          messages$errorNotIncluded(pkParameter, individualSAResults$allPKParameterNames)
+          "For individualID",
+          individualId,
+          ":",
+          messages$errorNotIncluded(
+            pkParameter,
+            individualSAResults$allPKParameterNames
+          )
         ))
         next
       }
@@ -899,20 +1139,32 @@ getPopSensDfForPkAndOutput <- function(simulation,
       # Verify that there exist SA results within the threshold given by totalSensitivityThreshold for this individual, this output and this pkParameter
       if (length(filteredIndividualSAResults) > 0) {
         # Build a list of sensitivities to parameters containing each sensitivity result falling within the threshold given by totalSensitivityThreshold
-        listOfFilteredIndividualSAResults <- lapply(filteredIndividualSAResults, function(x) {
-          list(
-            "QuantityPath" = x$outputPath,
-            "Parameter" = x$parameterName,
-            "PKParameter" = x$pkParameterName,
-            "Value" = x$value
-          )
-        })
+        listOfFilteredIndividualSAResults <- lapply(
+          filteredIndividualSAResults,
+          function(x) {
+            list(
+              "QuantityPath" = x$outputPath,
+              "Parameter" = x$parameterName,
+              "PKParameter" = x$pkParameterName,
+              "Value" = x$value
+            )
+          }
+        )
 
         # Merge list into a dataframe
-        individualDf <- do.call(rbind.data.frame, listOfFilteredIndividualSAResults)
+        individualDf <- do.call(
+          rbind.data.frame,
+          listOfFilteredIndividualSAResults
+        )
 
         # Append dataframe for current individual, current output and current pkParameter to the list dFlist
-        dfList[[n]] <- cbind(individualDf, data.frame("Quantile" = rep(quantile, nrow(individualDf)), "IndividualId" = rep(individualId, nrow(individualDf))))
+        dfList[[n]] <- cbind(
+          individualDf,
+          data.frame(
+            "Quantile" = rep(quantile, nrow(individualDf)),
+            "IndividualId" = rep(individualId, nrow(individualDf))
+          )
+        )
       }
     }
 
@@ -931,7 +1183,9 @@ getPopSensDfForPkAndOutput <- function(simulation,
 #' @return pkOutputIndexDf dataframe containing index of files containing population sensitivity analysis results conducted for given output and pkParameter
 #' @keywords internal
 getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
-  pkOutputIndexDf <- indexDf[(indexDf$pkParameter == pkParameter) & (indexDf$Output == output), ]
+  pkOutputIndexDf <- indexDf[
+    (indexDf$pkParameter == pkParameter) & (indexDf$Output == output),
+  ]
   return(pkOutputIndexDf)
 }
 
@@ -940,7 +1194,11 @@ getPkOutputIndexDf <- function(indexDf, pkParameter, output) {
 #' @param variableParameterPaths vector of paths of parameters to vary when performing sensitivity analysis
 #' @param totalSensitivityThreshold cut-off used for plots of the most sensitive parameters
 #' @keywords internal
-getDefaultTotalSensitivityThreshold <- function(totalSensitivityThreshold = NULL, variableParameterPaths = NULL) {
-  totalSensitivityThreshold <- totalSensitivityThreshold %||% ifNotNull(variableParameterPaths, 1, 0.9)
+getDefaultTotalSensitivityThreshold <- function(
+  totalSensitivityThreshold = NULL,
+  variableParameterPaths = NULL
+) {
+  totalSensitivityThreshold <- totalSensitivityThreshold %||%
+    ifNotNull(variableParameterPaths, 1, 0.9)
   return(totalSensitivityThreshold)
 }

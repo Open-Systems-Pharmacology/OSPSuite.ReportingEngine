@@ -1,5 +1,14 @@
 # ospsuite.reportingengine (development version)
 
+## Breaking changes
+
+- R version >=4.4 is required
+- ospsuite.utils version >=1.10.0 is required
+
+## Minor changes
+
+- Using native operator `%||%` instead of importing from the `ospsuite.utils` package.
+
 # ospsuite.reportingengine 2.3.11
 
 ## Minor improvements and bug fixes

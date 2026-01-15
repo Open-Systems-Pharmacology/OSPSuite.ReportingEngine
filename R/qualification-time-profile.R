@@ -14,8 +14,10 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
       {
         # Create a unique ID for the plot name as <Plot index>-<Project>-<Simulation>
         plotID <- defaultFileNames$resultID(
-          length(timeProfileResults) + 1, "time_profile_plot",
-          timeProfilePlan$Project, timeProfilePlan$Simulation
+          length(timeProfileResults) + 1,
+          "time_profile_plot",
+          timeProfilePlan$Project,
+          timeProfilePlan$Simulation
         )
         # Get simulation and simulation results
         simulationFile <- configurationPlan$getSimulationPath(
@@ -27,14 +29,22 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
           simulation = timeProfilePlan$Simulation
         )
 
-        simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
-        simulationResults <- ospsuite::importResultsFromCSV(simulation, simulationResultsFile)
+        simulation <- ospsuite::loadSimulation(
+          simulationFile,
+          loadFromCache = TRUE
+        )
+        simulationResults <- ospsuite::importResultsFromCSV(
+          simulation,
+          simulationResultsFile
+        )
 
         # Get axes properties (with scale, limits and display units)
-        axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||% settings$axes
+        axesProperties <- getAxesProperties(timeProfilePlan$Plot$Axes) %||%
+          settings$axes
         axesProperties <- updateAxesMargin(
           axesProperties = axesProperties,
-          sideMarginsEnabled = timeProfilePlan$Plot$Settings$SideMarginsEnabled %||% TRUE
+          sideMarginsEnabled = timeProfilePlan$Plot$Settings$SideMarginsEnabled %||%
+            TRUE
         )
         plotConfiguration <- getPlotConfigurationFromPlan(
           timeProfilePlan$Plot,
@@ -69,9 +79,11 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
         # Save results
         timeProfileResults[[plotID]] <- saveTaskResults(
           id = plotID,
-          sectionId = timeProfilePlan$SectionReference %||% timeProfilePlan$SectionId,
+          sectionId = timeProfilePlan$SectionReference %||%
+            timeProfilePlan$SectionId,
           plot = timeProfilePlot,
-          plotCaption = timeProfilePlan$Plot$Title %||% timeProfilePlan$Plot$Name
+          plotCaption = timeProfilePlan$Plot$Title %||%
+            timeProfilePlan$Plot$Name
         )
       },
       configurationPlanField = timeProfilePlan
@@ -94,28 +106,55 @@ plotQualificationTimeProfiles <- function(configurationPlan, settings) {
 #' @return Mean time profile plot as a `ggplot` object
 #' @import tlf
 #' @keywords internal
-plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
-                                             simulation,
-                                             simulationResults,
-                                             axesProperties,
-                                             configurationPlan,
-                                             plotConfiguration) {
+plotQualificationMeanTimeProfile <- function(
+  configurationPlanCurves,
+  simulation,
+  simulationResults,
+  axesProperties,
+  configurationPlan,
+  plotConfiguration
+) {
   # Define tlf data mapping for observed and simulated time profile
   simDataMapping <- tlf::TimeProfileDataMapping$new(
-    x = "x", y = "y", group = "legend", y2Axis = "y2Axis"
+    x = "x",
+    y = "y",
+    group = "legend",
+    y2Axis = "y2Axis"
   )
   obsDataMapping <- tlf::ObservedDataMapping$new(
-    x = "x", y = "y", ymin = "ymin", ymax = "ymax",
-    group = "legend", y2Axis = "y2Axis"
+    x = "x",
+    y = "y",
+    ymin = "ymin",
+    ymax = "ymax",
+    group = "legend",
+    y2Axis = "y2Axis"
   )
 
   # Initialize data and metaData
   simData <- data.frame()
   obsData <- data.frame()
-  simMetaData <- list(id = NULL, legend = NULL, color = NULL, linetype = NULL, size = NULL)
-  obsMetaData <- list(id = NULL, legend = NULL, color = NULL, shape = NULL, size = NULL)
-  defaultSimProperties <- getDefaultPropertiesFromTheme("plotTimeProfile", propertyType = "lines")
-  defaultObsProperties <- getDefaultPropertiesFromTheme("plotTimeProfile", propertyType = "points")
+  simMetaData <- list(
+    id = NULL,
+    legend = NULL,
+    color = NULL,
+    linetype = NULL,
+    size = NULL
+  )
+  obsMetaData <- list(
+    id = NULL,
+    legend = NULL,
+    color = NULL,
+    shape = NULL,
+    size = NULL
+  )
+  defaultSimProperties <- getDefaultPropertiesFromTheme(
+    "plotTimeProfile",
+    propertyType = "lines"
+  )
+  defaultObsProperties <- getDefaultPropertiesFromTheme(
+    "plotTimeProfile",
+    propertyType = "points"
+  )
   for (curve in configurationPlanCurves) {
     curveAxesProperties <- axesProperties
     # Update features related to observed data
@@ -130,9 +169,18 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
       # Use default property if property is undefined
       obsMetaData$id <- c(obsMetaData$id, curveProperties$id %||% NA)
       obsMetaData$legend <- c(obsMetaData$legend, curveProperties$legend)
-      obsMetaData$color <- c(obsMetaData$color, curveProperties$color %||% defaultObsProperties$color)
-      obsMetaData$size <- c(obsMetaData$size, curveProperties$size %||% defaultObsProperties$size)
-      obsMetaData$shape <- c(obsMetaData$shape, curveProperties$shape %||% defaultObsProperties$shape)
+      obsMetaData$color <- c(
+        obsMetaData$color,
+        curveProperties$color %||% defaultObsProperties$color
+      )
+      obsMetaData$size <- c(
+        obsMetaData$size,
+        curveProperties$size %||% defaultObsProperties$size
+      )
+      obsMetaData$shape <- c(
+        obsMetaData$shape,
+        curveProperties$shape %||% defaultObsProperties$shape
+      )
       next
     }
     # Update features related to simulated data
@@ -147,9 +195,18 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
     # Use default property if property is undefined
     simMetaData$id <- c(simMetaData$id, curveProperties$id %||% NA)
     simMetaData$legend <- c(simMetaData$legend, curveProperties$legend)
-    simMetaData$color <- c(simMetaData$color, curveProperties$color %||% defaultSimProperties$color)
-    simMetaData$size <- c(simMetaData$size, curveProperties$size %||% defaultSimProperties$size)
-    simMetaData$linetype <- c(simMetaData$linetype, curveProperties$linetype %||% defaultSimProperties$linetype)
+    simMetaData$color <- c(
+      simMetaData$color,
+      curveProperties$color %||% defaultSimProperties$color
+    )
+    simMetaData$size <- c(
+      simMetaData$size,
+      curveProperties$size %||% defaultSimProperties$size
+    )
+    simMetaData$linetype <- c(
+      simMetaData$linetype,
+      curveProperties$linetype %||% defaultSimProperties$linetype
+    )
   }
   # Update legend captions based on expected plot width
   # keep order as provided in legend index (collected as id in metaData)
@@ -177,7 +234,8 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
     timeValues = c(simData$x, obsData$x)
   )
   axesProperties$x$ticks <- axesProperties$x$ticks %||% timeTicks$ticks
-  axesProperties$x$ticklabels <- axesProperties$x$ticklabels %||% timeTicks$ticklabels
+  axesProperties$x$ticklabels <- axesProperties$x$ticklabels %||%
+    timeTicks$ticklabels
 
   # Check necessity if dual axis by getting requested axes
   requestedAxes <- sort(unique(c(simData$yAxis, obsData$yAxis)))
@@ -221,8 +279,14 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
   # TRUE y2Axis values correspond to data on the right axis
   # Since yAxis values are included in "Y", "Y2" or "Y3"
   # TRUE values will correspond to the values included (%in%) last found axis
-  simData$y2Axis <- ifNotNull(simData$yAxis, simData$yAxis %in% tail(requestedAxes, 1))
-  obsData$y2Axis <- ifNotNull(obsData$yAxis, obsData$yAxis %in% tail(requestedAxes, 1))
+  simData$y2Axis <- ifNotNull(
+    simData$yAxis,
+    simData$yAxis %in% tail(requestedAxes, 1)
+  )
+  obsData$y2Axis <- ifNotNull(
+    obsData$yAxis,
+    obsData$yAxis %in% tail(requestedAxes, 1)
+  )
 
   plotConfiguration <- updateQualificationTimeProfilePlotConfiguration(
     simulatedMetaData = simMetaData,
@@ -239,7 +303,6 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
     observedDataMapping = obsDataMapping,
     plotConfiguration = plotConfiguration
   )
-
 
   # We might need in that case to create a dummy plot
   # to update the exported size of the plot
@@ -271,22 +334,36 @@ plotQualificationMeanTimeProfile <- function(configurationPlanCurves,
 #' @param plotObject A `ggplot` object
 #' @return Population time profile plot as a `ggplot` object
 #' @import tlf
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
-plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedDataCollection, simulation, simulationResults, axesProperties, configurationPlan, plotObject) {
+plotQualificationPopulationTimeProfile <- function(
+  simulationAnalysis,
+  observedDataCollection,
+  simulation,
+  simulationResults,
+  axesProperties,
+  configurationPlan,
+  plotObject
+) {
   # Get simulation results from configuration plan field "Fields"
   outputPath <- simulationAnalysis$Fields[[1]]$QuantityPath
   simulationQuantity <- ospsuite::getQuantity(outputPath, simulation)
-  simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = outputPath)
+  simulationPathResults <- ospsuite::getOutputValues(
+    simulationResults,
+    quantitiesOrPaths = outputPath
+  )
   molWeight <- simulation$molWeightFor(outputPath)
   outputDimension <- simulationPathResults$metaData[[outputPath]]$dimension
 
   # Overwrite dimension, unit and scale if found in Analysis field
   # Keep compatibility with Config Plan from Matlab version
-  axesProperties$y$dimension <- simulationAnalysis$Fields[[1]]$Dimension %||% axesProperties$y$dimension
+  axesProperties$y$dimension <- simulationAnalysis$Fields[[1]]$Dimension %||%
+    axesProperties$y$dimension
   # If unit is left undefined, use base unit
-  axesProperties$y$unit <- simulationAnalysis$Fields[[1]]$Unit %||% ospsuite::getBaseUnit(outputDimension)
-  axesProperties$y$scale <- tlfScale(simulationAnalysis$Fields[[1]]$Scaling %||% axesProperties$y$scale)
+  axesProperties$y$unit <- simulationAnalysis$Fields[[1]]$Unit %||%
+    ospsuite::getBaseUnit(outputDimension)
+  axesProperties$y$scale <- tlfScale(
+    simulationAnalysis$Fields[[1]]$Scaling %||% axesProperties$y$scale
+  )
 
   # Get and convert output path values into display unit
   time <- ospsuite::toUnit(
@@ -325,16 +402,27 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     # observedResults is a list that includes
     # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
     # metaData: a list for each column of data that includes their unit
-    observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
+    observedResults <- getObservedDataFromConfigurationPlan(
+      observedDataId,
+      configurationPlan
+    )
     # Currently, the molecular weight is directly taken from the simulation output
-    observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, observedDataId)
+    observedData <- getTimeProfileObservedDataFromResults(
+      observedResults,
+      molWeight,
+      axesProperties,
+      observedDataId
+    )
 
     if (!isEmpty(observedData$error)) {
       plotObject <- tlf::addErrorbar(
         x = observedData$time,
         ymin = observedData$error$ymin,
         ymax = observedData$error$ymax,
-        caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data", plotObject),
+        caption = prettyCaption(
+          observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data",
+          plotObject
+        ),
         color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
         size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
         plotObject = plotObject
@@ -343,11 +431,18 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
     plotObject <- tlf::addScatter(
       x = observedData$time,
       y = observedData$y,
-      caption = prettyCaption(observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data", plotObject),
+      caption = prettyCaption(
+        observedDataCollection$CurveOptions[[1]]$Caption %||% "Observed data",
+        plotObject
+      ),
       color = observedDataCollection$CurveOptions[[1]]$CurveOptions$Color,
-      linetype = tlfLinetype(observedDataCollection$CurveOptions[[1]]$CurveOptions$LineStyle),
+      linetype = tlfLinetype(
+        observedDataCollection$CurveOptions[[1]]$CurveOptions$LineStyle
+      ),
       size = observedDataCollection$CurveOptions[[1]]$CurveOptions$Size,
-      shape = tlfShape(observedDataCollection$CurveOptions[[1]]$CurveOptions$Symbol),
+      shape = tlfShape(
+        observedDataCollection$CurveOptions[[1]]$CurveOptions$Symbol
+      ),
       plotObject = plotObject
     )
   }
@@ -368,10 +463,21 @@ plotQualificationPopulationTimeProfile <- function(simulationAnalysis, observedD
 #' @return A `ggplot` object updated with new displayed statistic
 #' @import tlf
 #' @keywords internal
-plotStatisticsFromPlan <- function(time, outputValues, statisticId, outputName, color, linetype, plotObject) {
+plotStatisticsFromPlan <- function(
+  time,
+  outputValues,
+  statisticId,
+  outputName,
+  color,
+  linetype,
+  plotObject
+) {
   # Format the data for plots
   aggregatedData <- getAggregateFromStat(statisticId, time, outputValues)
-  caption <- prettyCaption(getCaptionFromStat(statisticId, outputName), plotObject)
+  caption <- prettyCaption(
+    getCaptionFromStat(statisticId, outputName),
+    plotObject
+  )
   # Range and Deviation plots use addRibbon
   useRibbon <- any(
     grepl(pattern = "Range", statisticId),
@@ -444,7 +550,8 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
       by = list(time = time),
       # Plot will show mean +/- 1*SD is plotted,
       # This can be changed to plot +/- 1.96*SD representing a 95% CI
-      FUN = switch(statisticId,
+      FUN = switch(
+        statisticId,
         "ArithmeticStandardDeviation" = function(x) {
           mean(x) + stats::sd(x)
         },
@@ -456,7 +563,8 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
     aggregatedMaxData <- aggregate(
       x = outputValues,
       by = list(time = time),
-      FUN = switch(statisticId,
+      FUN = switch(
+        statisticId,
         "ArithmeticStandardDeviation" = function(x) {
           mean(x) - stats::sd(x)
         },
@@ -474,7 +582,11 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
   }
   # Line plots use data.frame with x and y
   if (grepl(pattern = "Percentile", statisticId)) {
-    percentileValue <- as.numeric(gsub(pattern = "Percentile_", "", statisticId))
+    percentileValue <- as.numeric(gsub(
+      pattern = "Percentile_",
+      "",
+      statisticId
+    ))
     aggregatedData <- aggregate(
       x = outputValues,
       by = list(time = time),
@@ -488,7 +600,8 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
   aggregatedData <- aggregate(
     x = outputValues,
     by = list(time = time),
-    FUN = switch(statisticId,
+    FUN = switch(
+      statisticId,
       "ArithmeticMean" = mean,
       "GeometricMean" = function(x) {
         exp(mean(log(x)))
@@ -512,17 +625,30 @@ getAggregateFromStat <- function(statisticId, time, outputValues) {
 #' @keywords internal
 getCaptionFromStat <- function(statisticId, outputName) {
   if (grepl(pattern = "Percentile", statisticId)) {
-    percentileValue <- as.numeric(gsub(pattern = "Percentile_", "", statisticId))
+    percentileValue <- as.numeric(gsub(
+      pattern = "Percentile_",
+      "",
+      statisticId
+    ))
     return(paste0(outputName, "-Percentile ", percentileValue, "%"))
   }
   if (grepl(pattern = "Range", statisticId)) {
     percentileValue <- as.numeric(gsub(pattern = "[Range_]", "", statisticId))
     percentileMinValue <- (100 - percentileValue) / 2
     percentileMaxValue <- (100 + percentileValue) / 2
-    return(return(paste0(outputName, "-Range ", percentileMinValue, " to ", percentileMaxValue, "%")))
+    return(return(paste0(
+      outputName,
+      "-Range ",
+      percentileMinValue,
+      " to ",
+      percentileMaxValue,
+      "%"
+    )))
   }
-  return(paste(outputName,
-    switch(statisticId,
+  return(paste(
+    outputName,
+    switch(
+      statisticId,
       "ArithmeticMean" = "Arithmetic Mean",
       "ArithmeticStandardDeviation" = "Arithmetic Standard Deviation",
       "GeometricMean" = "Geometric Mean",
@@ -547,7 +673,12 @@ getCaptionFromStat <- function(statisticId, outputName) {
 #' @param observedDataId Id of the observed data for better handling error messages
 #' @return List with `time`, `y` and `error` values
 #' @keywords internal
-getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, axesProperties, observedDataId) {
+getTimeProfileObservedDataFromResults <- function(
+  observedResults,
+  molWeight,
+  axesProperties,
+  observedDataId
+) {
   time <- ospsuite::toUnit(
     quantityOrDimension = "Time",
     values = as.numeric(observedResults$data[, 1]),
@@ -560,7 +691,9 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
   outputValues <- tryCatch(
     {
       ospsuite::toUnit(
-        quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+        quantityOrDimension = ospsuite::getDimensionForUnit(
+          observedResults$metaData$output$unit
+        ),
         values = observedResults$data[, 2],
         targetUnit = axesProperties$y$unit,
         sourceUnit = observedResults$metaData$output$unit,
@@ -577,7 +710,12 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
 
   outputError <- NULL
   if (!isEmpty(observedResults$metaData$error)) {
-    outputError <- getObservedErrorValues(outputValues, observedResults, axesProperties, molWeight = molWeight)
+    outputError <- getObservedErrorValues(
+      outputValues,
+      observedResults,
+      axesProperties,
+      molWeight = molWeight
+    )
   }
   return(list(
     time = time,
@@ -595,9 +733,17 @@ getTimeProfileObservedDataFromResults <- function(observedResults, molWeight, ax
 #' @param molWeight Molecular weight if unit conversion is required
 #' @return A named list, with `ymin` and `ymax`, of the observed data error range
 #' @keywords internal
-getObservedErrorValues <- function(observedValues, observedResults, axesProperties, molWeight = NA) {
+getObservedErrorValues <- function(
+  observedValues,
+  observedResults,
+  axesProperties,
+  molWeight = NA
+) {
   # Compute geometric error by default
-  observedError <- calculateGeometricErrorRange(observedValues, observedResults$data[, 3])
+  observedError <- calculateGeometricErrorRange(
+    observedValues,
+    observedResults$data[, 3]
+  )
 
   # If error has a unit, compute arithmetic error instead
   if (!isIncluded(observedResults$metaData$error$unit, "")) {
@@ -627,18 +773,27 @@ getObservedErrorValues <- function(observedValues, observedResults, axesProperti
         logError(messages$warningErrorAssumedArithmetic())
       }
     )
-    observedError <- calculateArithmeticErrorRange(observedValues, observedResults$data[, 3])
+    observedError <- calculateArithmeticErrorRange(
+      observedValues,
+      observedResults$data[, 3]
+    )
   }
 
   # Caution: errors input as NA values leads to ymin and ymax being also NA values
   # NA values are not well handled by ggplot2 which tends to crash
   # Thus, NAs need to be replaced by observedValues (no error bar) which is virtually the same
-  observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(observedError$ymin)]
-  observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(observedError$ymax)]
+  observedError$ymin[is.na(observedError$ymin)] <- observedValues[is.na(
+    observedError$ymin
+  )]
+  observedError$ymax[is.na(observedError$ymax)] <- observedValues[is.na(
+    observedError$ymax
+  )]
 
   # For log scale plots, ymin<0 are replaced by observedValues so upper branch is still plotted
   if (isIncluded(axesProperties$y$scale, tlf::Scaling$log)) {
-    observedError$ymin[observedError$ymin <= 0] <- observedValues[observedError$ymin <= 0]
+    observedError$ymin[observedError$ymin <= 0] <- observedValues[
+      observedError$ymin <= 0
+    ]
   }
   return(observedError)
 }
@@ -653,13 +808,16 @@ getObservedErrorValues <- function(observedValues, observedResults, axesProperti
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
 #' @return A named list data and meta data parameters
 #' @keywords internal
-getObservedCurveProperties <- function(configurationPlanCurve,
-                                       simulation,
-                                       axesProperties,
-                                       configurationPlan) {
+getObservedCurveProperties <- function(
+  configurationPlanCurve,
+  simulation,
+  axesProperties,
+  configurationPlan
+) {
   # Update Axis Properties based on yAxisType
   yAxisType <- configurationPlanCurve$CurveOptions$yAxisType %||% "Y"
-  axesProperties$y <- switch(yAxisType,
+  axesProperties$y <- switch(
+    yAxisType,
     "Y2" = axesProperties$y2,
     "Y3" = axesProperties$y3,
     axesProperties$y
@@ -674,8 +832,16 @@ getObservedCurveProperties <- function(configurationPlanCurve,
   # observedResults is a list that includes
   # data: a data.frame with column 1 = Time, column 2 = Concentration, column 3 = Error
   # metaData: a list for each column of data that includes their unit
-  observedResults <- getObservedDataFromConfigurationPlan(observedDataId, configurationPlan)
-  observedData <- getTimeProfileObservedDataFromResults(observedResults, molWeight, axesProperties, observedDataId)
+  observedResults <- getObservedDataFromConfigurationPlan(
+    observedDataId,
+    configurationPlan
+  )
+  observedData <- getTimeProfileObservedDataFromResults(
+    observedResults,
+    molWeight,
+    axesProperties,
+    observedDataId
+  )
 
   outputData <- data.frame(
     x = observedData$time,
@@ -709,14 +875,17 @@ getObservedCurveProperties <- function(configurationPlanCurve,
 #' @param configurationPlan A `ConfigurationPlan` object that includes methods to find observed data
 #' @return A named list data and meta data parameters
 #' @keywords internal
-getSimulatedCurveProperties <- function(configurationPlanCurve,
-                                        simulation,
-                                        simulationResults,
-                                        axesProperties,
-                                        configurationPlan) {
+getSimulatedCurveProperties <- function(
+  configurationPlanCurve,
+  simulation,
+  simulationResults,
+  axesProperties,
+  configurationPlan
+) {
   # Update Axis Properties based on yAxisType
   yAxisType <- configurationPlanCurve$CurveOptions$yAxisType %||% "Y"
-  axesProperties$y <- switch(yAxisType,
+  axesProperties$y <- switch(
+    yAxisType,
     "Y2" = axesProperties$y2,
     "Y3" = axesProperties$y3,
     axesProperties$y
@@ -729,7 +898,10 @@ getSimulatedCurveProperties <- function(configurationPlanCurve,
   outputPath <- ospsuite::toPathString(pathArray[-1])
   # Get and convert output path values into display unit
   simulationQuantity <- ospsuite::getQuantity(outputPath, simulation)
-  simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = outputPath)
+  simulationPathResults <- ospsuite::getOutputValues(
+    simulationResults,
+    quantitiesOrPaths = outputPath
+  )
   molWeight <- simulation$molWeightFor(outputPath)
 
   outputData <- data.frame(
@@ -769,17 +941,25 @@ getSimulatedCurveProperties <- function(configurationPlanCurve,
 #' @param plotConfiguration A `PlotConfiguration` object
 #' @return Updated `TimeProfilePlotConfiguration` object
 #' @keywords internal
-updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = NULL,
-                                                            observedMetaData = NULL,
-                                                            requestedAxes = "Y",
-                                                            axesProperties = NULL,
-                                                            plotConfiguration) {
+updateQualificationTimeProfilePlotConfiguration <- function(
+  simulatedMetaData = NULL,
+  observedMetaData = NULL,
+  requestedAxes = "Y",
+  axesProperties = NULL,
+  plotConfiguration
+) {
   # Update plot configuration for simulated values
   if (!isEmpty(simulatedMetaData$id)) {
     sortedSimulatedMetaData <- order(simulatedMetaData$id)
-    plotConfiguration$lines$color <- simulatedMetaData$color[sortedSimulatedMetaData]
-    plotConfiguration$lines$linetype <- simulatedMetaData$linetype[sortedSimulatedMetaData]
-    plotConfiguration$lines$size <- simulatedMetaData$size[sortedSimulatedMetaData]
+    plotConfiguration$lines$color <- simulatedMetaData$color[
+      sortedSimulatedMetaData
+    ]
+    plotConfiguration$lines$linetype <- simulatedMetaData$linetype[
+      sortedSimulatedMetaData
+    ]
+    plotConfiguration$lines$size <- simulatedMetaData$size[
+      sortedSimulatedMetaData
+    ]
   }
   # Update plot configuration for observed values
   if (!isEmpty(observedMetaData$id)) {
@@ -793,8 +973,12 @@ updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = 
       simulatedMetaData$color,
       observedMetaData$color[sortedObservedMetaData]
     )
-    plotConfiguration$points$shape <- observedMetaData$shape[sortedObservedMetaData]
-    plotConfiguration$points$size <- observedMetaData$size[sortedObservedMetaData]
+    plotConfiguration$points$shape <- observedMetaData$shape[
+      sortedObservedMetaData
+    ]
+    plotConfiguration$points$size <- observedMetaData$size[
+      sortedObservedMetaData
+    ]
   }
 
   # Update labels, axes and background properties
@@ -814,12 +998,18 @@ updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = 
   plotConfiguration$background$yGrid$linetype <- axesProperties$y$grid$linetype
 
   plotConfiguration$xAxis$scale <- axesProperties$x$scale
-  plotConfiguration$xAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max)
+  plotConfiguration$xAxis$axisLimits <- c(
+    axesProperties$x$min,
+    axesProperties$x$max
+  )
   plotConfiguration$xAxis$ticks <- axesProperties$x$ticks
   plotConfiguration$xAxis$ticklabels <- axesProperties$x$ticklabels
 
   plotConfiguration$yAxis$scale <- axesProperties$y$scale
-  plotConfiguration$yAxis$axisLimits <- c(axesProperties$y$min, axesProperties$y$max)
+  plotConfiguration$yAxis$axisLimits <- c(
+    axesProperties$y$min,
+    axesProperties$y$max
+  )
   plotConfiguration$yAxis$ticks <- axesProperties$y$ticks
   plotConfiguration$yAxis$ticklabels <- axesProperties$y$ticklabels
 
@@ -835,7 +1025,10 @@ updateQualificationTimeProfilePlotConfiguration <- function(simulatedMetaData = 
   plotConfiguration$background$y2Grid$linetype <- axesProperties$y2$grid$linetype
 
   plotConfiguration$y2Axis$scale <- axesProperties$y2$scale
-  plotConfiguration$y2Axis$axisLimits <- c(axesProperties$y2$min, axesProperties$y2$max)
+  plotConfiguration$y2Axis$axisLimits <- c(
+    axesProperties$y2$min,
+    axesProperties$y2$max
+  )
   plotConfiguration$y2Axis$ticks <- axesProperties$y2$ticks
   plotConfiguration$y2Axis$ticklabels <- axesProperties$y2$ticklabels
 

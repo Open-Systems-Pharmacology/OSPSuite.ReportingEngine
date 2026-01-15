@@ -3,7 +3,6 @@
 #' @param configurationPlan A `ConfigurationPlan` object
 #' @param settings settings for the task
 #' @return list of qualification GOF ggplot objects
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 plotQualificationGOFs <- function(configurationPlan, settings) {
   gofResults <- list()
@@ -13,7 +12,11 @@ plotQualificationGOFs <- function(configurationPlan, settings) {
         # If field artifacts is null, output them all
         gofPlan$Artifacts <- gofPlan$Artifacts %||% c("Plot", "GMFE")
         gofAxesUnits <- getGOFAxesUnits(gofPlan, settings)
-        gofData <- getQualificationGOFData(gofPlan, configurationPlan, gofAxesUnits)
+        gofData <- getQualificationGOFData(
+          gofPlan,
+          configurationPlan,
+          gofAxesUnits
+        )
 
         # GMFE
         gmfeID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_gmfe")
@@ -27,12 +30,24 @@ plotQualificationGOFs <- function(configurationPlan, settings) {
         )
 
         # GOF plots
-        plotTypes <- gofPlan$PlotTypes %||% ospsuite::toPathArray(gofPlan$PlotType)
+        plotTypes <- gofPlan$PlotTypes %||%
+          ospsuite::toPathArray(gofPlan$PlotType)
         for (plotType in plotTypes) {
-          plotID <- defaultFileNames$resultID(length(gofResults) + 1, "gof_plot", plotType)
-          axesProperties <- getAxesProperties(gofPlan$Axes[[plotType]]) %||% settings[[plotType]]$axes
+          plotID <- defaultFileNames$resultID(
+            length(gofResults) + 1,
+            "gof_plot",
+            plotType
+          )
+          axesProperties <- getAxesProperties(gofPlan$Axes[[plotType]]) %||%
+            settings[[plotType]]$axes
 
-          gofPlot <- getQualificationGOFPlot(plotType, gofData$data, gofData$metaData, axesProperties, gofPlan[["PlotSettings"]])
+          gofPlot <- getQualificationGOFPlot(
+            plotType,
+            gofData$data,
+            gofData$metaData,
+            axesProperties,
+            gofPlan[["PlotSettings"]]
+          )
           gofResults[[plotID]] <- saveTaskResults(
             id = plotID,
             sectionId = gofPlan$SectionReference %||% gofPlan$SectionId,
@@ -56,7 +71,6 @@ plotQualificationGOFs <- function(configurationPlan, settings) {
 #' @return list with `data` and `metaData`
 #' @import tlf
 #' @import ospsuite
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits) {
   gofData <- data.frame()
@@ -68,7 +82,11 @@ getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits) {
   groupColorsIndex <- 1
   for (group in gofPlan$Groups) {
     for (outputMapping in group$OutputMappings) {
-      gofResults <- getGOFDataForMapping(outputMapping, configurationPlan, axesUnits)
+      gofResults <- getGOFDataForMapping(
+        outputMapping,
+        configurationPlan,
+        axesUnits
+      )
       # Variable associated to shapes
       gofResults$Groups <- group$Caption %||% NA
       # Variable associated to colors
@@ -76,10 +94,16 @@ getQualificationGOFData <- function(gofPlan, configurationPlan, axesUnits) {
       groupColorsIndex <- groupColorsIndex + 1
       gofData <- rbind.data.frame(gofData, gofResults)
       # Use default "black" color to prevent crash if undefined
-      groupColors <- c(groupColors, outputMapping$Color %||% group$Color %||% "black")
+      groupColors <- c(
+        groupColors,
+        outputMapping$Color %||% group$Color %||% "black"
+      )
     }
     # Use default "circle" shape to prevent crash if undefined
-    groupShapes <- c(groupShapes, tlfShape(group$Symbol) %||% tlf::Shapes$circle)
+    groupShapes <- c(
+      groupShapes,
+      tlfShape(group$Symbol) %||% tlf::Shapes$circle
+    )
     groupCaptions <- c(groupCaptions, group$Caption %||% "")
   }
   # Capture plot properties in metaData
@@ -113,10 +137,16 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits) {
     simulation = outputMapping$Simulation
   )
   simulation <- ospsuite::loadSimulation(simulationFile, loadFromCache = TRUE)
-  simulationResults <- ospsuite::importResultsFromCSV(simulation, simulationResultsFile)
+  simulationResults <- ospsuite::importResultsFromCSV(
+    simulation,
+    simulationResultsFile
+  )
   # Get and convert output path values into display unit
   simulationQuantity <- ospsuite::getQuantity(outputMapping$Output, simulation)
-  simulationPathResults <- ospsuite::getOutputValues(simulationResults, quantitiesOrPaths = simulationQuantity)
+  simulationPathResults <- ospsuite::getOutputValues(
+    simulationResults,
+    quantitiesOrPaths = simulationQuantity
+  )
   molWeight <- simulation$molWeightFor(outputMapping$Output)
   simulatedTime <- ospsuite::toUnit(
     "Time",
@@ -133,7 +163,10 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits) {
   # Loop on each observed dataset in OutputMappings
   gofData <- data.frame()
   for (observedDataSet in outputMapping$ObservedData) {
-    observedResults <- getObservedDataFromConfigurationPlan(observedDataSet, configurationPlan)
+    observedResults <- getObservedDataFromConfigurationPlan(
+      observedDataSet,
+      configurationPlan
+    )
     observedTime <- ospsuite::toUnit(
       quantityOrDimension = "Time",
       values = as.numeric(observedResults$data[, 1]),
@@ -141,7 +174,9 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits) {
       sourceUnit = observedResults$metaData$time$unit
     )
     observedValues <- ospsuite::toUnit(
-      quantityOrDimension = ospsuite::getDimensionForUnit(observedResults$metaData$output$unit),
+      quantityOrDimension = ospsuite::getDimensionForUnit(
+        observedResults$metaData$output$unit
+      ),
       values = observedResults$data[, 2],
       targetUnit = axesUnits$observed,
       sourceUnit = tolower(observedResults$metaData$output$unit),
@@ -182,19 +217,35 @@ getGOFDataForMapping <- function(outputMapping, configurationPlan, axesUnits) {
 #' @param plotProperties list of plot properties defined in field `Plot` of GOFMerged configuration plan
 #' @return A ggplot object
 #' @import tlf
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
-getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, plotProperties) {
+getQualificationGOFPlot <- function(
+  plotType,
+  data,
+  metaData,
+  axesProperties,
+  plotProperties
+) {
   # Axes labels
-  axesProperties$y$dimension <- switch(plotType,
-    "predictedVsObserved" = paste0("Simulated ", displayDimension(axesProperties$y$dimension)),
-    "residualsOverTime" = captions$plotGoF$residualsLabel(ResidualScales$Logarithmic)
+  axesProperties$y$dimension <- switch(
+    plotType,
+    "predictedVsObserved" = paste0(
+      "Simulated ",
+      displayDimension(axesProperties$y$dimension)
+    ),
+    "residualsOverTime" = captions$plotGoF$residualsLabel(
+      ResidualScales$Logarithmic
+    )
   )
-  axesProperties$x$dimension <- switch(plotType,
-    "predictedVsObserved" = paste0("Observed ", displayDimension(axesProperties$x$dimension)),
+  axesProperties$x$dimension <- switch(
+    plotType,
+    "predictedVsObserved" = paste0(
+      "Observed ",
+      displayDimension(axesProperties$x$dimension)
+    ),
     "residualsOverTime" = displayDimension(axesProperties$x$dimension)
   )
-  dataMapping <- switch(plotType,
+  dataMapping <- switch(
+    plotType,
     "predictedVsObserved" = tlf::ObsVsPredDataMapping$new(
       x = "Observed",
       y = "Simulated",
@@ -210,7 +261,8 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
   )
   plotConfiguration <- getPlotConfigurationFromPlan(
     plotProperties,
-    plotType = switch(plotType,
+    plotType = switch(
+      plotType,
       "predictedVsObserved" = "ObsVsPred",
       "residualsOverTime" = "ResVsPred"
     )
@@ -230,20 +282,32 @@ getQualificationGOFPlot <- function(plotType, data, metaData, axesProperties, pl
   plotConfiguration$points$shape <- metaData$shape[order(metaData$caption)]
 
   positiveRows <- (data[, "Observed"] > 0) & (data[, "Simulated"] > 0)
-  dataForLimit <- c(data[positiveRows, "Observed"], data[positiveRows, "Simulated"])
+  dataForLimit <- c(
+    data[positiveRows, "Observed"],
+    data[positiveRows, "Simulated"]
+  )
 
-  plotConfiguration$xAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max) %||%
-    autoAxesLimits(switch(plotType,
+  plotConfiguration$xAxis$axisLimits <- c(
+    axesProperties$x$min,
+    axesProperties$x$max
+  ) %||%
+    autoAxesLimits(switch(
+      plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = data[positiveRows, "Time"]
     ))
-  plotConfiguration$yAxis$axisLimits <- c(axesProperties$x$min, axesProperties$x$max) %||%
-    autoAxesLimits(switch(plotType,
+  plotConfiguration$yAxis$axisLimits <- c(
+    axesProperties$x$min,
+    axesProperties$x$max
+  ) %||%
+    autoAxesLimits(switch(
+      plotType,
       "predictedVsObserved" = dataForLimit,
       "residualsOverTime" = c(0, data[positiveRows, "Residuals"])
     ))
 
-  gofPlot <- switch(plotType,
+  gofPlot <- switch(
+    plotType,
     "predictedVsObserved" = tlf::plotObsVsPred(
       data = data,
       metaData = metaData,
@@ -280,7 +344,10 @@ getQualificationGOFGMFE <- function(data) {
       gmfe,
       data.frame(
         Group = groupName,
-        GMFE = calculateGMFE(data[selectedRows, "Observed"], data[selectedRows, "Simulated"])
+        GMFE = calculateGMFE(
+          data[selectedRows, "Observed"],
+          data[selectedRows, "Simulated"]
+        )
       )
     )
   }
@@ -301,11 +368,16 @@ getQualificationGOFGMFE <- function(data) {
 #' @param gofPlan List providing the configuration of the goodness of fit results
 #' @param settings settings for the task
 #' @return A list of units for goodness of fit results
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getGOFAxesUnits <- function(gofPlan, settings) {
-  predictedVsObservedAxesProperties <- getAxesProperties(gofPlan$Axes$PredictedVsObserved) %||% settings$predictedVsObserved$axes
-  residualsOverTimeAxesProperties <- getAxesProperties(gofPlan$Axes$ResidualsOverTime) %||% settings$residualsOverTime$axes
+  predictedVsObservedAxesProperties <- getAxesProperties(
+    gofPlan$Axes$PredictedVsObserved
+  ) %||%
+    settings$predictedVsObserved$axes
+  residualsOverTimeAxesProperties <- getAxesProperties(
+    gofPlan$Axes$ResidualsOverTime
+  ) %||%
+    settings$residualsOverTime$axes
   return(
     list(
       time = residualsOverTimeAxesProperties$x$unit,

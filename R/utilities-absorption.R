@@ -9,37 +9,72 @@
 #' @import utils
 #' @keywords internal
 plotMeanAbsorption <- function(structureSet, settings = NULL) {
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$simulationSet$simulationFile
+  )
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
   # Get drug mass to perform the drugmass normalized plot
   applications <- ospsuite::getContainer("Applications", simulation)
   appliedMoleculePaths <- ospsuite::getAllMoleculePathsIn(applications)
 
-  appliedMolecules <- ospsuite::getAllMoleculesMatching(appliedMoleculePaths, simulation)
-
+  appliedMolecules <- ospsuite::getAllMoleculesMatching(
+    appliedMoleculePaths,
+    simulation
+  )
 
   # Get the absorption paths for each compound
   resultsByCompound <- list()
   for (compound in appliedMolecules) {
-    fractionAbsorbedInVenousBloodPath <- paste0("Organism|VenousBlood|*|", compound$name)
-    fractionAbsorbedInPortalVeinPath <- paste0("Organism|PortalVein|*|", compound$name)
+    fractionAbsorbedInVenousBloodPath <- paste0(
+      "Organism|VenousBlood|*|",
+      compound$name
+    )
+    fractionAbsorbedInPortalVeinPath <- paste0(
+      "Organism|PortalVein|*|",
+      compound$name
+    )
 
-    quantitiesInVenousBlood <- ospsuite::getAllQuantitiesMatching(fractionAbsorbedInVenousBloodPath, simulation)
-    quantitiesInPortalVein <- ospsuite::getAllQuantitiesMatching(fractionAbsorbedInPortalVeinPath, simulation)
+    quantitiesInVenousBlood <- ospsuite::getAllQuantitiesMatching(
+      fractionAbsorbedInVenousBloodPath,
+      simulation
+    )
+    quantitiesInPortalVein <- ospsuite::getAllQuantitiesMatching(
+      fractionAbsorbedInPortalVeinPath,
+      simulation
+    )
 
     resultsByCompound[[compound$name]] <- list(
       "compoundName" = compound$name,
       "drugMass" = compound$value,
-      "fractionDissolvedPath" = paste0("Organism|Lumen|", compound$name, "|Fraction dissolved"),
-      "fractionAbsorbedInMucosaPath" = paste0("Organism|Lumen|", compound$name, "|Fraction of oral drug mass absorbed into mucosa"),
-      "fractionExcretedPath" = paste0("Organism|Lumen|Feces|", compound$name, "|Fraction excreted to feces"),
-      "fractionAbsorbedInVenousBloodPaths" = sapply(quantitiesInVenousBlood, function(quantity) {
-        quantity$path
-      }),
-      "fractionAbsorbedInPortalVeinPaths" = sapply(quantitiesInPortalVein, function(quantity) {
-        quantity$path
-      }),
+      "fractionDissolvedPath" = paste0(
+        "Organism|Lumen|",
+        compound$name,
+        "|Fraction dissolved"
+      ),
+      "fractionAbsorbedInMucosaPath" = paste0(
+        "Organism|Lumen|",
+        compound$name,
+        "|Fraction of oral drug mass absorbed into mucosa"
+      ),
+      "fractionExcretedPath" = paste0(
+        "Organism|Lumen|Feces|",
+        compound$name,
+        "|Fraction excreted to feces"
+      ),
+      "fractionAbsorbedInVenousBloodPaths" = sapply(
+        quantitiesInVenousBlood,
+        function(quantity) {
+          quantity$path
+        }
+      ),
+      "fractionAbsorbedInPortalVeinPaths" = sapply(
+        quantitiesInPortalVein,
+        function(quantity) {
+          quantity$path
+        }
+      ),
       "timeProfileData" = NULL,
       "timeProfileMetaData" = NULL
     )
@@ -49,8 +84,14 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
   # Matlab version was setting the relative value of these 2 parameters to 1
   # It is supposed to mean that the value is equal to reference value of the parameter
   # Not sure if I need to use scaleParameterValues method ?
-  lungBloodFlowParameter <- ospsuite::getParameter("Organism|Lung|Blood flow rate", simulation)
-  portalVeinBloodFlowParameter <- ospsuite::getParameter("Organism|PortalVein|Blood flow rate", simulation)
+  lungBloodFlowParameter <- ospsuite::getParameter(
+    "Organism|Lung|Blood flow rate",
+    simulation
+  )
+  portalVeinBloodFlowParameter <- ospsuite::getParameter(
+    "Organism|PortalVein|Blood flow rate",
+    simulation
+  )
 
   # Add paths of
   # 1) Fraction dissolved
@@ -59,11 +100,29 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
   # 4) Fraction absorbed in venous blood with lungBloodFlowParameter set to 0
   # 5) Fraction absorbed in portal vein with portalVeinBloodFlowParameter set to 0
 
-  allFractionDissolvedPaths <- paste0("Organism|Lumen|", compoundNames, "|Fraction dissolved")
-  allFractionAbsorbedInMucosaPaths <- paste0("Organism|Lumen|", compoundNames, "|Fraction of oral drug mass absorbed into mucosa")
-  allFractionExcretedPaths <- paste0("Organism|Lumen|Feces|", compoundNames, "|Fraction excreted to feces")
-  allFractionAbsorbedInVenousBloodPaths <- paste0("Organism|VenousBlood|*|", compoundNames)
-  allFractionAbsorbedInPortalVeinPaths <- paste0("Organism|PortalVein|*|", compoundNames)
+  allFractionDissolvedPaths <- paste0(
+    "Organism|Lumen|",
+    compoundNames,
+    "|Fraction dissolved"
+  )
+  allFractionAbsorbedInMucosaPaths <- paste0(
+    "Organism|Lumen|",
+    compoundNames,
+    "|Fraction of oral drug mass absorbed into mucosa"
+  )
+  allFractionExcretedPaths <- paste0(
+    "Organism|Lumen|Feces|",
+    compoundNames,
+    "|Fraction excreted to feces"
+  )
+  allFractionAbsorbedInVenousBloodPaths <- paste0(
+    "Organism|VenousBlood|*|",
+    compoundNames
+  )
+  allFractionAbsorbedInPortalVeinPaths <- paste0(
+    "Organism|PortalVein|*|",
+    compoundNames
+  )
 
   # Get all the quantities with paths of fractions dissolved, absorbed and excreted
   quantitiesToSimulate <- ospsuite::getAllQuantitiesMatching(
@@ -99,7 +158,9 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
 
   # 5) Fraction absorbed in venous blood
   ospsuite::setParameterValues(portalVeinBloodFlowParameter, 0)
-  simulationResultsNoPortalVeinBloodFlow <- ospsuite::runSimulations(simulation)[[1]]
+  simulationResultsNoPortalVeinBloodFlow <- ospsuite::runSimulations(
+    simulation
+  )[[1]]
   simulationResultsOutputNoPortalVeinBloodFlow <- ospsuite::getOutputValues(
     simulationResults = simulationResultsNoPortalVeinBloodFlow,
     quantitiesOrPaths = simulationResultsNoPortalVeinBloodFlow$allQuantityPaths
@@ -108,42 +169,80 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
   # Get results by Compound
   absorptionResults <- list()
   for (result in resultsByCompound) {
-    resultID <- defaultFileNames$resultID(length(absorptionResults) + 1, "absorption", result$compoundName)
+    resultID <- defaultFileNames$resultID(
+      length(absorptionResults) + 1,
+      "absorption",
+      result$compoundName
+    )
     # Results by compound as fractions
     fractionAbsorbedInVenousBlood <- rowSums(cbind.data.frame(
-      simulationResultsOutputNoLungBloodFlow$data[, result$fractionAbsorbedInVenousBloodPaths, drop = FALSE],
+      simulationResultsOutputNoLungBloodFlow$data[,
+        result$fractionAbsorbedInVenousBloodPaths,
+        drop = FALSE
+      ],
       data.frame(dummyVariable = 0)
-    )) / result$drugMass
+    )) /
+      result$drugMass
 
     fractionAbsorbedInPortalVein <- rowSums(cbind.data.frame(
-      simulationResultsOutputNoPortalVeinBloodFlow$data[, result$fractionAbsorbedInPortalVeinPaths, drop = FALSE],
+      simulationResultsOutputNoPortalVeinBloodFlow$data[,
+        result$fractionAbsorbedInPortalVeinPaths,
+        drop = FALSE
+      ],
       data.frame(dummyVariable = 0)
-    )) / result$drugMass
+    )) /
+      result$drugMass
 
     result$timeProfileData <- rbind.data.frame(
       data.frame(
-        "Time" = toUnit("Time", simulationResultsOutput$data[, "Time"], structureSet$simulationSet$timeUnit),
-        "Fraction" = simulationResultsOutput$data[, result$fractionDissolvedPath],
+        "Time" = toUnit(
+          "Time",
+          simulationResultsOutput$data[, "Time"],
+          structureSet$simulationSet$timeUnit
+        ),
+        "Fraction" = simulationResultsOutput$data[,
+          result$fractionDissolvedPath
+        ],
         "Legend" = "Fraction dissolved"
       ),
       data.frame(
-        "Time" = toUnit("Time", simulationResultsOutput$data[, "Time"], structureSet$simulationSet$timeUnit),
-        "Fraction" = simulationResultsOutput$data[, result$fractionAbsorbedInMucosaPath],
+        "Time" = toUnit(
+          "Time",
+          simulationResultsOutput$data[, "Time"],
+          structureSet$simulationSet$timeUnit
+        ),
+        "Fraction" = simulationResultsOutput$data[,
+          result$fractionAbsorbedInMucosaPath
+        ],
         "Legend" = "Fraction absorbed to mucosa"
       ),
       data.frame(
-        "Time" = toUnit("Time", simulationResultsOutput$data[, "Time"], structureSet$simulationSet$timeUnit),
+        "Time" = toUnit(
+          "Time",
+          simulationResultsOutput$data[, "Time"],
+          structureSet$simulationSet$timeUnit
+        ),
         "Fraction" = fractionAbsorbedInPortalVein,
         "Legend" = "Fraction absorbed to portal vein"
       ),
       data.frame(
-        "Time" = toUnit("Time", simulationResultsOutput$data[, "Time"], structureSet$simulationSet$timeUnit),
+        "Time" = toUnit(
+          "Time",
+          simulationResultsOutput$data[, "Time"],
+          structureSet$simulationSet$timeUnit
+        ),
         "Fraction" = fractionAbsorbedInVenousBlood,
         "Legend" = "Fraction absorbed to venous blood"
       ),
       data.frame(
-        "Time" = toUnit("Time", simulationResultsOutput$data[, "Time"], structureSet$simulationSet$timeUnit),
-        "Fraction" = simulationResultsOutput$data[, result$fractionExcretedPath],
+        "Time" = toUnit(
+          "Time",
+          simulationResultsOutput$data[, "Time"],
+          structureSet$simulationSet$timeUnit
+        ),
+        "Fraction" = simulationResultsOutput$data[,
+          result$fractionExcretedPath
+        ],
         "Legend" = "Fraction excrected to feces"
       )
     )
@@ -174,11 +273,17 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
     # saved but not included into report
     absorptionTable <- data.frame(
       Time = simulationResultsOutput$data[, "Time"],
-      `Fraction dissolved` = simulationResultsOutput$data[, result$fractionDissolvedPath],
-      `Fraction absorbed to mucosa` = simulationResultsOutput$data[, result$fractionAbsorbedInMucosaPath],
+      `Fraction dissolved` = simulationResultsOutput$data[,
+        result$fractionDissolvedPath
+      ],
+      `Fraction absorbed to mucosa` = simulationResultsOutput$data[,
+        result$fractionAbsorbedInMucosaPath
+      ],
       `Fraction absorbed to portal vein` = fractionAbsorbedInPortalVein,
       `Fraction absorbed to venous blood` = fractionAbsorbedInVenousBlood,
-      `Fraction excrected to feces` = simulationResultsOutput$data[, result$fractionExcretedPath],
+      `Fraction excrected to feces` = simulationResultsOutput$data[,
+        result$fractionExcretedPath
+      ],
       check.names = FALSE
     )
 
@@ -206,30 +311,41 @@ plotMeanAbsorption <- function(structureSet, settings = NULL) {
 #' @import tlf
 #' @import ggplot2
 #' @import utils
-#' @importFrom ospsuite.utils %||%
-plotAbsorptionTimeProfile <- function(data,
-                                      metaData = NULL,
-                                      dataMapping = NULL,
-                                      plotConfiguration = NULL) {
-  timeVsFractionDataMapping <- dataMapping %||% tlf::XYGDataMapping$new(
-    x = "Time",
-    y = "Fraction",
-    color = "Legend"
-  )
-
-  timeVsFractionPlotConfiguration <- plotConfiguration %||% tlf::PlotConfiguration$new(
-    data = data,
-    metaData = metaData,
-    dataMapping = timeVsFractionDataMapping,
-    # Default line properties for Absorption plots use theme color and linetype maps
-    # Can be overwritten by user-defined plotConfiguration
-    lines = tlf::ThemeAestheticSelections$new(
-      color = "next", linetype = "next",
-      fill = NA, shape = tlf::Shapes$blank,
-      size = 0.5, alpha = 1
+plotAbsorptionTimeProfile <- function(
+  data,
+  metaData = NULL,
+  dataMapping = NULL,
+  plotConfiguration = NULL
+) {
+  timeVsFractionDataMapping <- dataMapping %||%
+    tlf::XYGDataMapping$new(
+      x = "Time",
+      y = "Fraction",
+      color = "Legend"
     )
+
+  timeVsFractionPlotConfiguration <- plotConfiguration %||%
+    tlf::PlotConfiguration$new(
+      data = data,
+      metaData = metaData,
+      dataMapping = timeVsFractionDataMapping,
+      # Default line properties for Absorption plots use theme color and linetype maps
+      # Can be overwritten by user-defined plotConfiguration
+      lines = tlf::ThemeAestheticSelections$new(
+        color = "next",
+        linetype = "next",
+        fill = NA,
+        shape = tlf::Shapes$blank,
+        size = 0.5,
+        alpha = 1
+      )
+    )
+  timeVsFractionPlotConfiguration <- updatePlotConfigurationTimeTicks(
+    data,
+    metaData,
+    timeVsFractionDataMapping,
+    timeVsFractionPlotConfiguration
   )
-  timeVsFractionPlotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, timeVsFractionDataMapping, timeVsFractionPlotConfiguration)
 
   timeVsFractionPlot <- tlf::addLine(
     data = data,

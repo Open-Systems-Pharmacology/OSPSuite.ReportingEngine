@@ -6,16 +6,26 @@
 #' @import ospsuite
 #' @keywords internal
 calculatePKParameters <- function(structureSet, settings = NULL) {
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$simulationSet$simulationFile
+  )
   simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet)
 
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationResultFileNames)
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$simulationResultFileNames
+  )
   simulationResults <- ospsuite::importResultsFromCSV(
     simulation = simulation,
     filePaths = structureSet$simulationResultFileNames
   )
 
-  logDebug(paste0("Simulation results '", structureSet$simulationResultFileNames, "' successfully loaded"))
+  logDebug(paste0(
+    "Simulation results '",
+    structureSet$simulationResultFileNames,
+    "' successfully loaded"
+  ))
 
   pkAnalyses <- calculatePKAnalyses(results = simulationResults)
   logDebug("Calculation of PK parameters complete")
@@ -33,11 +43,24 @@ plotMeanPKParameters <- function(structureSet, settings = NULL) {
   pkParametersData <- NULL
   pkParametersResults <- list()
 
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$simulationSet$simulationFile)
-  simulation <- loadSimulationWithUpdatedPaths(structureSet$simulationSet, loadFromCache = TRUE)
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$simulationSet$simulationFile
+  )
+  simulation <- loadSimulationWithUpdatedPaths(
+    structureSet$simulationSet,
+    loadFromCache = TRUE
+  )
 
-  re.tStoreFileMetadata(access = "read", filePath = structureSet$pkAnalysisResultsFileNames)
-  pkParametersTable <- loadPKAnalysesFromStructureSet(structureSet = structureSet, to = "data.frame", useCache = TRUE)
+  re.tStoreFileMetadata(
+    access = "read",
+    filePath = structureSet$pkAnalysisResultsFileNames
+  )
+  pkParametersTable <- loadPKAnalysesFromStructureSet(
+    structureSet = structureSet,
+    to = "data.frame",
+    useCache = TRUE
+  )
   for (output in structureSet$simulationSet$outputs) {
     molWeight <- simulation$molWeightFor(output$path)
 
@@ -48,7 +71,10 @@ plotMeanPKParameters <- function(structureSet, settings = NULL) {
   }
   pkParametersData$Value <- replaceInfWithNA(pkParametersData$Value)
 
-  tableID <- defaultFileNames$resultID("pk_parameters", structureSet$simulationSet$simulationSetName)
+  tableID <- defaultFileNames$resultID(
+    "pk_parameters",
+    structureSet$simulationSet$simulationSetName
+  )
   pkParametersResults[[tableID]] <- saveTaskResults(
     id = tableID,
     table = pkParametersData,
@@ -69,7 +95,6 @@ plotMeanPKParameters <- function(structureSet, settings = NULL) {
 #' @param molWeight Molecular weight for converting into PK Parameter `displayUnit`
 #' @return A data.frame with `Path`, `Parameter`, `Value` and `Unit` to display in final report
 #' @import ospsuite
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getMeanPKAnalysesFromOutput <- function(data, output, molWeight = NULL) {
   pkAnalysesFromOutput <- NULL
