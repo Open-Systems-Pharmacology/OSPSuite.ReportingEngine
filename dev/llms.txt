@@ -1,0 +1,629 @@
+# OSPSuite.ReportingEngine
+
+The
+[ospsuite.reportingengine](https://github.com/open-systems-pharmacology/ospsuite.reportingengine)
+package provides a framework in R to design and create reports
+evaluating PBPK models developed in the [Open Systems
+Pharmacology](https://github.com/Open-Systems-Pharmacology) ecosystem.
+
+## Installation
+
+The
+[ospsuite.reportingengine](https://github.com/open-systems-pharmacology/ospsuite.reportingengine)
+package is compatible with version 4.x.x of R. Please follow the
+installation instructions below:
+
+### From Github ![](https://avatars.githubusercontent.com/github)
+
+You can install the development version of
+[ospsuite.reportingengine](https://github.com/open-systems-pharmacology/ospsuite.reportingengine)
+from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("Open-Systems-Pharmacology/OSPSuite.ReportingEngine")
+```
+
+### Using the package bundle 📦
+
+You can install the
+[ospsuite.reportingengine](https://github.com/open-systems-pharmacology/ospsuite.reportingengine)
+package by downloading and installing its zip or tar.gz bundle.
+
+- The package bundle for the **release** version is available [here
+  📦](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/master/artifacts).
+- The package bundle for the **development** version is available [here
+  📦](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/branch/develop/artifacts).
+- The package bundles for specific versions of
+  [ospsuite.reportingengine](https://github.com/open-systems-pharmacology/ospsuite.reportingengine)
+  are available [here
+  📦](https://ci.appveyor.com/project/open-systems-pharmacology-ci/OSPSuite-ReportingEngine/history).
+
+Then, to install manually, replace the
+`path/to/ospsuite.reportingengine.zip` by your actual local path to the
+`.zip` or `tar.gz` file in the code below:
+
+``` r
+install.packages(path/to/ospsuite.reportingengine.zip, repos = NULL)
+```
+
+To install the package along with its tests, the `.tar.gz` bundle is
+required. Then, use the `install-tests` option as illustrated below.
+
+``` r
+install.packages(path/to/ospsuite.reportingengine.tar.gz, repos = NULL, INSTALL_opts = "--install-tests")
+```
+
+### Required packages
+
+[ospsuite.reportingengine](https://github.com/open-systems-pharmacology/ospsuite.reportingengine)
+requires following packages to be installed:
+
+- From the [Open Systems
+  Pharmacology](https://github.com/Open-Systems-Pharmacology) ecosystem:
+
+[TABLE]
+
+Once the bundles downloaded, you can install the packages by using the
+code below:
+
+``` r
+# bundlePath <- path/to/osp/bundles
+install.packages(file.path(bundlePath,"ospsuite.utils.zip"), repos = NULL)
+install.packages(file.path(bundlePath,"tlf.zip"), repos = NULL)
+install.packages(file.path(bundlePath,"rSharp.zip"), repos = NULL)
+install.packages(file.path(bundlePath,"ospsuite.zip"), repos = NULL)
+```
+
+- Required packages from [CRAN](https://cran.r-project.org/): \> Some of
+  these packages may already be installed as dependencies of the Open
+  Systems Pharmacology ecosystem
+  - [`{dplyr}`](https://cran.r-project.org/web/packages/dplyr)
+  - [`{ggplot2}` \>=
+    3.3.0](https://cran.r-project.org/web/packages/ggplot2)
+  - [`{jsonlite}`](https://cran.r-project.org/web/packages/jsonlite)
+  - [`{R6}`](https://cran.r-project.org/web/packages/R6)
+  - [`{tidyr}`](https://cran.r-project.org/web/packages/tidyr)
+- Optional packages from [CRAN](https://cran.r-project.org/)
+  - [`{crayon}`](https://cran.r-project.org/web/packages/crayon)
+  - [`{knitr}`](https://cran.r-project.org/web/packages/knitr)
+  - [`{parallel}`](https://cran.r-project.org/web/packages/parallel)
+  - [`{readxl}`](https://cran.r-project.org/web/packages/readxl)
+  - [`{Rmpi}`](https://cran.r-project.org/web/packages/Rmpi)
+  - [`{styler}`](https://cran.r-project.org/web/packages/styler)
+
+To install these packages, use the code below:
+
+``` r
+# Required packages
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("jsonlite")
+install.packages("R6")
+install.packages("tidyr")
+# Optional packages
+install.packages("crayon")
+install.packages("knitr")
+install.packages("parallel")
+install.packages("readxl")
+install.packages("Rmpi")
+install.packages("styler")
+```
+
+## MS-Word reports
+
+It is possible to convert markdown reports to MS-Word (`.docx` format)
+from the
+[ospsuite.reportingengine](https://github.com/open-systems-pharmacology/ospsuite.reportingengine)
+package. This conversion requires the installation of an additional
+software: [Pandoc](https://pandoc.org/).
+
+A dedicated article details how to create MS-Word reports using the
+[ospsuite.reportingengine](https://github.com/open-systems-pharmacology/ospsuite.reportingengine)
+package:
+[here](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/word-report.html)
+
+### \[OPTIONAL\] Pandoc Installation
+
+Install **Pandoc** (required for generation of reports in MS-Word
+format) by downloading one of the following files:
+
+- [Pandoc Installer
+  (Windows)](https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-windows-x86_64.msi)
+
+- [Pandoc Installer
+  (Linux)](https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-linux-amd64.tar.gz)
+
+### \[OPTIONAL\] Use SVG figures
+
+In order to use SVG figures in MS-Word report, you need to install
+**rsvg-convert** (required by Pandoc for conversion of images in SVG
+format)
+
+- [Installer
+  (Windows)](https://github.com/miyako/console-rsvg-convert/releases)
+  - ⚠ The installation folder must be added to the **system path**. ⚠
+- For Linux, **librsvg** package must be installed (package name depends
+  on distribution, e.g. **librsvg2-bin** for Ubuntu).
+
+## Documentation 📖
+
+A detailed account of existing functions and articles on how to use them
+can be found on the [dedicated
+website](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/).
+
+## Code of conduct
+
+Everyone interacting in the Open Systems Pharmacology community
+(codebases, issue trackers, chat rooms, mailing lists etc…) is expected
+to follow the Open Systems Pharmacology [code of
+conduct](https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CODE_OF_CONDUCT.md).
+
+## Contribution 💡
+
+We encourage contribution to the Open Systems Pharmacology community.
+Before getting started please read the [contribution
+guidelines](https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CONTRIBUTING.md).
+If you are contributing code, please be familiar with the [coding
+standards](https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CODING_STANDARDS_R.md).
+
+## License
+
+OSPSuite.ReportingEngine Library is released under the [GPLv2
+License](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/LICENSE).
+
+All trademarks within this document belong to their legitimate owners.
+
+# Package index
+
+## Working with Workflow objects
+
+Functions and classes for creating and working with Workflow objects
+
+- [`MeanModelWorkflow`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/MeanModelWorkflow.md)
+  : MeanModelWorkflow
+- [`PopulationWorkflow`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationWorkflow.md)
+  : PopulationWorkflow
+- [`QualificationWorkflow`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationWorkflow.md)
+  : QualificationWorkflow
+- [`activateWorkflowTasks()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/activateWorkflowTasks.md)
+  : activateWorkflowTasks
+- [`addStudyParameters()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addStudyParameters.md)
+  : addStudyParameters
+- [`addXParametersForDemographyPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addXParametersForDemographyPlot.md)
+  : addXParametersForDemographyPlot
+- [`addXParametersForPKParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addXParametersForPKParametersPlot.md)
+  [`addXParametersForPkParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addXParametersForPKParametersPlot.md)
+  : addXParametersForPKParametersPlot
+- [`addYParametersForDemographyPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addYParametersForDemographyPlot.md)
+  : addYParametersForDemographyPlot
+- [`addYParametersForPKParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addYParametersForPKParametersPlot.md)
+  [`addYParametersForPkParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addYParametersForPKParametersPlot.md)
+  : addYParametersForPKParametersPlot
+- [`checkTaskInputsExist()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/checkTaskInputsExist.md)
+  : checkTaskInputsExist
+- [`createWorkflowFromExcelInput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/createWorkflowFromExcelInput.md)
+  : createWorkflowFromExcelInput
+- [`getMeanSensitivityAnalysisResultsFileNames()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getMeanSensitivityAnalysisResultsFileNames.md)
+  : getMeanSensitivityAnalysisResultsFileNames
+- [`getOutputPathsInSimulationSet()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getOutputPathsInSimulationSet.md)
+  : getOutputPathsInSimulationSet
+- [`getPKAnalysisResultsFileNames()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKAnalysisResultsFileNames.md)
+  [`getPkAnalysisResultsFileNames()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKAnalysisResultsFileNames.md)
+  : getPKAnalysisResultsFileNames
+- [`getPKParameterGroupsInOutput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParameterGroupsInOutput.md)
+  : getPKParameterGroupsInOutput
+- [`getPKParametersInOutput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParametersInOutput.md)
+  : getPKParametersInOutput
+- [`getPKParametersInSimulationSet()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParametersInSimulationSet.md)
+  : getPKParametersInSimulationSet
+- [`getPopulationPKData()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPopulationPKData.md)
+  : getPopulationPKData
+- [`getPopulationPKMetaData()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPopulationPKMetaData.md)
+  : getPopulationPKMetaData
+- [`getPopulationSensitivityAnalysisResultsFileNames()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPopulationSensitivityAnalysisResultsFileNames.md)
+  : getPopulationSensitivityAnalysisResultsFileNames
+- [`getSimulationDescriptor()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getSimulationDescriptor.md)
+  : getSimulationDescriptor
+- [`getSimulationParameterDisplayPaths()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getSimulationParameterDisplayPaths.md)
+  : getSimulationParameterDisplayPaths
+- [`getSimulationResultFileNames()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getSimulationResultFileNames.md)
+  : getSimulationResultFileNames
+- [`getTaskInputs()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getTaskInputs.md)
+  : getTaskInputs
+- [`getWorkflowParameterDisplayPaths()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getWorkflowParameterDisplayPaths.md)
+  : getWorkflowParameterDisplayPaths
+- [`getWorkflowReferencePopulationName()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getWorkflowReferencePopulationName.md)
+  : getWorkflowReferencePopulationName
+- [`getXParametersForDemographyPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getXParametersForDemographyPlot.md)
+  : getXParametersForDemographyPlot
+- [`getXParametersForPKParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getXParametersForPKParametersPlot.md)
+  [`getXParametersForPkParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getXParametersForPKParametersPlot.md)
+  : getXParametersForPKParametersPlot
+- [`getYParametersForDemographyPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getYParametersForDemographyPlot.md)
+  : getYParametersForDemographyPlot
+- [`getYParametersForPKParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getYParametersForPKParametersPlot.md)
+  [`getYParametersForPkParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getYParametersForPKParametersPlot.md)
+  : getYParametersForPKParametersPlot
+- [`inactivateWorkflowTasks()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/inactivateWorkflowTasks.md)
+  : inactivateWorkflowTasks
+- [`setSimulationDescriptor()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setSimulationDescriptor.md)
+  : setSimulationDescriptor
+- [`setWorkflowParameterDisplayPaths()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setWorkflowParameterDisplayPaths.md)
+  : setWorkflowParameterDisplayPaths
+- [`setWorkflowParameterDisplayPathsFromFile()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setWorkflowParameterDisplayPathsFromFile.md)
+  : setWorkflowParameterDisplayPathsFromFile
+- [`setXParametersForDemographyPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setXParametersForDemographyPlot.md)
+  : setXParametersForDemographyPlot
+- [`setXParametersForPKParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setXParametersForPKParametersPlot.md)
+  [`setXParametersForPkParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setXParametersForPKParametersPlot.md)
+  : setXParametersForPKParametersPlot
+- [`setYParametersForDemographyPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setYParametersForDemographyPlot.md)
+  : setYParametersForDemographyPlot
+- [`setYParametersForPKParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setYParametersForPKParametersPlot.md)
+  [`setYParametersForPkParametersPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setYParametersForPKParametersPlot.md)
+  : setYParametersForPKParametersPlot
+
+## Simulation Sets and Outputs
+
+Classes required for creating workflows
+
+- [`PopulationSimulationSet`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationSimulationSet.md)
+  : PopulationSimulationSet
+- [`SimulationSet`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationSet.md)
+  : SimulationSet
+- [`getOutputPathsInSimulationSet()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getOutputPathsInSimulationSet.md)
+  : getOutputPathsInSimulationSet
+- [`getPKParametersInSimulationSet()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParametersInSimulationSet.md)
+  : getPKParametersInSimulationSet
+- [`Output`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Output.md)
+  : Output
+- [`getPKParameterGroupsInOutput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParameterGroupsInOutput.md)
+  : getPKParameterGroupsInOutput
+- [`getPKParametersInOutput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getPKParametersInOutput.md)
+  : getPKParametersInOutput
+- [`DataSource`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/DataSource.md)
+  : DataSource
+- [`PkParameterInfo`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PkParameterInfo.md)
+  : PkParameterInfo
+- [`loadStudyDesign()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadStudyDesign.md)
+  : loadStudyDesign
+
+## Workflow tasks
+
+Functions and classes for creating and working with workflow tasks
+
+- [`GofPlotTask`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/GofPlotTask.md)
+  : GofPlotTask
+- [`PlotTask`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PlotTask.md)
+  : PlotTask
+- [`PopulationPlotTask`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationPlotTask.md)
+  : PopulationPlotTask
+- [`PopulationSensitivityAnalysisTask`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationSensitivityAnalysisTask.md)
+  : PopulationSensitivityAnalysisTask
+- [`QualificationTask`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationTask.md)
+  : QualificationTask
+- [`SensitivityAnalysisTask`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SensitivityAnalysisTask.md)
+  : SensitivityAnalysisTask
+- [`Task`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Task.md)
+  : Task
+- [`addUserDefinedTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addUserDefinedTask.md)
+  : addUserDefinedTask
+- [`loadCalculatePKParametersTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadCalculatePKParametersTask.md)
+  : loadCalculatePKParametersTask
+- [`loadCalculateSensitivityTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadCalculateSensitivityTask.md)
+  : loadCalculateSensitivityTask
+- [`loadGOFMergedTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadGOFMergedTask.md)
+  : loadGOFMergedTask
+- [`loadPlotAbsorptionTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotAbsorptionTask.md)
+  : loadPlotAbsorptionTask
+- [`loadPlotDDIRatioTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotDDIRatioTask.md)
+  : loadPlotDDIRatioTask
+- [`loadPlotDemographyTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotDemographyTask.md)
+  : loadPlotDemographyTask
+- [`loadPlotMassBalanceTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotMassBalanceTask.md)
+  : loadPlotMassBalanceTask
+- [`loadPlotPKParametersTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotPKParametersTask.md)
+  : loadPlotPKParametersTask
+- [`loadPlotPKRatioTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotPKRatioTask.md)
+  : loadPlotPKRatioTask
+- [`loadPlotSensitivityTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotSensitivityTask.md)
+  : loadPlotSensitivityTask
+- [`loadPlotTimeProfilesAndResidualsTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadPlotTimeProfilesAndResidualsTask.md)
+  : loadPlotTimeProfilesAndResidualsTask
+- [`loadQualificationComparisonTimeProfileTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadQualificationComparisonTimeProfileTask.md)
+  : loadQualificationComparisonTimeProfileTask
+- [`loadQualificationTimeProfilesTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadQualificationTimeProfilesTask.md)
+  : loadPlotTimeProfilesTask
+- [`loadSimulateTask()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadSimulateTask.md)
+  : loadSimulateTask
+- [`SensitivityPlotSettings`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SensitivityPlotSettings.md)
+  : SensitivityPlotSettings
+- [`saveTaskResults()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/saveTaskResults.md)
+  : saveTaskResults
+
+## Qualification Workflows
+
+Functions and classes dedicated to Qualification Workflows
+
+- [`ConfigurationPlan`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/ConfigurationPlan.md)
+  : ConfigurationPlan
+- [`QualificationVersionInfo`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationVersionInfo.md)
+  : QualificationVersionInfo
+- [`adjustTitlePage()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/adjustTitlePage.md)
+  : adjustTitlePage
+- [`loadConfigurationPlan()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadConfigurationPlan.md)
+  : loadConfigurationPlan
+- [`loadQualificationWorkflow()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadQualificationWorkflow.md)
+  : loadQualificationWorkflow
+- [`startQualificationRunner()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/startQualificationRunner.md)
+  : startQualificationRunner
+
+## Writing and formatting reports
+
+Functions for facilitating the writing and formatting of markdown and
+word reports
+
+- [`addFigureChunk()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addFigureChunk.md)
+  : addFigureChunk
+- [`addTableChunk()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addTableChunk.md)
+  : addTableChunk
+- [`addTextChunk()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addTextChunk.md)
+  : addTextChunk
+- [`anchor()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/anchor.md)
+  : anchor
+- [`copyReport()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/copyReport.md)
+  : copyReport
+- [`getAnchorName()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getAnchorName.md)
+  : getAnchorName
+- [`getFigurePathsFromReport()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getFigurePathsFromReport.md)
+  : getFigurePathsFromReport
+- [`hasAnchor()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/hasAnchor.md)
+  : hasAnchor
+- [`mergeMarkdownFiles()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/mergeMarkdownFiles.md)
+  : mergeMarkdownFiles
+- [`renderReport()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/renderReport.md)
+  : renderReport
+- [`renderWordReport()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/renderWordReport.md)
+  : renderWordReport
+- [`resetReport()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/resetReport.md)
+  : resetReport
+- [`trimFile()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/trimFile.md)
+  : trimFile
+
+## Enum Helpers
+
+Enums listing available values for specific properties
+
+- [`AllAvailableTasks`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/AllAvailableTasks.md)
+  : AllAvailableTasks
+- [`ApplicationRanges`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/ApplicationRanges.md)
+  : ApplicationRanges
+- [`DataSelectionKeys`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/DataSelectionKeys.md)
+  : DataSelectionKeys
+- [`PopulationWorkflowTypes`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationWorkflowTypes.md)
+  : PopulationWorkflowTypes
+- [`ResidualScales`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/ResidualScales.md)
+  : ResidualScales
+- [`StandardPlotTasks`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/StandardPlotTasks.md)
+  : StandardPlotTasks
+- [`StandardSimulationTasks`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/StandardSimulationTasks.md)
+  : StandardSimulationTasks
+- [`StatisticsTypes`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/StatisticsTypes.md)
+  : StatisticsTypes
+- [`reSettingsNames`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/reSettingsNames.md)
+  : reSettingsNames
+
+## Default Settings
+
+Functions for defining default package or workflow settings.
+
+- [`setDefaultAutoAxisLimitMargin()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultAutoAxisLimitMargin.md)
+  : setDefaultAutoAxisLimitMargin
+
+- [`setDefaultBins()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultBins.md)
+  : setDefaultBins
+
+- [`setDefaultMCRandomSeed()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultMCRandomSeed.md)
+  : setDefaultMCRandomSeed
+
+- [`setDefaultMCRepetitions()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultMCRepetitions.md)
+  : setDefaultMCRepetitions
+
+- [`setDefaultNumericFormat()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultNumericFormat.md)
+  : setDefaultNumericFormat
+
+- [`setDefaultPlotFormat()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultPlotFormat.md)
+  : setDefaultPlotFormat
+
+- [`setDefaultREErrorbarCapSize()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultREErrorbarCapSize.md)
+  : setDefaultREErrorbarCapSize
+
+- [`setDefaultStairstep()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultStairstep.md)
+  : setDefaultStairstep
+
+- [`setDefaultTheme()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultTheme.md)
+  : setDefaultTheme
+
+- [`setDefaultThemeFromJson()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultThemeFromJson.md)
+  : setDefaultThemeFromJson
+
+- [`setDefaultTimeProfileStatistics()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultTimeProfileStatistics.md)
+  : setDefaultTimeProfileStatistics
+
+- [`getDefaultDemographyXParameters()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultDemographyXParameters.md)
+  : getDefaultDemographyXParameters
+
+- [`getDefaultMCRandomSeed()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultMCRandomSeed.md)
+  : getDefaultMCRandomSeed
+
+- [`getDefaultMCRepetitions()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultMCRepetitions.md)
+  : getDefaultMCRepetitions
+
+- [`getDefaultPKParametersXParameters()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultPKParametersXParameters.md)
+  [`getDefaultPkParametersXParameters()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultPKParametersXParameters.md)
+  : getDefaultPKParametersXParameters
+
+- [`getDefaultRETheme()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultRETheme.md)
+  : getDefaultRETheme
+
+- [`setPlotFormat()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setPlotFormat.md)
+  : setPlotFormat
+
+- [`getRESettings()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getRESettings.md)
+  : getRESettings
+
+- [`loadRESettings()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadRESettings.md)
+  : loadRESettings
+
+- [`saveRESettings()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/saveRESettings.md)
+  :
+
+  saveRESettings Save the current reporting engine global settings in a
+  `.RData` file
+
+- [`resetRESettingsToDefault()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/resetRESettingsToDefault.md)
+  : resetRESettingsToDefault
+
+## Simulated and observed data helpers
+
+Helper functions for working with simulated and observed data.
+
+- [`calculateArithmeticErrorRange()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/calculateArithmeticErrorRange.md)
+  : calculateArithmeticErrorRange
+- [`calculateGeometricErrorRange()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/calculateGeometricErrorRange.md)
+  : calculateGeometricErrorRange
+- [`calculateGMFE()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/calculateGMFE.md)
+  : calculateGMFE
+- [`displayConfigurationPlanPlotInfo()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/displayConfigurationPlanPlotInfo.md)
+  : displayConfigurationPlanPlotInfo
+- [`getResiduals()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getResiduals.md)
+  : getResiduals
+- [`measureValuesBetween()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/measureValuesBetween.md)
+  : measureValuesBetween
+- [`geomean()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/geomean.md)
+  : geomean
+- [`geomeanDividedBySD()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/geomeanDividedBySD.md)
+  : geomeanDividedBySD
+- [`geomeanMultipliedBySD()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/geomeanMultipliedBySD.md)
+  : geomeanMultipliedBySD
+- [`getStatisticsFromType()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getStatisticsFromType.md)
+  : getStatisticsFromType
+- [`readObservedDataFile()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/readObservedDataFile.md)
+  : readObservedDataFile
+- [`evalDataFilter()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/evalDataFilter.md)
+  : evalDataFilter
+- [`getSelectedRows()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getSelectedRows.md)
+  : getSelectedRows
+- [`getSelectedData()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getSelectedData.md)
+  : getSelectedData
+- [`loadSimulationWithUpdatedPaths()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadSimulationWithUpdatedPaths.md)
+  : loadSimulationWithUpdatedPaths
+- [`loadWorkflowPopulation()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadWorkflowPopulation.md)
+  : loadWorkflowPopulation
+- [`getMolWeightForCompound()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getMolWeightForCompound.md)
+  : getMolWeightForCompound
+- [`plotAbsorptionTimeProfile()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotAbsorptionTimeProfile.md)
+  : plotAbsorptionTimeProfile
+- [`plotDemographyHistogram()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotDemographyHistogram.md)
+  : plotDemographyHistogram
+- [`plotDemographyRange()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotDemographyRange.md)
+  : plotDemographyRange
+- [`plotMeanTimeProfile()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotMeanTimeProfile.md)
+  : plotMeanTimeProfile
+- [`plotMeanTimeProfileLog()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotMeanTimeProfileLog.md)
+  : plotMeanTimeProfileLog
+- [`plotPopTimeProfile()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotPopTimeProfile.md)
+  : plotPopTimeProfile
+- [`plotPopTimeProfileLog()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/plotPopTimeProfileLog.md)
+  : plotPopTimeProfileLog
+- [`ratioBoxplot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/ratioBoxplot.md)
+  : ratioBoxplot
+- [`vpcParameterPlot()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/vpcParameterPlot.md)
+  : vpcParameterPlot
+- [`addLineBreakToCaption()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/addLineBreakToCaption.md)
+  : addLineBreakToCaption
+- [`AggregationConfiguration`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/AggregationConfiguration.md)
+  : AggregationConfiguration
+- [`prettyCaption()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/prettyCaption.md)
+  : prettyCaption
+- [`removeForbiddenLetters()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/removeForbiddenLetters.md)
+  : removeForbiddenLetters
+- [`trimFileName()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/trimFileName.md)
+  : trimFileName
+
+## Parallel computation helpers
+
+Helper functions for working with parallel simulations and sensitivity
+analyses.
+
+- [`analyzeCoreSensitivity()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/analyzeCoreSensitivity.md)
+  : analyzeCoreSensitivity
+- [`analyzeSensitivity()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/analyzeSensitivity.md)
+  : analyzeSensitivity
+- [`isLoadedPackage()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isLoadedPackage.md)
+  : isLoadedPackage
+- [`isLoadedPopulation()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isLoadedPopulation.md)
+  : isLoadedPopulation
+- [`isLoadedSimulation()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/isLoadedSimulation.md)
+  : isLoadedSimulation
+- [`generateResultFileNames()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/generateResultFileNames.md)
+  : generateResultFileNames
+- [`simulateModelOnCore()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/simulateModelOnCore.md)
+  : simulateModelOnCore
+- [`updateSimulationIndividualParameters()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/updateSimulationIndividualParameters.md)
+  : updateSimulationIndividualParameters
+
+## Logging system
+
+Helper functions for working with workflow logs.
+
+- [`LogTypes`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/LogTypes.md)
+  : LogTypes
+- [`logInfo()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/logInfo.md)
+  : logInfo
+- [`logError()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/logError.md)
+  : logError
+- [`logDebug()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/logDebug.md)
+  : logDebug
+- [`logCatch()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/logCatch.md)
+  : logCatch
+- [`saveLogs()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/saveLogs.md)
+  : saveLogs
+- [`saveLogsToJson()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/saveLogsToJson.md)
+  : saveLogsToJson
+- [`showLogMessages()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/showLogMessages.md)
+  : showLogMessages
+- [`displayDebugLogs()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/displayDebugLogs.md)
+  : displayDebugLogs
+- [`getReportingEngineInfo()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getReportingEngineInfo.md)
+  : getReportingEngineInfo
+
+# Articles
+
+### All vignettes
+
+- [Add a title page to your workflow
+  report](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/add-title-page.md):
+- [Demography Parameters in Population
+  Workflows](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/demography.md):
+- [Excel
+  Template](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/excel-template.md):
+- [Time profiles and Residuals
+  task](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/goodness-of-fit.md):
+- [Mass
+  Balance](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/mass-balance.md):
+- [Get
+  Started](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/ospsuite-reportingengine.md):
+- [PK
+  parameters](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/pk-parameters.md):
+- [Plot
+  settings](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/plot-settings.md):
+- [PK Parameters in Population
+  Workflows](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/pop-pk-parameters.md):
+- [Qualification
+  Workflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/qualification-workflow.md):
+- [Sensitivity
+  Analysis](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/sensitivity-analysis.md):
+- [How to work with word
+  reports](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/word-report.md):

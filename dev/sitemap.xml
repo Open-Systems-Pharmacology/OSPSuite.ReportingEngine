@@ -158,6 +158,7 @@
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultFolderName.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultMCRandomSeed.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultMCRepetitions.html</loc></url>
+<url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultPKParametersXParameters.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultPropertiesFromTheme.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultRETheme.html</loc></url>
 <url><loc>https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/getDefaultTotalSensitivityThreshold.html</loc></url>
