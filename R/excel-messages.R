@@ -2,7 +2,6 @@
 #' @description  R6 class for tracking and printing messages for the Excel template
 #' @field type "warnings" or "errors" (could potentially include other kind of information)
 #' @field messages list of messages included in each script section
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 ExcelMessaging <- R6::R6Class(
   "ExcelMessaging",
@@ -47,14 +46,20 @@ ExcelMessaging <- R6::R6Class(
     #' @param section name of R script section
     getMessageHeader = function(section) {
       return(paste(
-        "Potential", highlight(self$type),
-        "identified when writing section ", highlight(section)
+        "Potential",
+        highlight(self$type),
+        "identified when writing section ",
+        highlight(section)
       ))
     },
 
     #' @description Get message displaying no issue identified
     getNoIssueMessage = function() {
-      return(paste("No potential", highlight(self$type), "identified when writing R script"))
+      return(paste(
+        "No potential",
+        highlight(self$type),
+        "identified when writing R script"
+      ))
     }
   )
 )

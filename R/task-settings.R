@@ -1,6 +1,5 @@
 #' @title TaskSettings
 #' @description  R6 class defining properties of plot task settings
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 TaskSettings <- R6::R6Class(
   "TaskSettings",
@@ -56,7 +55,9 @@ TaskSettings <- R6::R6Class(
         self$mcRepetitions <- getDefaultMCRepetitions()
         self$mcRandomSeed <- getDefaultMCRandomSeed()
       }
-      if (isIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)) {
+      if (
+        isIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
+      ) {
         private$.plotConfigurations <- list(
           timeProfile = NULL,
           obsVsPred = NULL,
@@ -182,10 +183,15 @@ GofTaskSettings <- R6::R6Class(
     #' @param outputSelections subset of simulationSet outputs to be used in GoF plot
     #' @param statisticsType Statistics summarizing time profile simulated data
     #' @return A new `GofTaskSettings` object
-    initialize = function(taskName = AllAvailableTasks$plotTimeProfilesAndResiduals,
-                          outputSelections = NULL,
-                          statisticsType = NULL) {
-      validateIsIncluded(taskName, AllAvailableTasks$plotTimeProfilesAndResiduals)
+    initialize = function(
+      taskName = AllAvailableTasks$plotTimeProfilesAndResiduals,
+      outputSelections = NULL,
+      statisticsType = NULL
+    ) {
+      validateIsIncluded(
+        taskName,
+        AllAvailableTasks$plotTimeProfilesAndResiduals
+      )
       validateIsIncluded(statisticsType, StatisticsTypes, nullAllowed = TRUE)
 
       super$initialize(taskName)
@@ -217,12 +223,14 @@ GofTaskSettings <- R6::R6Class(
     #'
     #' }
     #'
-    setStatistics = function(statisticsType = NULL,
-                             y = NULL,
-                             ymin = NULL,
-                             ymax = NULL,
-                             yCaption = NULL,
-                             rangeCaption = NULL) {
+    setStatistics = function(
+      statisticsType = NULL,
+      y = NULL,
+      ymin = NULL,
+      ymax = NULL,
+      yCaption = NULL,
+      rangeCaption = NULL
+    ) {
       validateIsIncluded(statisticsType, StatisticsTypes, nullAllowed = TRUE)
       # Allow user to enter the function directly
       validateIsOfType(y, c("character", "closure"), nullAllowed = TRUE)

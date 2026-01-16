@@ -1,7 +1,6 @@
 #' @title SensitivityPlotSettings
 #' @description  R6 class for sensitivity analysis plot settings
 #' @export
-#' @importFrom ospsuite.utils %||%
 SensitivityPlotSettings <- R6::R6Class(
   "SensitivityPlotSettings",
   public = list(
@@ -19,17 +18,19 @@ SensitivityPlotSettings <- R6::R6Class(
     #' @param maxWidthPerParameter maximum number of characters allowed per lines of displayed parameters
     #' @param colorPalette Name of a color palette to be used by `ggplot2::scale_fill_brewer()` for sensitivity plot
     #' @return A new `SensitivityPlotSettings` object
-    initialize = function(totalSensitivityThreshold = NULL,
-                          variableParameterPaths = NULL,
-                          maximalParametersPerSensitivityPlot = NULL,
-                          plotConfiguration = NULL,
-                          xAxisFontSize = 6,
-                          yAxisFontSize = 6,
-                          maxLinesPerParameter = NULL,
-                          maxWidthPerParameter = NULL,
-                          xLabel = "Sensitivity",
-                          yLabel = NULL,
-                          colorPalette = "Spectral") {
+    initialize = function(
+      totalSensitivityThreshold = NULL,
+      variableParameterPaths = NULL,
+      maximalParametersPerSensitivityPlot = NULL,
+      plotConfiguration = NULL,
+      xAxisFontSize = 6,
+      yAxisFontSize = 6,
+      maxLinesPerParameter = NULL,
+      maxWidthPerParameter = NULL,
+      xLabel = "Sensitivity",
+      yLabel = NULL,
+      colorPalette = "Spectral"
+    ) {
       validateIsInteger(maximalParametersPerSensitivityPlot, nullAllowed = TRUE)
       validateIsInteger(maxLinesPerParameter, nullAllowed = TRUE)
       validateIsInteger(maxWidthPerParameter, nullAllowed = TRUE)
@@ -41,15 +42,21 @@ SensitivityPlotSettings <- R6::R6Class(
         variableParameterPaths = variableParameterPaths
       )
 
-      private$.maximalParametersPerSensitivityPlot <- maximalParametersPerSensitivityPlot %||% reEnv$maximalParametersPerSensitivityPlot
+      private$.maximalParametersPerSensitivityPlot <- maximalParametersPerSensitivityPlot %||%
+        reEnv$maximalParametersPerSensitivityPlot
       private$.plotConfiguration <- plotConfiguration
       private$.xAxisFontSize <- xAxisFontSize
       private$.yAxisFontSize <- yAxisFontSize
-      private$.maxLinesPerParameter <- maxLinesPerParameter %||% reEnv$maxLinesPerParameter
+      private$.maxLinesPerParameter <- maxLinesPerParameter %||%
+        reEnv$maxLinesPerParameter
       # Default line breaks will now be limited to 1/3 of plot width
       defaultPlotConfiguration <- tlf::TornadoPlotConfiguration$new(bar = FALSE)
       defaultPlotConfiguration$yAxis$font$size <- yAxisFontSize
-      private$.maxWidthPerParameter <- maxWidthPerParameter %||% getLineBreakWidth(element = "yticklabels", plotConfiguration %||% defaultPlotConfiguration)
+      private$.maxWidthPerParameter <- maxWidthPerParameter %||%
+        getLineBreakWidth(
+          element = "yticklabels",
+          plotConfiguration %||% defaultPlotConfiguration
+        )
       private$.xLabel <- xLabel
       private$.yLabel <- yLabel
       private$.colorPalette <- colorPalette
@@ -79,7 +86,6 @@ SensitivityPlotSettings <- R6::R6Class(
         }
       }
     },
-
 
     #' @field  plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
     plotConfiguration = function(value) {
@@ -154,7 +160,8 @@ SensitivityPlotSettings <- R6::R6Class(
         private$.maxLinesPerParameter
       } else {
         validateIsInteger(value, nullAllowed = TRUE)
-        private$.maxLinesPerParameter <- value %||% private$.maxLinesPerParameter
+        private$.maxLinesPerParameter <- value %||%
+          private$.maxLinesPerParameter
       }
     },
 
@@ -164,7 +171,8 @@ SensitivityPlotSettings <- R6::R6Class(
         private$.maxWidthPerParameter
       } else {
         validateIsInteger(value, nullAllowed = TRUE)
-        private$.maxWidthPerParameter <- value %||% private$.maxWidthPerParameter
+        private$.maxWidthPerParameter <- value %||%
+          private$.maxWidthPerParameter
       }
     }
   ),

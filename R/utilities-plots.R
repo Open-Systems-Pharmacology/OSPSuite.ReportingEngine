@@ -31,7 +31,15 @@ AggregationConfiguration <- list(
 )
 
 displayDimension <- function(dimension) {
-  if (isIncluded(dimension, c(ospsuite::ospDimensions$`Concentration (mass)`, ospsuite::ospDimensions$`Concentration (molar)`))) {
+  if (
+    isIncluded(
+      dimension,
+      c(
+        ospsuite::ospDimensions$`Concentration (mass)`,
+        ospsuite::ospDimensions$`Concentration (molar)`
+      )
+    )
+  ) {
     return("Concentration")
   }
   return(dimension)
@@ -153,7 +161,12 @@ getTimeTicksFromUnit <- function(unit, timeValues = NULL, maxTicks = 10) {
 #' @param plotConfiguration `PlotConfiguration` R6 class object from `tlf` library
 #' @return A `PlotConfiguration` object
 #' @keywords internal
-updatePlotConfigurationTimeTicks <- function(data, metaData, dataMapping, plotConfiguration) {
+updatePlotConfigurationTimeTicks <- function(
+  data,
+  metaData,
+  dataMapping,
+  plotConfiguration
+) {
   timeValues <- data[, dataMapping$x]
   timeUnit <- metaData[[dataMapping$x]]$unit
   timeTicks <- getTimeTicksFromUnit(timeUnit, timeValues)
@@ -172,34 +185,54 @@ updatePlotConfigurationTimeTicks <- function(data, metaData, dataMapping, plotCo
 #' @param legendPosition Legend position in order to add scale factor in the final plot dimensions
 #' that accounts for possible shrinking of the plot panel due to the addition of the legend
 #' @return A `PlotConfiguration` object
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
-getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legendPosition = NULL) {
+getPlotConfigurationFromPlan <- function(
+  plotProperties,
+  plotType = NULL,
+  legendPosition = NULL
+) {
   # Define the appropriate configuration from plotType
   # by creating expression: "tlf::<plotType>PlotCOnfiguration$new()"
-  plotConfiguration <- eval(parse(text = paste0("tlf::", plotType, "PlotConfiguration$new()")))
+  plotConfiguration <- eval(parse(
+    text = paste0("tlf::", plotType, "PlotConfiguration$new()")
+  ))
 
   # Set properties from FontAndSize field
   fonts <- plotProperties$FontAndSize$Fonts
   # plotConfiguration initial font and size properties were defined from current theme
   # their scaling was not perform then to have it performed only at this level
-  plotConfiguration$labels$title$font$size <- fonts$TitleSize %||% plotConfiguration$labels$title$font$size
-  plotConfiguration$labels$subtitle$font$size <- fonts$DescriptionSize %||% plotConfiguration$labels$subtitle$font$size
-  plotConfiguration$labels$xlabel$font$size <- fonts$AxisSize %||% plotConfiguration$labels$xlabel$font$size
-  plotConfiguration$labels$ylabel$font$size <- fonts$AxisSize %||% plotConfiguration$labels$ylabel$font$size
-  plotConfiguration$xAxis$font$size <- fonts$AxisSize %||% plotConfiguration$xAxis$font$size
-  plotConfiguration$yAxis$font$size <- fonts$AxisSize %||% plotConfiguration$yAxis$font$size
-  plotConfiguration$legend$font$size <- fonts$LegendSize %||% plotConfiguration$legend$font$size
-  plotConfiguration$background$watermark$font$size <- fonts$WatermarkSize %||% plotConfiguration$background$watermark$font$size
+  plotConfiguration$labels$title$font$size <- fonts$TitleSize %||%
+    plotConfiguration$labels$title$font$size
+  plotConfiguration$labels$subtitle$font$size <- fonts$DescriptionSize %||%
+    plotConfiguration$labels$subtitle$font$size
+  plotConfiguration$labels$xlabel$font$size <- fonts$AxisSize %||%
+    plotConfiguration$labels$xlabel$font$size
+  plotConfiguration$labels$ylabel$font$size <- fonts$AxisSize %||%
+    plotConfiguration$labels$ylabel$font$size
+  plotConfiguration$xAxis$font$size <- fonts$AxisSize %||%
+    plotConfiguration$xAxis$font$size
+  plotConfiguration$yAxis$font$size <- fonts$AxisSize %||%
+    plotConfiguration$yAxis$font$size
+  plotConfiguration$legend$font$size <- fonts$LegendSize %||%
+    plotConfiguration$legend$font$size
+  plotConfiguration$background$watermark$font$size <- fonts$WatermarkSize %||%
+    plotConfiguration$background$watermark$font$size
   # Fix issue #1333: use same font between axes
   if (isOfType(plotConfiguration, "TimeProfilePlotConfiguration")) {
-    plotConfiguration$y2Axis$font$size <- fonts$AxisSize %||% plotConfiguration$y2Axis$font$size
-    plotConfiguration$labels$y2label$font$size <- fonts$AxisSize %||% plotConfiguration$labels$y2label$font$size
+    plotConfiguration$y2Axis$font$size <- fonts$AxisSize %||%
+      plotConfiguration$y2Axis$font$size
+    plotConfiguration$labels$y2label$font$size <- fonts$AxisSize %||%
+      plotConfiguration$labels$y2label$font$size
   }
 
   # Set legend position
-  validateIsIncluded(values = legendPosition, parentValues = tlf::LegendPositions, nullAllowed = TRUE)
-  plotConfiguration$legend$position <- legendPosition %||% reEnv$theme$background$legendPosition
+  validateIsIncluded(
+    values = legendPosition,
+    parentValues = tlf::LegendPositions,
+    nullAllowed = TRUE
+  )
+  plotConfiguration$legend$position <- legendPosition %||%
+    reEnv$theme$background$legendPosition
 
   # Quadratic dimensions for ObsVsPred, DDIRatio plot type
   # Note that other plots be could included in default quadratic plots
@@ -249,7 +282,11 @@ getPlotConfigurationFromPlan <- function(plotProperties, plotType = NULL, legend
 #'
 #' cat(addLineBreakToCaption("this forces the sentence to use one line", maxLines = 1, width = 5))
 #'
-addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCaption, width = reEnv$maxWidthPerLegendCaption) {
+addLineBreakToCaption <- function(
+  captions,
+  maxLines = reEnv$maxLinesPerLegendCaption,
+  width = reEnv$maxWidthPerLegendCaption
+) {
   # Get number of characters for each caption
   totalWidths <- nchar(captions)
   # Check which captions need line breaks to split
@@ -270,13 +307,24 @@ addLineBreakToCaption <- function(captions, maxLines = reEnv$maxLinesPerLegendCa
       next
     }
     # dashes and spaces provides preferential sites for line breaks
-    dashSplits <- as.numeric(gregexpr(pattern = "-", captions[captionIndex])[[1]])
-    spaceSplits <- as.numeric(gregexpr(pattern = " ", captions[captionIndex])[[1]])
-    possibleSplits <- sort(c(dashSplits[dashSplits > 0], spaceSplits[spaceSplits > 0]))
+    dashSplits <- as.numeric(gregexpr(pattern = "-", captions[captionIndex])[[
+      1
+    ]])
+    spaceSplits <- as.numeric(gregexpr(pattern = " ", captions[captionIndex])[[
+      1
+    ]])
+    possibleSplits <- sort(c(
+      dashSplits[dashSplits > 0],
+      spaceSplits[spaceSplits > 0]
+    ))
     # Recalculate width accounting for maxLines
     splitWidth <- totalWidths[captionIndex] / numberOfLines[captionIndex]
     # Get split positions (actualSplits is a vector)
-    actualSplits <- getSplitPositions(possibleSplits, splitWidth, numberOfSplits[captionIndex])
+    actualSplits <- getSplitPositions(
+      possibleSplits,
+      splitWidth,
+      numberOfSplits[captionIndex]
+    )
     splitFirst <- c(1, actualSplits + 1)
     splitLast <- c(actualSplits, totalWidths[captionIndex])
     # Update captions with sensible line breaks
@@ -308,7 +356,9 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
       next
     }
     # If available use the available split and remove it from other loops
-    closestAvailableSplitIndex <- which.min(abs(possibleSplits - optimalSplits[splitIndex]))
+    closestAvailableSplitIndex <- which.min(abs(
+      possibleSplits - optimalSplits[splitIndex]
+    ))
     optimalSplits[splitIndex] <- possibleSplits[closestAvailableSplitIndex]
     possibleSplits <- possibleSplits[-closestAvailableSplitIndex]
   }
@@ -327,18 +377,25 @@ getSplitPositions <- function(possibleSplits, splitWidth, numberOfSplits) {
 #' @keywords internal
 getLineBreakWidth <- function(element = "legend", plotConfiguration) {
   # Use inches as unit of formula for plotWidth
-  plotWidth <- plotConfiguration$export$width / switch(plotConfiguration$export$units,
-    "in" = 1,
-    "cm" = 2.54,
-    "mm" = 25.4,
-    1
-  )
+  plotWidth <- plotConfiguration$export$width /
+    switch(
+      plotConfiguration$export$units,
+      "in" = 1,
+      "cm" = 2.54,
+      "mm" = 25.4,
+      1
+    )
   # Initialize a default fontsize to have a more robust
   fontSize <- 10
   if (isIncluded(element, "legend")) {
     fontSize <- plotConfiguration$legend$font$size
     # Use only a third of the plot width when legend is on the side
-    if (isIncluded(plotConfiguration$legend$position, tlf::LegendPositions[c("outsideLeft", "outsideRight")])) {
+    if (
+      isIncluded(
+        plotConfiguration$legend$position,
+        tlf::LegendPositions[c("outsideLeft", "outsideRight")]
+      )
+    ) {
       fontSize <- plotConfiguration$legend$font$size * 3
     }
   }
@@ -383,13 +440,27 @@ updateWatermarkDimensions <- function(plotObject) {
   }
   # Watermark size in inches to compare with plot dimensions
   # Font size is in point = 1/72 inches
-  watermarkSize <- nchar(plotObject$plotConfiguration$background$watermark$text) *
-    plotObject$plotConfiguration$background$watermark$font$size / 72
-  watermarkWidth <- abs(watermarkSize * cos(plotObject$plotConfiguration$background$watermark$font$angle * pi / 180))
-  watermarkHeight <- abs(watermarkSize * sin(plotObject$plotConfiguration$background$watermark$font$angle * pi / 180))
+  watermarkSize <- nchar(
+    plotObject$plotConfiguration$background$watermark$text
+  ) *
+    plotObject$plotConfiguration$background$watermark$font$size /
+    72
+  watermarkWidth <- abs(
+    watermarkSize *
+      cos(
+        plotObject$plotConfiguration$background$watermark$font$angle * pi / 180
+      )
+  )
+  watermarkHeight <- abs(
+    watermarkSize *
+      sin(
+        plotObject$plotConfiguration$background$watermark$font$angle * pi / 180
+      )
+  )
 
   # Plot dimensions in inches to compare with watermark dimensions
-  unitScaling <- switch(plotObject$plotConfiguration$export$units,
+  unitScaling <- switch(
+    plotObject$plotConfiguration$export$units,
     "in" = 1,
     "cm" = 2.54,
     "mm" = 25.4,
@@ -409,13 +480,14 @@ updateWatermarkDimensions <- function(plotObject) {
   }
   plotObject <- tlf::setWatermark(
     plotObject = plotObject,
-    size = plotObject$plotConfiguration$background$watermark$font$size / watermarkScaling
+    size = plotObject$plotConfiguration$background$watermark$font$size /
+      watermarkScaling
   )
   return(plotObject)
 }
 
-getLegendGrob <- function(plotObject){
-  if(utils::packageVersion("cowplot") >= "1.2.0"){
+getLegendGrob <- function(plotObject) {
+  if (utils::packageVersion("cowplot") >= "1.2.0") {
     return(cowplot::get_legend(plotObject))
   }
   # Get grob from plot = list of plot properties
@@ -429,7 +501,10 @@ getLegendGrob <- function(plotObject){
     return(NULL)
   }
   # Look for legend grob that stores the dimensions of the legend
-  legendGrobIndex <- head(which(sapply(allLegendGrobs, function(grob) grob$name) %in% "guide-box"), 1)
+  legendGrobIndex <- head(
+    which(sapply(allLegendGrobs, function(grob) grob$name) %in% "guide-box"),
+    1
+  )
   # If no legend, index is empty
   if (isEmpty(legendGrobIndex)) {
     return(NULL)
@@ -488,7 +563,9 @@ updatePlotDimensions <- function(plotObject) {
   }
   # If not empty,
   # - add nothing if legend within
-  if (grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)) {
+  if (
+    grepl(pattern = "inside", x = plotObject$plotConfiguration$legend$position)
+  ) {
     # Add small margin of 20 pts on right side of plot to prevent axis ticklabel being cut-off
     plotObject <- plotObject +
       ggplot2::theme(plot.margin = ggplot2::margin(r = 20, b = 10, l = 10))
@@ -504,13 +581,19 @@ updatePlotDimensions <- function(plotObject) {
   if (isLegendPositionVertical) {
     # Prevent truncated legend, if legend is too long
     # Get size ratio to keep same aspect ratio
-    sizeRatio <- plotObject$plotConfiguration$export$height / plotObject$plotConfiguration$export$width
+    sizeRatio <- plotObject$plotConfiguration$export$height /
+      plotObject$plotConfiguration$export$width
     # Update width if top/bottom legend is too wide (add 5% to legend width to ensure all the entry content are displayed)
-    plotObject$plotConfiguration$export$width <- max(plotObject$plotConfiguration$export$width, 1.05 * legendWidth)
+    plotObject$plotConfiguration$export$width <- max(
+      plotObject$plotConfiguration$export$width,
+      1.05 * legendWidth
+    )
     # Keep width-height aspect ratio
-    plotObject$plotConfiguration$export$height <- sizeRatio * plotObject$plotConfiguration$export$height
+    plotObject$plotConfiguration$export$height <- sizeRatio *
+      plotObject$plotConfiguration$export$height
     # Add legend height to final plot height to prevent shrinkage of plot area
-    plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height + legendHeight
+    plotObject$plotConfiguration$export$height <- plotObject$plotConfiguration$export$height +
+      legendHeight
     # Caution: pieChart currently do not use watermark because of ggplot2::coord_polar
     if (!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")) {
       plotObject <- updateWatermarkDimensions(plotObject)
@@ -522,13 +605,19 @@ updatePlotDimensions <- function(plotObject) {
   }
   # Prevent truncated legend, if legend is too long
   # Get size ratio to keep same aspect ratio
-  sizeRatio <- plotObject$plotConfiguration$export$width / plotObject$plotConfiguration$export$height
+  sizeRatio <- plotObject$plotConfiguration$export$width /
+    plotObject$plotConfiguration$export$height
   # Update height if side legend is too long (add 5% to legend height to ensure all the entries are displayed)
-  plotObject$plotConfiguration$export$height <- max(plotObject$plotConfiguration$export$height, 1.05 * legendHeight)
+  plotObject$plotConfiguration$export$height <- max(
+    plotObject$plotConfiguration$export$height,
+    1.05 * legendHeight
+  )
   # Keep width-height aspect ratio
-  plotObject$plotConfiguration$export$width <- sizeRatio * plotObject$plotConfiguration$export$width
+  plotObject$plotConfiguration$export$width <- sizeRatio *
+    plotObject$plotConfiguration$export$width
   # Add legend width to final plot width to prevent shrinkage of plot area
-  plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width + legendWidth
+  plotObject$plotConfiguration$export$width <- plotObject$plotConfiguration$export$width +
+    legendWidth
   # Caution: pieChart currently do not use watermark because of ggplot2::coord_polar
   if (!isOfType(plotObject$plotConfiguration, "PieChartPlotConfiguration")) {
     plotObject <- updateWatermarkDimensions(plotObject)
@@ -567,18 +656,21 @@ setQuadraticDimension <- function(plotObject, plotConfiguration = NULL) {
 #' @param plotConfiguration A user-defined `TimeProfilePlotConfiguration` object
 #' @return A `TimeProfilePlotConfiguration` object
 #' @keywords internal
-getTimeProfilePlotConfiguration <- function(workflowType,
-                                            group,
-                                            data,
-                                            metaData,
-                                            observedData = NULL,
-                                            dataMapping = NULL,
-                                            plotConfiguration = NULL) {
+getTimeProfilePlotConfiguration <- function(
+  workflowType,
+  group,
+  data,
+  metaData,
+  observedData = NULL,
+  dataMapping = NULL,
+  plotConfiguration = NULL
+) {
   # If user-defined plot configuration, use as is
   if (!isEmpty(plotConfiguration)) {
     return(plotConfiguration)
   }
-  dataMapping <- switch(workflowType,
+  dataMapping <- switch(
+    workflowType,
     "mean" = tlf::TimeProfileDataMapping$new(
       x = dataMapping$x,
       y = dataMapping$y,
@@ -597,7 +689,12 @@ getTimeProfilePlotConfiguration <- function(workflowType,
     metaData = metaData,
     dataMapping = dataMapping
   )
-  plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+  plotConfiguration <- updatePlotConfigurationTimeTicks(
+    data,
+    metaData,
+    dataMapping,
+    plotConfiguration
+  )
 
   plotConfiguration$lines$color <- getColorFromOutputGroup(
     group = group,
@@ -641,18 +738,21 @@ getTimeProfilePlotConfiguration <- function(workflowType,
 #' @param plotConfiguration A user-defined `PlotConfiguration` object
 #' @return A `PlotConfiguration` object
 #' @keywords internal
-getGOFPlotConfiguration <- function(plotType,
-                                    group,
-                                    data,
-                                    metaData,
-                                    dataMapping = NULL,
-                                    plotConfiguration = NULL) {
+getGOFPlotConfiguration <- function(
+  plotType,
+  group,
+  data,
+  metaData,
+  dataMapping = NULL,
+  plotConfiguration = NULL
+) {
   # If user-defined plot configuration, use as is
   if (!isEmpty(plotConfiguration)) {
     return(plotConfiguration)
   }
 
-  plotConfiguration <- switch(plotType,
+  plotConfiguration <- switch(
+    plotType,
     "obsVsPred" = tlf::ObsVsPredPlotConfiguration$new(
       data = data,
       metaData = metaData,
@@ -699,15 +799,21 @@ getGOFPlotConfiguration <- function(plotType,
     # Use auto axis limits to get prettier obs vs pred plot
     axisLimits <- autoAxesLimits(
       c(data$Simulated, data$Observed, data$lloq),
-      scale = switch(plotType,
+      scale = switch(
+        plotType,
         "obsVsPredLog" = tlf::Scaling$log,
         "obsVsPred" = tlf::Scaling$lin
       )
     )
-    plotConfiguration$xAxis$axisLimits <- axisLimits %||% plotConfiguration$xAxis$axisLimits
-    plotConfiguration$yAxis$axisLimits <- axisLimits %||% plotConfiguration$yAxis$axisLimits
+    plotConfiguration$xAxis$axisLimits <- axisLimits %||%
+      plotConfiguration$xAxis$axisLimits
+    plotConfiguration$yAxis$axisLimits <- axisLimits %||%
+      plotConfiguration$yAxis$axisLimits
 
-    updateAxisTicks <- all(isIncluded(plotType, "obsVsPredLog"), !isEmpty(axisLimits))
+    updateAxisTicks <- all(
+      isIncluded(plotType, "obsVsPredLog"),
+      !isEmpty(axisLimits)
+    )
     if (updateAxisTicks) {
       plotConfiguration$xAxis$ticks <- autoAxesTicksFromLimits(axisLimits)
       plotConfiguration$yAxis$ticks <- autoAxesTicksFromLimits(axisLimits)
@@ -716,7 +822,12 @@ getGOFPlotConfiguration <- function(plotType,
 
   # Set time ticks for res vs time
   if (plotType %in% "resVsTime") {
-    plotConfiguration <- updatePlotConfigurationTimeTicks(data, metaData, dataMapping, plotConfiguration)
+    plotConfiguration <- updatePlotConfigurationTimeTicks(
+      data,
+      metaData,
+      dataMapping,
+      plotConfiguration
+    )
   }
   # Set labels for qq plots and histograms
   if (plotType %in% "resHisto") {
@@ -767,12 +878,14 @@ getGOFPlotConfiguration <- function(plotType,
 #' @param plotConfiguration A user-defined `PlotConfiguration` object
 #' @return A `PlotConfiguration` object
 #' @keywords internal
-getBoxWhiskerPlotConfiguration <- function(plotScale = "log",
-                                           colorGrouping = NULL,
-                                           data,
-                                           metaData,
-                                           dataMapping = NULL,
-                                           plotConfiguration = NULL) {
+getBoxWhiskerPlotConfiguration <- function(
+  plotScale = "log",
+  colorGrouping = NULL,
+  data,
+  metaData,
+  dataMapping = NULL,
+  plotConfiguration = NULL
+) {
   if (!isEmpty(plotConfiguration)) {
     return(plotConfiguration)
   }
@@ -833,20 +946,17 @@ alignXTicks <- function(plotObject) {
     return(plotObject)
   }
   xAxisFont <- plotObject$plotConfiguration$xAxis$font
-  plotObject <- plotObject + ggplot2::theme(
-    axis.text.x = ggplot2::element_text(
-      colour = xAxisFont$color,
-      size = xAxisFont$size,
-      face = xAxisFont$fontFace,
-      family = tlf:::.checkPlotFontFamily(xAxisFont$fontFamily),
-      hjust = switch(xAxisFont$align,
-        left = 0,
-        center = 0.5,
-        right = 1
-      ),
-      vjust = 1
+  plotObject <- plotObject +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(
+        colour = xAxisFont$color,
+        size = xAxisFont$size,
+        face = xAxisFont$fontFace,
+        family = tlf:::.checkPlotFontFamily(xAxisFont$fontFamily),
+        hjust = switch(xAxisFont$align, left = 0, center = 0.5, right = 1),
+        vjust = 1
+      )
     )
-  )
   return(plotObject)
 }
 
@@ -860,16 +970,20 @@ alignXTicks <- function(plotObject) {
 #' @param colorVariable Name of color variable in`group`
 #' @return A sorted array of color values
 #' @keywords internal
-getColorFromOutputGroup <- function(group,
-                                    data,
-                                    dataMapping,
-                                    legendVariable = "legend",
-                                    colorVariable = "color") {
+getColorFromOutputGroup <- function(
+  group,
+  data,
+  dataMapping,
+  legendVariable = "legend",
+  colorVariable = "color"
+) {
   # If no output to plot, return a default color
   if (isEmpty(data)) {
     return("black")
   }
-  displayedLegendValues <- unique(data[, dataMapping$groupMapping[[colorVariable]]$group])
+  displayedLegendValues <- unique(data[,
+    dataMapping$groupMapping[[colorVariable]]$group
+  ])
   # Get legend order and associated right color
   toKeep <- (group[[legendVariable]] %in% displayedLegendValues) &
     !duplicated(group[[legendVariable]])
@@ -889,9 +1003,11 @@ getColorFromOutputGroup <- function(group,
 #' @param simulationSetNames Display names of simulation sets
 #' @return A data.frame mapping colors to names
 #' @keywords internal
-getColorGroupForPKParameterPlot <- function(output,
-                                            referenceSetName = NULL,
-                                            simulationSetNames) {
+getColorGroupForPKParameterPlot <- function(
+  output,
+  referenceSetName = NULL,
+  simulationSetNames
+) {
   remainingSetNames <- setdiff(simulationSetNames, referenceSetName)
   colorGrouping <- data.frame(
     # Legend is the default variable name used by getColorFromOutputGroup
@@ -915,20 +1031,35 @@ getColorGroupForPKParameterPlot <- function(output,
 #' @param referenceSimulationSetName Display name of reference simulation set
 #' @return A ggplot object
 #' @keywords internal
-updateVpcPlotColor <- function(plotObject, output, referenceSimulationSetName = NULL) {
-  legendSim <- paste("Simulated", AggregationConfiguration$names$middle, "and", AggregationConfiguration$names$range)
+updateVpcPlotColor <- function(
+  plotObject,
+  output,
+  referenceSimulationSetName = NULL
+) {
+  legendSim <- paste(
+    "Simulated",
+    AggregationConfiguration$names$middle,
+    "and",
+    AggregationConfiguration$names$range
+  )
   legendReference <- paste(legendSim, "of", referenceSimulationSetName)
 
   plotObject <- plotObject +
     ggplot2::scale_color_manual(
-      breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
+      breaks = c(
+        ifNotNull(referenceSimulationSetName, legendReference),
+        legendSim
+      ),
       values = c(
         ifNotNull(referenceSimulationSetName, reEnv$referenceColor),
         output$color %||% "dodgerblue"
       )
     ) +
     ggplot2::scale_fill_manual(
-      breaks = c(ifNotNull(referenceSimulationSetName, legendReference), legendSim),
+      breaks = c(
+        ifNotNull(referenceSimulationSetName, legendReference),
+        legendSim
+      ),
       values = c(
         ifNotNull(referenceSimulationSetName, reEnv$referenceFill),
         output$fill %||% "dodgerblue"
@@ -978,13 +1109,17 @@ updateAxesMargin <- function(axesProperties, sideMarginsEnabled = TRUE) {
 #' @param propertyNames Names of the aesthetic property (e.g. `"color"`)
 #' @return Property value
 #' @keywords internal
-getDefaultPropertiesFromTheme <- function(plotName,
-                                          propertyType = "points",
-                                          propertyNames = as.character(tlf::AestheticProperties)) {
+getDefaultPropertiesFromTheme <- function(
+  plotName,
+  propertyType = "points",
+  propertyNames = as.character(tlf::AestheticProperties)
+) {
   # The function to get values from a Theme/PlotConfiguration exists in tlf but it is not exported
   # For this reason, it needs to be called using :::
   tlf:::.getAestheticValuesFromConfiguration(
-    plotConfigurationProperty = reEnv$theme$plotConfigurations[[plotName]][[propertyType]],
+    plotConfigurationProperty = reEnv$theme$plotConfigurations[[plotName]][[
+      propertyType
+    ]],
     propertyNames = propertyNames
   )
 }

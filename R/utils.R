@@ -106,7 +106,11 @@ trimFileName <- function(path, extension = NULL, sep = "/") {
 #' removeForbiddenLetters(text)
 #' }
 #' @export
-removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:][:blank:]]", replacement = "_") {
+removeForbiddenLetters <- function(
+  text,
+  forbiddenLetters = "[[:punct:][:blank:]]",
+  replacement = "_"
+) {
   # Remove accents from characters
   text <- iconv(x = text, to = "ASCII//TRANSLIT")
   gsub(
@@ -126,9 +130,16 @@ removeForbiddenLetters <- function(text, forbiddenLetters = "[[:punct:][:blank:]
 #' @description
 #' #Generate a list containing names of CSV result files that will be output by each core in parallel computation
 #' @export
-generateResultFileNames <- function(numberOfCores, folderName, fileName, separator = "-", extension = ".csv") {
+generateResultFileNames <- function(
+  numberOfCores,
+  folderName,
+  fileName,
+  separator = "-",
+  extension = ".csv"
+) {
   allResultsFileNames <- sapply(
-    X = 1:numberOfCores, function(x, folderName, fileName) {
+    X = 1:numberOfCores,
+    function(x, folderName, fileName) {
       return(file.path(folderName, paste0(fileName, separator, x, extension)))
     },
     folderName = folderName,
@@ -146,7 +157,10 @@ replaceInfWithNA <- function(data) {
   infData <- is.infinite(data)
   Ninf <- sum(infData)
   if (Ninf > 0) {
-    logDebug(paste0(Ninf, " values were infinite and transformed into missing values (NA)"))
+    logDebug(paste0(
+      Ninf,
+      " values were infinite and transformed into missing values (NA)"
+    ))
   }
   data[infData] <- NA
   return(data)
@@ -167,7 +181,12 @@ removeMissingValues <- function(data, dataMapping = NULL) {
   data <- data[!naData, ]
 
   if (Nna > 0) {
-    logDebug(paste0(Nna, " values were missing (NA) from variable '", dataMapping, "' and removed from the analysis"))
+    logDebug(paste0(
+      Nna,
+      " values were missing (NA) from variable '",
+      dataMapping,
+      "' and removed from the analysis"
+    ))
   }
   return(data)
 }
@@ -186,7 +205,12 @@ removeNegativeValues <- function(data, dataMapping = NULL) {
   data <- data[!negativeData, ]
 
   if (Nnegative > 0) {
-    logDebug(paste0(Nnegative, " values from variable '", dataMapping, "' were negative and removed from the analysis"))
+    logDebug(paste0(
+      Nnegative,
+      " values from variable '",
+      dataMapping,
+      "' were negative and removed from the analysis"
+    ))
   }
   return(data)
 }
@@ -217,7 +241,6 @@ newOutputColor <- function() {
 }
 
 
-
 #' @title getAllowedCores
 #'
 #' @description Get allowed number of CPU cores for computation
@@ -243,8 +266,14 @@ getAllowedCoresLinuxKubernetes <- function() {
   cores <- tryCatch(
     {
       # get cpu allowance from files
-      cfs_quota_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us", intern = TRUE))
-      cfs_period_us <- as.numeric(system("cat /sys/fs/cgroup/cpu/cpu.cfs_period_us", intern = TRUE))
+      cfs_quota_us <- as.numeric(system(
+        "cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us",
+        intern = TRUE
+      ))
+      cfs_period_us <- as.numeric(system(
+        "cat /sys/fs/cgroup/cpu/cpu.cfs_period_us",
+        intern = TRUE
+      ))
       cores <- floor(cfs_quota_us / cfs_period_us)
       if (cores < 1) {
         return(NULL)
@@ -267,13 +296,30 @@ getAllowedCoresLinuxKubernetes <- function() {
 #' @param variableName Name of the variable and field of `objectName`
 #' @param keepIfNull logical `objectName$variableName <- variableName \%||\% objectName$variableName`
 #' @return An expression to `eval()`
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
-parseVariableToObject <- function(objectName, variableName, keepIfNull = FALSE) {
+parseVariableToObject <- function(
+  objectName,
+  variableName,
+  keepIfNull = FALSE
+) {
   if (keepIfNull) {
-    return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName, " %||% ", objectName, "$", variableName)))
+    return(parse(
+      text = paste0(
+        objectName,
+        "$",
+        variableName,
+        " <- ",
+        variableName,
+        " %||% ",
+        objectName,
+        "$",
+        variableName
+      )
+    ))
   }
-  return(parse(text = paste0(objectName, "$", variableName, " <- ", variableName)))
+  return(parse(
+    text = paste0(objectName, "$", variableName, " <- ", variableName)
+  ))
 }
 
 #' @title calculateGMFE

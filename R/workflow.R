@@ -10,7 +10,6 @@
 #' @field userDefinedTasks List of user-defined tasks (to update with loadUserDefinedTask)
 #' @field numberSections logical defining if the report sections should be numbered
 #' @import tlf
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 Workflow <- R6::R6Class(
   "Workflow",
@@ -38,15 +37,17 @@ Workflow <- R6::R6Class(
     #' If `reportTitle` is an existing file, it will be merged to the report as cover page.
     #' @param theme A `Theme` object from `{tlf}` package
     #' @return A new `Workflow` object
-    initialize = function(simulationSets,
-                          workflowFolder,
-                          createWordReport = TRUE,
-                          wordConversionTemplate = NULL,
-                          watermark = NULL,
-                          simulationSetDescriptor = NULL,
-                          numberSections = TRUE,
-                          reportTitle = NULL,
-                          theme = NULL) {
+    initialize = function(
+      simulationSets,
+      workflowFolder,
+      createWordReport = TRUE,
+      wordConversionTemplate = NULL,
+      watermark = NULL,
+      simulationSetDescriptor = NULL,
+      numberSections = TRUE,
+      reportTitle = NULL,
+      theme = NULL
+    ) {
       #----- Check and initialize workflow folder  -----
       validateIsString(workflowFolder)
       self$workflowFolder <- workflowFolder
@@ -89,7 +90,9 @@ Workflow <- R6::R6Class(
         self$simulationStructures <- list()
         simulationSets <- c(simulationSets)
         for (simulationSetIndex in seq_along(simulationSets)) {
-          self$simulationStructures[[simulationSetIndex]] <- SimulationStructure$new(
+          self$simulationStructures[[
+            simulationSetIndex
+          ]] <- SimulationStructure$new(
             simulationSet = simulationSets[[simulationSetIndex]],
             workflowFolder = self$workflowFolder
           )
@@ -99,7 +102,9 @@ Workflow <- R6::R6Class(
         self$wordConversionTemplate <- wordConversionTemplate
         self$numberSections <- numberSections
         self$reportTitle <- reportTitle
-        self$setSimulationDescriptor(simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor)
+        self$setSimulationDescriptor(
+          simulationSetDescriptor %||% reEnv$defaultSimulationSetDescriptor
+        )
 
         private$.reportFolder <- workflowFolder
         self$reportFileName <- paste0(defaultFileNames$reportName(), ".md")
@@ -122,7 +127,10 @@ Workflow <- R6::R6Class(
         isOfType(x, "Task")
       }))
 
-      taskNames <- setdiff(names(isTaskVector[as.logical(isTaskVector)]), "userDefinedTasks")
+      taskNames <- setdiff(
+        names(isTaskVector[as.logical(isTaskVector)]),
+        "userDefinedTasks"
+      )
 
       return(taskNames)
     },
@@ -136,7 +144,10 @@ Workflow <- R6::R6Class(
         isOfType(x, "PlotTask")
       }))
 
-      taskNames <- setdiff(names(isPlotTaskVector[as.logical(isPlotTaskVector)]), "userDefinedTasks")
+      taskNames <- setdiff(
+        names(isPlotTaskVector[as.logical(isPlotTaskVector)]),
+        "userDefinedTasks"
+      )
 
       return(taskNames)
     },
@@ -216,12 +227,22 @@ Workflow <- R6::R6Class(
     setParameterDisplayPaths = function(parameterDisplayPaths) {
       setLogFolder(self$workflowFolder)
       logCatch({
-        validateIsOfType(parameterDisplayPaths, "data.frame", nullAllowed = TRUE)
+        validateIsOfType(
+          parameterDisplayPaths,
+          "data.frame",
+          nullAllowed = TRUE
+        )
         if (!isEmpty(parameterDisplayPaths)) {
-          validateIsIncluded(c("parameter", "displayPath"), names(parameterDisplayPaths))
+          validateIsIncluded(
+            c("parameter", "displayPath"),
+            names(parameterDisplayPaths)
+          )
         }
         # In case the same parameter is defined more than once, throw an error
-        validateNoDuplicate(values = parameterDisplayPaths$parameter, variableName = "variable 'parameter'")
+        validateNoDuplicate(
+          values = parameterDisplayPaths$parameter,
+          variableName = "variable 'parameter'"
+        )
         # parameterDisplayPaths are centralized in the central private field .parameterDisplayPaths
         # However, they need to be send to the task using the field simulationStructures commmon among all tasks
         private$.parameterDisplayPaths <- parameterDisplayPaths

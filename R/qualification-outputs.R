@@ -5,7 +5,9 @@
 #' @keywords internal
 getOutputsFromConfigurationPlan <- function(configurationPlan) {
   outputsTimeProfile <- getTimeProfileOutputsDataframe(configurationPlan)
-  outputsComparisonTimeProfile <- getComparisonTimeProfileOutputsDataframe(configurationPlan)
+  outputsComparisonTimeProfile <- getComparisonTimeProfileOutputsDataframe(
+    configurationPlan
+  )
   outputsGOF <- getGOFOutputsDataframe(configurationPlan)
   outputsDDI <- getDDIOutputsDataframe(configurationPlan)
   outputsPKRatio <- getPKRatioOutputsDataframe(configurationPlan)
@@ -30,7 +32,11 @@ getOutputsFromConfigurationPlan <- function(configurationPlan) {
 getTimeProfileOutputsDataframe <- function(configurationPlan) {
   timeProfileOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$TimeProfile) {
-    validateIsIncluded(values = "Plot", parentValues = names(plot), nullAllowed = TRUE)
+    validateIsIncluded(
+      values = "Plot",
+      parentValues = names(plot),
+      nullAllowed = TRUE
+    )
     # Accounts for paths of both mean and pop time profiles
     # If population, paths is directly QuantityPath and Curves is NULL
     # If mean, paths from QuantityPath is NULL and increases using Curves coming from same simulation
@@ -39,7 +45,10 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
       if (isObservedData(curve$Y)) {
         next
       }
-      paths <- c(paths, ospsuite::toPathString(tail(ospsuite::toPathArray(curve$Y), -1)))
+      paths <- c(
+        paths,
+        ospsuite::toPathString(tail(ospsuite::toPathArray(curve$Y), -1))
+      )
     }
     timeProfileOutputsDataframe <- rbind.data.frame(
       timeProfileOutputsDataframe,
@@ -55,7 +64,9 @@ getTimeProfileOutputsDataframe <- function(configurationPlan) {
       stringsAsFactors = FALSE
     )
   }
-  return(timeProfileOutputsDataframe[!duplicated(timeProfileOutputsDataframe), ])
+  return(timeProfileOutputsDataframe[
+    !duplicated(timeProfileOutputsDataframe),
+  ])
 }
 
 #' @title getComparisonTimeProfileOutputsDataframe
@@ -82,7 +93,9 @@ getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
       )
     }
   }
-  return(comparisonTimeProfileOutputsDataframe[!duplicated(comparisonTimeProfileOutputsDataframe), ])
+  return(comparisonTimeProfileOutputsDataframe[
+    !duplicated(comparisonTimeProfileOutputsDataframe),
+  ])
 }
 
 #' @title getGOFOutputsDataframe
@@ -93,11 +106,23 @@ getComparisonTimeProfileOutputsDataframe <- function(configurationPlan) {
 getGOFOutputsDataframe <- function(configurationPlan) {
   gofOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$GOFMergedPlots) {
-    validateIsIncluded(values = "Groups", parentValues = names(plot), nullAllowed = TRUE)
+    validateIsIncluded(
+      values = "Groups",
+      parentValues = names(plot),
+      nullAllowed = TRUE
+    )
     for (group in plot$Groups) {
-      validateIsIncluded(values = "OutputMappings", parentValues = names(group), nullAllowed = TRUE)
+      validateIsIncluded(
+        values = "OutputMappings",
+        parentValues = names(group),
+        nullAllowed = TRUE
+      )
       for (outputMapping in group$OutputMappings) {
-        validateIsIncluded(values = "Output", parentValues = names(outputMapping), nullAllowed = TRUE)
+        validateIsIncluded(
+          values = "Output",
+          parentValues = names(outputMapping),
+          nullAllowed = TRUE
+        )
         validateIsString(object = outputMapping$Output)
         gofOutputsDataframe <- rbind.data.frame(
           gofOutputsDataframe,
@@ -122,12 +147,12 @@ getGOFOutputsDataframe <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation, output, pk parameter, start time, end time for each DDI plot component
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A list containing data for generating DDI plots
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getDDIOutputsDataframe <- function(configurationPlan) {
   ddiOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$DDIRatioPlots) {
-    pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
+    pkParameters <- plot$PKParameters %||%
+      ospsuite::toPathArray(plot$PKParameter)
 
     for (group in plot$Groups) {
       for (ddiRatio in group$DDIRatios) {
@@ -161,7 +186,11 @@ getDDIOutputsDataframe <- function(configurationPlan) {
             endTime = endTime %||% NA,
             stringsAsFactors = FALSE
           )
-          ddiOutputsDataframe <- rbind.data.frame(ddiOutputsDataframe, df, stringsAsFactors = FALSE)
+          ddiOutputsDataframe <- rbind.data.frame(
+            ddiOutputsDataframe,
+            df,
+            stringsAsFactors = FALSE
+          )
         }
       }
     }
@@ -173,12 +202,12 @@ getDDIOutputsDataframe <- function(configurationPlan) {
 #' @description Get a dataframe relating project, simulation, output path and pk parameter for each PK ratio plot
 #' @param configurationPlan The configuration plan of a Qualification workflow read from json file.
 #' @return A list containing data for generating DDI plots
-#' @importFrom ospsuite.utils %||%
 #' @keywords internal
 getPKRatioOutputsDataframe <- function(configurationPlan) {
   pkRatioOutputsDataframe <- NULL
   for (plot in configurationPlan$plots$PKRatioPlots) {
-    pkParameters <- plot$PKParameters %||% ospsuite::toPathArray(plot$PKParameter)
+    pkParameters <- plot$PKParameters %||%
+      ospsuite::toPathArray(plot$PKParameter)
 
     for (group in plot$Groups) {
       for (plotComponent in group$PKRatios) {
@@ -203,7 +232,11 @@ getPKRatioOutputsDataframe <- function(configurationPlan) {
           stringsAsFactors = FALSE
         )
 
-        pkRatioOutputsDataframe <- rbind.data.frame(pkRatioOutputsDataframe, df, stringsAsFactors = FALSE)
+        pkRatioOutputsDataframe <- rbind.data.frame(
+          pkRatioOutputsDataframe,
+          df,
+          stringsAsFactors = FALSE
+        )
       }
     }
   }
@@ -218,7 +251,11 @@ getPKRatioOutputsDataframe <- function(configurationPlan) {
 #' @return String `pkParameterName`
 #' @keywords internal
 addNewPkParameter <- function(pkParameter, startTime, endTime) {
-  pkParameterName <- generateDDIPlotPKParameterName(pkParameter, startTime, endTime)
+  pkParameterName <- generateDDIPlotPKParameterName(
+    pkParameter,
+    startTime,
+    endTime
+  )
 
   if (pkParameterName %in% ospsuite::allPKParameterNames()) {
     return(pkParameterName)
@@ -226,7 +263,9 @@ addNewPkParameter <- function(pkParameter, startTime, endTime) {
 
   newPKParameter <- ospsuite::addUserDefinedPKParameter(
     name = pkParameterName,
-    standardPKParameter = StandardPKParameter[[pkDictionaryQualificationOSP[[pkParameter]]]],
+    standardPKParameter = StandardPKParameter[[pkDictionaryQualificationOSP[[
+      pkParameter
+    ]]]],
     displayName = pkParameterName
   )
   if (!is.null(startTime)) {
@@ -247,11 +286,22 @@ addNewPkParameter <- function(pkParameter, startTime, endTime) {
 #' @return String `pkParameterName`
 #' @keywords internal
 generateDDIPlotPKParameterName <- function(pkParameter, startTime, endTime) {
-  validateIsIncluded(values = pkParameter, parentValues = names(pkDictionaryQualificationOSP))
+  validateIsIncluded(
+    values = pkParameter,
+    parentValues = names(pkDictionaryQualificationOSP)
+  )
   standardPKParameter <- pkDictionaryQualificationOSP[[pkParameter]]
   pkParameterName <- standardPKParameter
-  pkParameterName <- ifNotNull(startTime, paste0(pkParameterName, "_tStartTime_", startTime), pkParameterName)
-  pkParameterName <- ifNotNull(endTime, paste0(pkParameterName, "_tEndTime_", endTime), pkParameterName)
+  pkParameterName <- ifNotNull(
+    startTime,
+    paste0(pkParameterName, "_tStartTime_", startTime),
+    pkParameterName
+  )
+  pkParameterName <- ifNotNull(
+    endTime,
+    paste0(pkParameterName, "_tEndTime_", endTime),
+    pkParameterName
+  )
   return(pkParameterName)
 }
 
