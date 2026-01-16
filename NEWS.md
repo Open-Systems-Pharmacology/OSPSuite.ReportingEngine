@@ -3,7 +3,6 @@
 ## Breaking changes
 
 - R version >=4.4 is required
-- ospsuite.utils version >=1.10.0 is required
 
 ## Minor changes
 
