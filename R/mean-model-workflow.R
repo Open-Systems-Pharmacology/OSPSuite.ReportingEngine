@@ -129,6 +129,15 @@ MeanModelWorkflow <- R6::R6Class(
       # Stop logging messages in workflowFolder after run is completed
       # Prevents potential logging of new messages in previous workflowFolder
       setLogFolder()
+    },
+
+    #' @description
+    #' Finalize the `MeanModelWorkflow` object.
+    #' This method is called automatically when the object is garbage collected.
+    #' It ensures proper cleanup of resources.
+    finalize = function() {
+      # Reset log folder to prevent logging to workflow folder after object destruction
+      setLogFolder()
     }
   )
 )

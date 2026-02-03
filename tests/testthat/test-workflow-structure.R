@@ -62,3 +62,29 @@ test_that("Workflows initialization creates appropriate folder and logs, and war
   resetLogs()
   unlink(testFolder, recursive = TRUE)
 })
+
+test_that("MeanModelWorkflow has finalize method for lifecycle management", {
+  testFolder <- "testFolder"
+  unlink(testFolder, recursive = TRUE)
+  
+  simSet <- SimulationSet$new(
+    simulationSetName = "myTest",
+    simulationFile = getTestDataFilePath("input-data/MiniModel2.pkml")
+  )
+  
+  # Create workflow
+  expect_output(mWorkflow <- MeanModelWorkflow$new(
+    simulationSets = simSet,
+    workflowFolder = testFolder
+  ))
+  
+  # Verify that the finalize method exists
+  expect_true("finalize" %in% names(mWorkflow))
+  
+  # Cleanup
+  rm(mWorkflow)
+  gc() # Force garbage collection to trigger finalize
+  
+  resetLogs()
+  unlink(testFolder, recursive = TRUE)
+})
