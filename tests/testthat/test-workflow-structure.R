@@ -81,13 +81,20 @@ test_that("MeanModelWorkflow has finalize method for lifecycle management", {
   # Verify that the finalize method exists
   expect_true("finalize" %in% names(mWorkflow))
   
+  # Set log folder to the workflow folder to simulate active workflow state
+  setLogFolder(testFolder)
+  expect_equal(reEnv$log$folder, testFolder)
+  
   # Manually call finalize to test its behavior
-  # The finalize method should reset the log folder
+  # The finalize method should reset the log folder to NULL
   mWorkflow$finalize()
   
-  # After finalize, logging should not go to the workflow folder
-  # We can't directly test setLogFolder() output, but we verify no errors occur
+  # Verify that the log folder has been reset to NULL
+  expect_null(reEnv$log$folder)
+  
+  # Calling finalize again should be safe (idempotent)
   expect_silent(mWorkflow$finalize())
+  expect_null(reEnv$log$folder)
   
   # Cleanup
   rm(mWorkflow)
