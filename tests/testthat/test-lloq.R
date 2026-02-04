@@ -4,6 +4,9 @@ library(ospsuite.reportingengine)
 
 context("Observed Data in plot time profile task")
 
+# MeanModelWorkflow is deprecated, skip all tests in this file
+skip("MeanModelWorkflow is deprecated")
+
 # Input files and structures for comparisons
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 

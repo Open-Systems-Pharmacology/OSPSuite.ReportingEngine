@@ -1,4 +1,8 @@
 context("Run workflows with Sensitivity tasks")
+
+# MeanModelWorkflow is deprecated, skip all tests in this file
+skip("MeanModelWorkflow is deprecated")
+
 # Get test data
 removeAllUserDefinedPKParameters()
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")

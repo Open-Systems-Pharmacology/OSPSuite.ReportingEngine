@@ -29,20 +29,12 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @return A new `MeanModelWorkflow` object
     initialize = function(...) {
-      super$initialize(...)
-      logCatch({
-        self$simulate <- loadSimulateTask(self)
-        self$calculatePKParameters <- loadCalculatePKParametersTask(self)
-        self$calculateSensitivity <- loadCalculateSensitivityTask(self)
-
-        self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
-        self$plotMassBalance <- loadPlotMassBalanceTask(self)
-        self$plotAbsorption <- loadPlotAbsorptionTask(self)
-        self$plotPKParameters <- loadPlotPKParametersTask(self)
-        self$plotSensitivity <- loadPlotSensitivityTask(self)
-
-        self$taskNames <- enum(self$getAllTasks())
-      })
+      stop(
+        "MeanModelWorkflow is no longer available. ",
+        "Please use OSPSuite.ReportingFramework instead. ",
+        "For more information, visit: https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingFramework",
+        call. = FALSE
+      )
     },
 
     #' @description

@@ -33,19 +33,15 @@ test_that("Workflows initialization creates appropriate folder and logs, and war
     simulationFile = getTestDataFilePath("input-data/MiniModel2.pkml"),
     populationFile = "test.csv"
   )
-  # Dummy simulation set for the example
-  expect_output(mWorkflow <- MeanModelWorkflow$new(
-    simulationSets = simSet,
-    workflowFolder = testFolder
-  ))
-
-  expect_true(testFolder %in% list.files())
-  expect_true("log-info.txt" %in% list.files(testFolder))
-  expect_false("log-debug.txt" %in% list.files(testFolder))
-  expect_false("log-error.txt" %in% list.files(testFolder))
-
-  # Make sure testFolder is not there
-  unlink(testFolder, recursive = TRUE)
+  
+  # MeanModelWorkflow is deprecated and should throw an error
+  expect_error(
+    MeanModelWorkflow$new(
+      simulationSets = simSet,
+      workflowFolder = testFolder
+    ),
+    "MeanModelWorkflow is no longer available"
+  )
 
   # Dummy simulation set for the example
   expect_output(pWorkflow <- PopulationWorkflow$new(
