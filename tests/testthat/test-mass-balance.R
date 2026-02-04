@@ -1,5 +1,8 @@
 context("Run workflow with mass balance task")
 
+# MeanModelWorkflow is deprecated, skip all tests in this file
+skip("MeanModelWorkflow is deprecated")
+
 simulationFile <- getTestDataFilePath("input-data/Larson 2013 8-18y meal.pkml")
 
 # Output reference absorption time profiles

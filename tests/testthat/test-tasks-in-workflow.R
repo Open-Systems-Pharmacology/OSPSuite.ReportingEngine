@@ -13,6 +13,9 @@ popSimSet <- PopulationSimulationSet$new(
   populationFile = getTestDataFilePath("input-data/Pop500_p1p2p3.csv")
 )
 
+# MeanModelWorkflow is deprecated, skip tests that use it
+skip("MeanModelWorkflow is deprecated")
+
 mWorkflow <- MeanModelWorkflow$new(
   simulationSets = meanSimSet,
   workflowFolder = meanTestFolder

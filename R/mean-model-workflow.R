@@ -29,20 +29,12 @@ MeanModelWorkflow <- R6::R6Class(
     #' @param ... input parameters inherited from R6 class object `Workflow`.
     #' @return A new `MeanModelWorkflow` object
     initialize = function(...) {
-      super$initialize(...)
-      logCatch({
-        self$simulate <- loadSimulateTask(self)
-        self$calculatePKParameters <- loadCalculatePKParametersTask(self)
-        self$calculateSensitivity <- loadCalculateSensitivityTask(self)
-
-        self$plotTimeProfilesAndResiduals <- loadPlotTimeProfilesAndResidualsTask(self)
-        self$plotMassBalance <- loadPlotMassBalanceTask(self)
-        self$plotAbsorption <- loadPlotAbsorptionTask(self)
-        self$plotPKParameters <- loadPlotPKParametersTask(self)
-        self$plotSensitivity <- loadPlotSensitivityTask(self)
-
-        self$taskNames <- enum(self$getAllTasks())
-      })
+      stop(
+        "MeanModelWorkflow is no longer available. ",
+        "Please use OSPSuite.ReportingFramework instead. ",
+        "For more information, visit: https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingFramework",
+        call. = FALSE
+      )
     },
 
     #' @description
@@ -128,15 +120,6 @@ MeanModelWorkflow <- R6::R6Class(
       logInfo(messages$runCompleted(getElapsedTime(t0), "Mean Model Workflow"))
       # Stop logging messages in workflowFolder after run is completed
       # Prevents potential logging of new messages in previous workflowFolder
-      setLogFolder()
-    },
-
-    #' @description
-    #' Finalize the `MeanModelWorkflow` object.
-    #' This method is called automatically when the object is garbage collected.
-    #' It ensures proper cleanup of resources.
-    finalize = function() {
-      # Reset log folder to prevent logging to workflow folder after object destruction
       setLogFolder()
     }
   )

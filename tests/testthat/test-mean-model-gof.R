@@ -1,5 +1,8 @@
 context("Run mean model workflows with Time Profiles and Residuals task")
 
+# MeanModelWorkflow is deprecated, skip all tests in this file
+skip("MeanModelWorkflow is deprecated")
+
 simulationFile <- getTestDataFilePath("input-data/MiniModel2.pkml")
 dataFile <- getTestDataFilePath("input-data/SimpleData.nmdat")
 dictFile <- getTestDataFilePath("input-data/tpDictionary.csv")
