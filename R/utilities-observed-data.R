@@ -519,7 +519,7 @@ getObservedDemographyFromSimulationSet <- function(structureSet, demographyPaths
     ospsuite::validateUnit(sourceUnit, targetDimension)
 
     demographyObsData[[demographyPath]] <- ospsuite::toUnit(
-      quantityOrDimension = demographyPath,
+      quantityOrDimension = targetDimension,
       values = selectedData[, datasetColumn],
       targetUnit = metaData[[demographyPath]]$unit,
       sourceUnit = sourceUnit
