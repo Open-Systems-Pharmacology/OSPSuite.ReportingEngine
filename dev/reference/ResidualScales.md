@@ -27,6 +27,7 @@ Other enum helpers:
 ## Examples
 
 ``` r
+
 # Lists available Residual Scales
 ResidualScales
 #> $Linear

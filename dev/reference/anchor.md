@@ -37,6 +37,7 @@ Other reporting:
 ## Examples
 
 ``` r
+
 anchor("section-1")
 #> [1] "<a id=\"section-1\"></a>"
 ```

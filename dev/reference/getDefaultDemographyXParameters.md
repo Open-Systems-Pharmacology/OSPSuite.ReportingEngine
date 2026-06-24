@@ -23,6 +23,7 @@ names of default demography parameters
 ## Examples
 
 ``` r
+
 getDefaultDemographyXParameters(PopulationWorkflowTypes$pediatric)
 #> [1] "Organism|Age"
 ```

@@ -1,10 +1,18 @@
 # Excel Template
 
 ``` r
+
 require(ospsuite.reportingengine)
 #> Loading required package: ospsuite.reportingengine
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 ## Get started
@@ -319,15 +327,15 @@ Table : StudyDesign sheet
     #> • `Organism|Weight` -> `Organism|Weight...1`
     #> • `Organism|Weight` -> `Organism|Weight...2`
 
-| Organism\|Weight…1 | Organism\|Weight…2 | Gender        | Applications\|IV Bolus\|DrugMass |
-|:-------------------|:-------------------|:--------------|:---------------------------------|
-| kg                 | kg                 |               | nmol                             |
-| SOURCE_MIN         | SOURCE_MAX         | SOURCE_EQUALS | TARGET                           |
-| 20                 | 40                 | MALE          | 2                                |
-| 20                 | 40                 | FEMALE        | 2.5                              |
-| 40                 | 60                 | MALE          | 10                               |
-| 40                 | 60                 | FEMALE        | 14                               |
-| 60                 |                    |               | 20                               |
+| Organism\|Weight…1 | Organism\|Weight…2 | Gender | Applications\|IV Bolus\|DrugMass |
+|:---|:---|:---|:---|
+| kg | kg |  | nmol |
+| SOURCE_MIN | SOURCE_MAX | SOURCE_EQUALS | TARGET |
+| 20 | 40 | MALE | 2 |
+| 20 | 40 | FEMALE | 2.5 |
+| 40 | 60 | MALE | 10 |
+| 40 | 60 | FEMALE | 14 |
+| 60 |  |  | 20 |
 
 ### How to include your own code ?
 

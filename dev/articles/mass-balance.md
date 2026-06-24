@@ -1,9 +1,17 @@
 # Mass Balance
 
 ``` r
+
 library(ospsuite.reportingengine)
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 ## Overview
@@ -45,6 +53,7 @@ associated with the compartment name.
 **Code**
 
 ``` r
+
 # Define file paths for pkml simulation
 simulationFile <- system.file("extdata", "Aciclovir.pkml", package = "ospsuite.reportingengine")
 
@@ -56,39 +65,39 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
   simulationSets = simulationSet,
   workflowFolder = "Mass-Balance-Workflow"
 )
-#> 16/01/2026 - 14:35:13
+#> 24/06/2026 - 16:08:11
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:35:13
+#>  Date: 24/06/2026 - 16:08:11
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
 massBalanceWorkflow$activateTasks("plotMassBalance")
 massBalanceWorkflow$runWorkflow()
-#> 16/01/2026 - 14:35:14
+#> 24/06/2026 - 16:08:12
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:35:14
+#> 24/06/2026 - 16:08:12
 #> i Info  Starting run of Plot Mass Balance task
-#> 16/01/2026 - 14:35:14
+#> 24/06/2026 - 16:08:12
 #> i Info  Starting run of Plot Mass Balance task for Aciclovir
-#> 16/01/2026 - 14:35:16
+#> 24/06/2026 - 16:08:14
 #> ! Warning   No molecule paths included in group 'Aciclovir - Endosome'.
-#> 16/01/2026 - 14:35:16
+#> 24/06/2026 - 16:08:14
 #> ! Warning   No molecule paths included in group 'Rest of Aciclovir'.
-#> 16/01/2026 - 14:35:31
+#> 24/06/2026 - 16:08:31
 #> i Info  Plot Mass Balance task completed in 0.3 min
-#> 16/01/2026 - 14:35:31
+#> 24/06/2026 - 16:08:31
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o 'Mass-Balance-Workflow/Report-word.docx' 'Mass-Balance-Workflow/Report-word.md'
 #> 
-#> 16/01/2026 - 14:35:31
+#> 24/06/2026 - 16:08:31
 #> i Info  Mean Model Workflow completed in 0.3 min
 ```
 
@@ -253,6 +262,7 @@ settings file is provided to the `SimulationSet` object.
 **Code**
 
 ``` r
+
 simulationFile <- system.file("extdata", "Aciclovir.pkml", package = "ospsuite.reportingengine")
 massBalanceFile <- system.file("extdata", "mass-balance-settings.json", package = "ospsuite.reportingengine")
 
@@ -265,35 +275,35 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
   simulationSets = simulationSet,
   workflowFolder = "Mass-Balance-Workflow"
 )
-#> 16/01/2026 - 14:35:34
+#> 24/06/2026 - 16:08:34
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:35:34
+#>  Date: 24/06/2026 - 16:08:34
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
 massBalanceWorkflow$activateTasks("plotMassBalance")
 massBalanceWorkflow$runWorkflow()
-#> 16/01/2026 - 14:35:34
+#> 24/06/2026 - 16:08:35
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:35:34
+#> 24/06/2026 - 16:08:35
 #> i Info  Starting run of Plot Mass Balance task
-#> 16/01/2026 - 14:35:34
+#> 24/06/2026 - 16:08:35
 #> i Info  Starting run of Plot Mass Balance task for Aciclovir
-#> 16/01/2026 - 14:35:58
+#> 24/06/2026 - 16:09:01
 #> i Info  Plot Mass Balance task completed in 0.4 min
-#> 16/01/2026 - 14:35:59
+#> 24/06/2026 - 16:09:01
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o 'Mass-Balance-Workflow/Report-word.docx' 'Mass-Balance-Workflow/Report-word.md'
 #> 
-#> 16/01/2026 - 14:35:59
+#> 24/06/2026 - 16:09:01
 #> i Info  Mean Model Workflow completed in 0.4 min
 ```
 

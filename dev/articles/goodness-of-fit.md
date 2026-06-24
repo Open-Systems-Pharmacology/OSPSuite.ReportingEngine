@@ -1,10 +1,18 @@
 # Time profiles and Residuals task
 
 ``` r
+
 require(ospsuite.reportingengine)
 #> Loading required package: ospsuite.reportingengine
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 This vignette focuses on time profiles and residuals plots (also called
@@ -77,6 +85,7 @@ The residual scale corresponds to one element from the enum
 `ResidualScales`:
 
 ``` r
+
 ResidualScales
 #> $Linear
 #> [1] "Linear"
@@ -86,18 +95,19 @@ ResidualScales
 ```
 
 The default uses “Logarithmic” and calculate residuals as:
-$Residuals = log(Observed) - log(Simulated)$
+$`Residuals=log(Observed)-log(Simulated)`$
 
 If the option “Linear” is used instead, the residuals are calculated as:
-$Residuals = Observed - Simulated$
+$`Residuals=Observed-Simulated`$
 
 A histogram and a qq-plot of residuals across all the simulation sets
 will also be added at the end of the analysis.
 
 For population workflows, residuals are calculated from the aggregation
-of the Simulated output. By default, $median(Simulated)$ is used instead
-of $Simulated$. It is possible to modify this aggregation function by
-updating the fields of the object **AggregationConfiguration**.
+of the Simulated output. By default, $`median(Simulated)`$ is used
+instead of $`Simulated`$. It is possible to modify this aggregation
+function by updating the fields of the object
+**AggregationConfiguration**.
 
 ## Template examples
 
@@ -115,7 +125,7 @@ the features tested in each template script.
 |       6 | Population model |               1 |       1 | No            |
 |       7 | Population model |               1 |       1 | Yes           |
 
-Table 1: Features tested by each template script
+Table 1: Features tested by each template script {.table}
 
 ### Example 1
 
@@ -127,6 +137,7 @@ output are requested.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -151,18 +162,18 @@ workflow1 <-
     simulationSets = setA,
     workflowFolder = "Example-1"
   )
-#> 16/01/2026 - 14:33:48
+#> 24/06/2026 - 16:06:38
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:33:48
+#>  Date: 24/06/2026 - 16:06:38
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -170,27 +181,27 @@ workflow1$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow1$runWorkflow()
-#> 16/01/2026 - 14:33:48
+#> 24/06/2026 - 16:06:38
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:33:48
+#> 24/06/2026 - 16:06:38
 #> i Info  Starting run of Simulation task
-#> 16/01/2026 - 14:33:48
+#> 24/06/2026 - 16:06:38
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 16/01/2026 - 14:33:48
+#> 24/06/2026 - 16:06:38
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 16/01/2026 - 14:33:49
+#> 24/06/2026 - 16:06:39
 #> i Info  Simulation task completed in 0 min
-#> 16/01/2026 - 14:33:49
+#> 24/06/2026 - 16:06:39
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 16/01/2026 - 14:33:49
+#> 24/06/2026 - 16:06:39
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 16/01/2026 - 14:33:51
+#> 24/06/2026 - 16:06:42
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 16/01/2026 - 14:33:51
+#> 24/06/2026 - 16:06:42
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 16/01/2026 - 14:33:51
+#> 24/06/2026 - 16:06:42
 #> i Info  Mean Model Workflow completed in 0.1 min
 ```
 
@@ -217,6 +228,7 @@ Example 1. This example shows 3 new features:
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -260,18 +272,18 @@ workflow2 <-
     simulationSets = setA,
     workflowFolder = "Example-1"
   )
-#> 16/01/2026 - 14:33:53
+#> 24/06/2026 - 16:06:44
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:33:53
+#>  Date: 24/06/2026 - 16:06:44
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -280,20 +292,20 @@ workflow2$inactivateTasks("simulate")
 
 # Run the workflow
 workflow2$runWorkflow()
-#> 16/01/2026 - 14:33:54
+#> 24/06/2026 - 16:06:44
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:33:54
+#> 24/06/2026 - 16:06:44
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 16/01/2026 - 14:33:54
+#> 24/06/2026 - 16:06:44
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 16/01/2026 - 14:33:54
+#> 24/06/2026 - 16:06:44
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
-#> 16/01/2026 - 14:34:03
+#> 24/06/2026 - 16:06:54
 #> i Info  Plot Time profiles and Residuals task completed in 0.2 min
-#> 16/01/2026 - 14:34:03
+#> 24/06/2026 - 16:06:54
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 16/01/2026 - 14:34:03
+#> 24/06/2026 - 16:06:54
 #> i Info  Mean Model Workflow completed in 0.2 min
 ```
 
@@ -311,25 +323,25 @@ dictionary are respectively described Table 2 and 3.
 |   4 | 9999 |   1 |    6 |   6 | 0.00163 |   1 |   0 |   0 |   82 |  160 |   1 |  32 | 0.001 |
 |   5 | 9999 |   1 |    8 |   8 | 0.00269 |   1 |   0 |   0 |   82 |  160 |   1 |  32 | 0.001 |
 
-Table 2: Observed data content
+Table 2: Observed data content {.table style="width:100%;"}
 
     #> Warning in readLines(file): incomplete final line found on
     #> '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
 
-| ID     | type        | datasetColumn | datasetUnit | reportName  | pathID           | comment                               |
-|:-------|:------------|:--------------|:------------|:------------|:-----------------|:--------------------------------------|
-| sid    | identifier  | SID           |             |             |                  |                                       |
-| stud   | identifier  | STUD          |             |             |                  |                                       |
-| time   | timeprofile | TIME          | h           |             |                  |                                       |
-| dv     | timeprofile | DV            | mg/ml       |             |                  |                                       |
-| tad    | timeprofile | TAD           | h           |             |                  |                                       |
-| age    | covariate   | AGE           | year(s)     | Age         | Organism\|Age    |                                       |
-| wght   | covariate   | WGHT          | kg          | Body weight | Organism\|Weight |                                       |
-| hght   | covariate   | HGHT          | cm          | Height      | Organism\|Height |                                       |
-| bmi    | covariate   | BMI           | kg/m²       | BMI         | Organism\|BMI    |                                       |
-| gender | covariate   | SEX           |             | SEX         | Gender           | Make sure male=MALE and female=FEMALE |
+| ID | type | datasetColumn | datasetUnit | reportName | pathID | comment |
+|:---|:---|:---|:---|:---|:---|:---|
+| sid | identifier | SID |  |  |  |  |
+| stud | identifier | STUD |  |  |  |  |
+| time | timeprofile | TIME | h |  |  |  |
+| dv | timeprofile | DV | mg/ml |  |  |  |
+| tad | timeprofile | TAD | h |  |  |  |
+| age | covariate | AGE | year(s) | Age | Organism\|Age |  |
+| wght | covariate | WGHT | kg | Body weight | Organism\|Weight |  |
+| hght | covariate | HGHT | cm | Height | Organism\|Height |  |
+| bmi | covariate | BMI | kg/m² | BMI | Organism\|BMI |  |
+| gender | covariate | SEX |  | SEX | Gender | Make sure male=MALE and female=FEMALE |
 
-Table 3: Dictionary content
+Table 3: Dictionary content {.table}
 
 The output report for Example 2 is shown below. There are now many more
 figures in the report showing not only time profiles in `µmol/ml`
@@ -350,6 +362,7 @@ previous example, there is no need to re-run the `simulate` task.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -388,18 +401,18 @@ workflow3 <-
     simulationSets = setA,
     workflowFolder = "Example-1"
   )
-#> 16/01/2026 - 14:34:05
+#> 24/06/2026 - 16:06:57
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:34:05
+#>  Date: 24/06/2026 - 16:06:57
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -408,20 +421,20 @@ workflow3$inactivateTasks("simulate")
 
 # Run the workflow
 workflow3$runWorkflow()
-#> 16/01/2026 - 14:34:05
+#> 24/06/2026 - 16:06:57
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:34:05
+#> 24/06/2026 - 16:06:57
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 16/01/2026 - 14:34:05
+#> 24/06/2026 - 16:06:57
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 16/01/2026 - 14:34:05
+#> 24/06/2026 - 16:06:57
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionaryLoq.csv'
-#> 16/01/2026 - 14:34:14
+#> 24/06/2026 - 16:07:07
 #> i Info  Plot Time profiles and Residuals task completed in 0.2 min
-#> 16/01/2026 - 14:34:14
+#> 24/06/2026 - 16:07:07
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 16/01/2026 - 14:34:14
+#> 24/06/2026 - 16:07:07
 #> i Info  Mean Model Workflow completed in 0.2 min
 ```
 
@@ -430,20 +443,20 @@ The new dictionary content is described in Table 4.
     #> Warning in readLines(file): incomplete final line found on
     #> '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
 
-| ID     | type        | datasetColumn | datasetUnit | reportName  | pathID           | comment                               |
-|:-------|:------------|:--------------|:------------|:------------|:-----------------|:--------------------------------------|
-| sid    | identifier  | SID           |             |             |                  |                                       |
-| stud   | identifier  | STUD          |             |             |                  |                                       |
-| time   | timeprofile | TIME          | h           |             |                  |                                       |
-| dv     | timeprofile | DV            | mg/ml       |             |                  |                                       |
-| tad    | timeprofile | TAD           | h           |             |                  |                                       |
-| age    | covariate   | AGE           | year(s)     | Age         | Organism\|Age    |                                       |
-| wght   | covariate   | WGHT          | kg          | Body weight | Organism\|Weight |                                       |
-| hght   | covariate   | HGHT          | cm          | Height      | Organism\|Height |                                       |
-| bmi    | covariate   | BMI           | kg/m²       | BMI         | Organism\|BMI    |                                       |
-| gender | covariate   | SEX           |             | SEX         | Gender           | Make sure male=MALE and female=FEMALE |
+| ID | type | datasetColumn | datasetUnit | reportName | pathID | comment |
+|:---|:---|:---|:---|:---|:---|:---|
+| sid | identifier | SID |  |  |  |  |
+| stud | identifier | STUD |  |  |  |  |
+| time | timeprofile | TIME | h |  |  |  |
+| dv | timeprofile | DV | mg/ml |  |  |  |
+| tad | timeprofile | TAD | h |  |  |  |
+| age | covariate | AGE | year(s) | Age | Organism\|Age |  |
+| wght | covariate | WGHT | kg | Body weight | Organism\|Weight |  |
+| hght | covariate | HGHT | cm | Height | Organism\|Height |  |
+| bmi | covariate | BMI | kg/m² | BMI | Organism\|BMI |  |
+| gender | covariate | SEX |  | SEX | Gender | Make sure male=MALE and female=FEMALE |
 
-Table 4: Dictionary content
+Table 4: Dictionary content {.table}
 
 The output report for Example 3 is shown below. The time profiles now
 indicate the LLOQ.
@@ -467,6 +480,7 @@ task needs to be re-run.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -507,18 +521,18 @@ workflow4 <-
     simulationSets = setAB,
     workflowFolder = "Example-4"
   )
-#> 16/01/2026 - 14:34:16
+#> 24/06/2026 - 16:07:09
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:34:16
+#>  Date: 24/06/2026 - 16:07:09
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -526,29 +540,29 @@ workflow4$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow4$runWorkflow()
-#> 16/01/2026 - 14:34:16
+#> 24/06/2026 - 16:07:09
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:34:16
+#> 24/06/2026 - 16:07:09
 #> i Info  Starting run of Simulation task
-#> 16/01/2026 - 14:34:16
+#> 24/06/2026 - 16:07:09
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 16/01/2026 - 14:34:16
+#> 24/06/2026 - 16:07:09
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 16/01/2026 - 14:34:17
+#> 24/06/2026 - 16:07:10
 #> i Info  Simulation task completed in 0 min
-#> 16/01/2026 - 14:34:17
+#> 24/06/2026 - 16:07:10
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 16/01/2026 - 14:34:17
+#> 24/06/2026 - 16:07:10
 #> i Info  Starting run of Plot Time profiles and Residuals task for A and B
-#> 16/01/2026 - 14:34:17
+#> 24/06/2026 - 16:07:10
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
-#> 16/01/2026 - 14:34:28
+#> 24/06/2026 - 16:07:22
 #> i Info  Plot Time profiles and Residuals task completed in 0.2 min
-#> 16/01/2026 - 14:34:28
+#> 24/06/2026 - 16:07:22
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-4" -t docx -o 'Example-4/Report-word.docx' 'Example-4/Report-word.md'
 #> 
-#> 16/01/2026 - 14:34:28
+#> 24/06/2026 - 16:07:22
 #> i Info  Mean Model Workflow completed in 0.2 min
 ```
 
@@ -572,6 +586,7 @@ simulation results are saved in files that use the simulation set names.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel1.pkml"
 simulationFileA <- system.file("extdata", "MiniModel1.pkml",
   package = "ospsuite.reportingengine"
@@ -622,18 +637,18 @@ workflow5 <-
     simulationSets = c(setA, setB),
     workflowFolder = "Example-5"
   )
-#> 16/01/2026 - 14:34:30
+#> 24/06/2026 - 16:07:24
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:34:30
+#>  Date: 24/06/2026 - 16:07:24
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -641,31 +656,31 @@ workflow5$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow5$runWorkflow()
-#> 16/01/2026 - 14:34:30
+#> 24/06/2026 - 16:07:24
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:34:30
+#> 24/06/2026 - 16:07:24
 #> i Info  Starting run of Simulation task
-#> 16/01/2026 - 14:34:30
+#> 24/06/2026 - 16:07:24
 #> i Info  Splitting simulations for parallel run: 2 simulations split into 1 subsets
-#> 16/01/2026 - 14:34:30
+#> 24/06/2026 - 16:07:24
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 16/01/2026 - 14:34:30
+#> 24/06/2026 - 16:07:25
 #> i Info  Simulation task completed in 0 min
-#> 16/01/2026 - 14:34:30
+#> 24/06/2026 - 16:07:25
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 16/01/2026 - 14:34:30
+#> 24/06/2026 - 16:07:25
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 16/01/2026 - 14:34:31
+#> 24/06/2026 - 16:07:25
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
-#> 16/01/2026 - 14:34:39
+#> 24/06/2026 - 16:07:35
 #> i Info  Starting run of Plot Time profiles and Residuals task for B
-#> 16/01/2026 - 14:34:48
+#> 24/06/2026 - 16:07:44
 #> i Info  Plot Time profiles and Residuals task completed in 0.3 min
-#> 16/01/2026 - 14:34:48
+#> 24/06/2026 - 16:07:44
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-5" -t docx -o 'Example-5/Report-word.docx' 'Example-5/Report-word.md'
 #> 
-#> 16/01/2026 - 14:34:48
+#> 24/06/2026 - 16:07:45
 #> i Info  Mean Model Workflow completed in 0.3 min
 ```
 
@@ -686,6 +701,7 @@ output are requested.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -716,18 +732,18 @@ workflow6 <-
     simulationSets = setA,
     workflowFolder = "Example-6"
   )
-#> 16/01/2026 - 14:34:51
+#> 24/06/2026 - 16:07:47
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:34:51
+#>  Date: 24/06/2026 - 16:07:47
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -735,29 +751,29 @@ workflow6$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow6$runWorkflow()
-#> 16/01/2026 - 14:34:51
+#> 24/06/2026 - 16:07:47
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 16/01/2026 - 14:34:51
+#> 24/06/2026 - 16:07:47
 #> i Info  Starting run of Simulation task
-#> 16/01/2026 - 14:34:51
+#> 24/06/2026 - 16:07:47
 #> i Info  Starting run of Population Simulations
 #>   |                                                                              |                                                                      |   0%
-#> 16/01/2026 - 14:34:51
+#> 24/06/2026 - 16:07:47
 #> i Info  Starting run of A (Pop500_p1p2p3)
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 16/01/2026 - 14:34:51
+#> 24/06/2026 - 16:07:48
 #> i Info  Simulation task completed in 0 min
-#> 16/01/2026 - 14:34:51
+#> 24/06/2026 - 16:07:48
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 16/01/2026 - 14:34:51
+#> 24/06/2026 - 16:07:48
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 16/01/2026 - 14:34:54
-#> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 16/01/2026 - 14:34:54
+#> 24/06/2026 - 16:07:51
+#> i Info  Plot Time profiles and Residuals task completed in 0.1 min
+#> 24/06/2026 - 16:07:51
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-6" -t docx -o 'Example-6/Report-word.docx' 'Example-6/Report-word.md'
 #> 
-#> 16/01/2026 - 14:34:54
+#> 24/06/2026 - 16:07:51
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
@@ -778,6 +794,7 @@ Example 7 add observed data to the previous workflow.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -818,18 +835,18 @@ workflow7 <-
     simulationSets = setA,
     workflowFolder = "Example-6"
   )
-#> 16/01/2026 - 14:34:55
+#> 24/06/2026 - 16:07:53
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:34:55
+#>  Date: 24/06/2026 - 16:07:53
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -838,20 +855,20 @@ workflow7$inactivateTasks(StandardSimulationTasks$simulate)
 
 # Run the workflow
 workflow7$runWorkflow()
-#> 16/01/2026 - 14:34:55
+#> 24/06/2026 - 16:07:53
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 16/01/2026 - 14:34:55
+#> 24/06/2026 - 16:07:53
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 16/01/2026 - 14:34:55
+#> 24/06/2026 - 16:07:53
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 16/01/2026 - 14:34:56
+#> 24/06/2026 - 16:07:53
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
-#> 16/01/2026 - 14:35:05
+#> 24/06/2026 - 16:08:03
 #> i Info  Plot Time profiles and Residuals task completed in 0.2 min
-#> 16/01/2026 - 14:35:05
+#> 24/06/2026 - 16:08:03
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-6" -t docx -o 'Example-6/Report-word.docx' 'Example-6/Report-word.md'
 #> 
-#> 16/01/2026 - 14:35:06
+#> 24/06/2026 - 16:08:03
 #> i Info  Population Workflow for parallelComparison completed in 0.2 min
 ```
 

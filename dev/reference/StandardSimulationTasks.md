@@ -28,6 +28,7 @@ Other enum helpers:
 ## Examples
 
 ``` r
+
 # Lists all available standard simulation task names available in both mean and population workflows
 StandardSimulationTasks
 #> $simulate

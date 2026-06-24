@@ -1,10 +1,18 @@
 # Plot settings
 
 ``` r
+
 require(ospsuite.reportingengine)
 #> Loading required package: ospsuite.reportingengine
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 ## Overview
@@ -47,6 +55,7 @@ Templates of json files are available in the `tlf` package at the
 location defined below:
 
 ``` r
+
 # Get the path of the Json template
 jsonFile <- system.file("extdata", "re-theme.json",
   package = "ospsuite.reportingengine"
@@ -60,6 +69,7 @@ Modifications of the theme properties can be done directly by updating
 the properties of the `Theme` object as shown below:
 
 ``` r
+
 # Overwrite the current background fill
 reTheme$background$panel$fill <- "white"
 reTheme$background$panel$fill
@@ -70,6 +80,7 @@ To save the updated `Theme` object, the function `saveThemeToJson`
 provided by `tlf` package can be used.
 
 ``` r
+
 # Save your updated theme in "my-new-theme.json"
 tlf::saveThemeToJson("my-new-theme.json", theme = reTheme)
 ```
@@ -87,6 +98,7 @@ The properties defined by the `Theme` object will be used by default if
 no specific plot configurations are provided for the workflow plots.
 
 ``` r
+
 # Set reTheme as current default Theme
 setDefaultTheme(reTheme)
 ```
@@ -111,6 +123,7 @@ as illustrated below, input arguments are `format`, `width`, `height`,
 their `units` and the plot resolution `dpi`.
 
 ``` r
+
 setDefaultPlotFormat(format = "png")
 ```
 
@@ -195,6 +208,7 @@ Displayed names and units are usually managed through the
 **“plotTimeProfilesAndResiduals”** task.
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -220,18 +234,18 @@ workflowA <-
     simulationSets = setA,
     workflowFolder = "Example-A"
   )
-#> 16/01/2026 - 14:36:35
+#> 24/06/2026 - 16:09:52
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:36:35
+#>  Date: 24/06/2026 - 16:09:52
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -242,6 +256,7 @@ The next chunk of code will define `PlotConfiguration` objects to be
 included in **`settings`**:
 
 ``` r
+
 # Define plot configuration for obsVsPred
 obsVsPredConfiguration <- PlotConfiguration$new(
   xlabel = "Observed values [µmol/ml]",
@@ -280,6 +295,7 @@ Then, the **`settings`** field of the **“plotTimeProfilesAndResiduals”**
 task can be updated as shown below:
 
 ``` r
+
 # Run the workflow
 workflowA$plotTimeProfilesAndResiduals$settings <- mySettings
 ```
@@ -295,29 +311,30 @@ the updated xlabel, ylabel and watermark as defined in the plot
 configuration.
 
 ``` r
+
 # Run the workflow
 workflowA$runWorkflow()
-#> 16/01/2026 - 14:36:36
+#> 24/06/2026 - 16:09:53
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:36:36
+#> 24/06/2026 - 16:09:53
 #> i Info  Starting run of Simulation task
-#> 16/01/2026 - 14:36:36
+#> 24/06/2026 - 16:09:53
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 16/01/2026 - 14:36:36
+#> 24/06/2026 - 16:09:53
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 16/01/2026 - 14:36:36
+#> 24/06/2026 - 16:09:53
 #> i Info  Simulation task completed in 0 min
-#> 16/01/2026 - 14:36:36
+#> 24/06/2026 - 16:09:53
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 16/01/2026 - 14:36:36
+#> 24/06/2026 - 16:09:53
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 16/01/2026 - 14:36:39
+#> 24/06/2026 - 16:09:56
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 16/01/2026 - 14:36:39
+#> 24/06/2026 - 16:09:56
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o 'Example-A/Report-word.docx' 'Example-A/Report-word.md'
 #> 
-#> 16/01/2026 - 14:36:39
+#> 24/06/2026 - 16:09:56
 #> i Info  Mean Model Workflow completed in 0.1 min
 ```
 
@@ -369,6 +386,7 @@ but this can be tuned with the optional field **`stairstep`**
 Below shows examples of how to set such options:
 
 ``` r
+
 # Associate the bin edges
 workflowA$plotPKParameters$settings$bins <- c(0, 1, 2, 3, 5, 10)
 

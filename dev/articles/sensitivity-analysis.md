@@ -15,6 +15,7 @@ the absolute path or the relative path with respect to the
 `workflowFolder` directory) is specified as a string:
 
 ``` r
+
 simulationFile <- system.file("extdata", "caffeine-simulation.pkml",
   package = "ospsuite.reportingengine"
 )
@@ -24,6 +25,7 @@ For population sensitivity analyses, the user needs to similarly specify
 paths to `.csv` files containing data on the populations to be studied:
 
 ``` r
+
 populationFile1 <- system.file("extdata", "pop1.csv",
   package = "ospsuite.reportingengine"
 )
@@ -57,6 +59,7 @@ Sets of output and PK parameter combinations for the sensitivity
 analysis are defined as follows:
 
 ``` r
+
 output1 <- Output$new(
   path = "Organism|Lung|Interstitial|Caffeine|Concentration", displayName = "op1",
   pkParameters = c(
@@ -69,6 +72,7 @@ output1 <- Output$new(
 and
 
 ``` r
+
 output2 <- Output$new(
   path = "Organism|ArterialBlood|Plasma|Caffeine|Concentration", displayName = "op2",
   pkParameters = c(
@@ -102,6 +106,7 @@ field of the `SimulationSet` constructor. For the mean model workflow, a
 `SimulationSet` object is created as follows:
 
 ``` r
+
 ms <- SimulationSet$new(
   simulationSetName = "simulationSet1",
   simulationFile = simulationFile,
@@ -113,6 +118,7 @@ A mean model workflow object is then instantiated using the
 `SimulationSet` object `ms` as follows:
 
 ``` r
+
 mwf <- MeanModelWorkflow$new(
   simulationSets = ms,
   workflowFolder = "meanSensitivityExample"
@@ -124,6 +130,7 @@ analysis followed by generation of plots of the sensitivity analysis
 results. These two tasks are activated as follows:
 
 ``` r
+
 mwf$simulate$activate()
 mwf$calculateSensitivity$activate()
 mwf$plotSensitivity$activate()
@@ -133,6 +140,7 @@ The model parameters to be perturbed in the sensitivity analysis are
 next set:
 
 ``` r
+
 mwf$calculateSensitivity$settings$variableParameterPaths <- c(
   "Organism|Heart|Volume",
   "Organism|Lung|Volume",
@@ -161,6 +169,7 @@ variables to be displayed in sensitivity plots. The axis font size is
 set using the parameters `xAxisFontSize` and `yAxisFontSize`.
 
 ``` r
+
 mwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
   totalSensitivityThreshold = 0.9,
   maximalParametersPerSensitivityPlot = 12,
@@ -174,6 +183,7 @@ the sensitivity evaluation and plot are started with the command
 `runWorkflow`:
 
 ``` r
+
 mwf$runWorkflow()
 ```
 
@@ -216,6 +226,7 @@ populations in parallel. In the first step, the model outputs to be
 analyzed are defined:
 
 ``` r
+
 populationOutputs <- c(output1, output2)
 ```
 
@@ -223,6 +234,7 @@ Next, `PopulationSimulationSet` objects are defined for each of the two
 populations:
 
 ``` r
+
 ps1 <- PopulationSimulationSet$new(
   simulationSetName = "popSimulationSet1",
   simulationFile = simulationFile,
@@ -245,6 +257,7 @@ With this setup, the sensitivity of PK parameters of `output1` and
 directory `./popSensitivityExample`:
 
 ``` r
+
 pwf <- PopulationWorkflow$new(
   simulationSets = list(ps1, ps2),
   workflowFolder = "popSensitivityExample",
@@ -256,6 +269,7 @@ Next, the required tasks of the workflow are activated. The sensitivity
 analysis and sensitivity plot tasks are activated using the commands
 
 ``` r
+
 pwf$calculateSensitivity$activate()
 pwf$plotSensitivity$activate()
 ```
@@ -267,6 +281,7 @@ simulation results. If these prerequisite tasks (`simulate` and
 activated:
 
 ``` r
+
 pwf$simulate$activate()
 pwf$calculatePKParameters$activate()
 ```
@@ -275,6 +290,7 @@ The variables to be perturbed in the sensitivity analysis are specified
 as follows:
 
 ``` r
+
 pwf$calculateSensitivity$settings$variableParameterPaths <- c(
   "Organism|Heart|Volume",
   "Organism|Lung|Volume",
@@ -301,6 +317,7 @@ quantiles of the population’s PK parameter distributions. These
 quantiles are specified as follows:
 
 ``` r
+
 pwf$calculateSensitivity$settings$quantileVec <- c(0.25, 0.5, 0.75)
 ```
 
@@ -308,6 +325,7 @@ As with the mean model sensitivity plot, the population sensitivity plot
 is configured using an instance of a `SensitivityPlotSettings` object:
 
 ``` r
+
 pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
   totalSensitivityThreshold = 0.9,
   maximalParametersPerSensitivityPlot = 12,
@@ -319,6 +337,7 @@ pwf$plotSensitivity$settings <- SensitivityPlotSettings$new(
 The population sensitivity workflow is run using the command:
 
 ``` r
+
 pwf$runWorkflow()
 ```
 

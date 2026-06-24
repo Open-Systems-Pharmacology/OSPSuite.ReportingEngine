@@ -10,6 +10,9 @@
 
 - Using native operator `%||%` instead of importing from the
   `ospsuite.utils` package.
+- Fixed incorrect `Age` and `Body Weight` values in PK-Ratio tables that
+  were displayed in base units instead of their display units.
+  ([\#1374](https://github.com/open-systems-pharmacology/ospsuite.reportingengine/issues/1374))
 
 ## ospsuite.reportingengine 2.3.11
 
@@ -315,6 +318,7 @@
   `system.file("extdata", "WorkflowInput.xlsx", package = "ospsuite.reportingengine")`
 
 ``` r
+
 excelFile <- system.file("extdata", "WorkflowInput.xlsx", package = "ospsuite.reportingengine")
 workflowFile <- createWorkflowFromExcelInput(excelFile)
 ```

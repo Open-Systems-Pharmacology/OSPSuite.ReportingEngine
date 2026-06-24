@@ -1,10 +1,18 @@
 # Get Started
 
 ``` r
+
 require(ospsuite.reportingengine)
 #> Loading required package: ospsuite.reportingengine
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 This vignette introduces the notions and objects implemented in the
@@ -70,30 +78,30 @@ usage of each of these objects is accessible in the tab **Reference**.
 
 **Table 1: Nomenclature of `ospsuite.reportingengine` main instances**
 
-| **Workflow objects**                                                                                                                                       | **Use case**                                                                                                                                            |
-|------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [MeanModelWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/MeanModelWorkflow.md)                                 | Defined by user                                                                                                                                         |
-| [PopulationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationWorkflow.md)                               | Defined by user                                                                                                                                         |
-| [QualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadQualificationWorkflow.md)                     | Built in [loadQualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationWorkflow.md)         |
-| **Simulation Set objects**                                                                                                                                 | **Use case**                                                                                                                                            |
-| [SimulationSet](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationSet.md)                                         | Defined by user                                                                                                                                         |
-| [PopulationSimulationSet](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationSimulationSet.md)                     | Defined by user                                                                                                                                         |
-| [ConfigurationPlan](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/ConfigurationPlan.md)                                 | Built in [loadQualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationWorkflow.md)         |
-| **Output path and PK parameter objects**                                                                                                                   | **Use case**                                                                                                                                            |
-| [Output](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Output.md)                                                       | Defined by user                                                                                                                                         |
-| [PkParameterInfo](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PkParameterInfo.md)                                     | Defined by user                                                                                                                                         |
-| **Workflow task objects**                                                                                                                                  | **Use case**                                                                                                                                            |
-| [Task](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Task.md)                                                           | Built in workflow objects                                                                                                                               |
-| [SimulationTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationTask.md)                                       | Built in workflow objects                                                                                                                               |
-| [SensitivityAnalysisTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SensitivityAnalysisTask.md)                     | Built in workflow objects                                                                                                                               |
-| [PopulationSensitivityAnalysisTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationSensitivityAnalysisTask.md) | Built in workflow objects                                                                                                                               |
-| [QualificationTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationTask.md)                                 | Built in [QualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadQualificationWorkflow.md) objects |
-| [PlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PlotTask.md)                                                   | Built in workflow objects                                                                                                                               |
-| [PopulationPlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationPlotTask.md)                               | Built in [PopulationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationWorkflow.md) objects           |
-| [GofPlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/GofPlotTask.md)                                             | Built in workflow objects                                                                                                                               |
-| **Workflow task settings objects**                                                                                                                         | **Use case**                                                                                                                                            |
-| PlotSettings                                                                                                                                               | Built in workflow objects                                                                                                                               |
-| [SensitivityPlotSettings](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SensitivityPlotSettings.md)                     | Built in workflow objects                                                                                                                               |
+| **Workflow objects** | **Use case** |
+|----|----|
+| [MeanModelWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/MeanModelWorkflow.md) | Defined by user |
+| [PopulationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationWorkflow.md) | Defined by user |
+| [QualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadQualificationWorkflow.md) | Built in [loadQualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationWorkflow.md) |
+| **Simulation Set objects** | **Use case** |
+| [SimulationSet](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationSet.md) | Defined by user |
+| [PopulationSimulationSet](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationSimulationSet.md) | Defined by user |
+| [ConfigurationPlan](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/ConfigurationPlan.md) | Built in [loadQualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationWorkflow.md) |
+| **Output path and PK parameter objects** | **Use case** |
+| [Output](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Output.md) | Defined by user |
+| [PkParameterInfo](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PkParameterInfo.md) | Defined by user |
+| **Workflow task objects** | **Use case** |
+| [Task](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Task.md) | Built in workflow objects |
+| [SimulationTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationTask.md) | Built in workflow objects |
+| [SensitivityAnalysisTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SensitivityAnalysisTask.md) | Built in workflow objects |
+| [PopulationSensitivityAnalysisTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationSensitivityAnalysisTask.md) | Built in workflow objects |
+| [QualificationTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/QualificationTask.md) | Built in [QualificationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/loadQualificationWorkflow.md) objects |
+| [PlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PlotTask.md) | Built in workflow objects |
+| [PopulationPlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationPlotTask.md) | Built in [PopulationWorkflow](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationWorkflow.md) objects |
+| [GofPlotTask](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/GofPlotTask.md) | Built in workflow objects |
+| **Workflow task settings objects** | **Use case** |
+| PlotSettings | Built in workflow objects |
+| [SensitivityPlotSettings](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SensitivityPlotSettings.md) | Built in workflow objects |
 
 ### 1.4. General scheme
 
@@ -103,12 +111,14 @@ are required:
 - 1.  Load the `ospsuite.reportingengine` package
 
 ``` r
+
 library(ospsuite.reportingengine)
 ```
 
 - 2.  Define the simulation outputs possibly with their PK parameters
 
 ``` r
+
 Output$new()
 ```
 
@@ -116,24 +126,28 @@ Output$new()
       observed data
 
 ``` r
+
 SimulationSet$new()
 ```
 
 - 4.  Define the workflow and its result folder
 
 ``` r
+
 Workflow$new()
 ```
 
 - 5.  Define the workflow tasks
 
 ``` r
+
 workflow$activateTasks()
 ```
 
 - 6.  Run the workflow
 
 ``` r
+
 workflow$runWorkflow()
 ```
 
@@ -143,6 +157,7 @@ time profile plot on *Minimodel2.pkml*.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -183,6 +198,7 @@ For this example, the list of files and folders generated by the
 workflow are:
 
 ``` r
+
 list.files(myExampleWorkflow$workflowFolder)
 #> [1] "log-debug.txt"     "log-info.txt"      "Report-word.md"   
 #> [4] "Report.docx"       "Report.md"         "SimulationResults"
@@ -299,12 +315,14 @@ method `$new()` needs to be used with at least the inputs defined below.
 - For mean model workflows:
 
 ``` r
+
 myWorkflow <- MeanModelWorkflow$new(simulationSets, workflowFolder)
 ```
 
 - For population workflows:
 
 ``` r
+
 myWorkflow <- 
 PopulationWorkflow$new(workflowType, simulationSets, workflowFolder)
 ```
@@ -402,6 +420,7 @@ sub-sections will provide more details on each input:
 **Simulation Set**
 
 ``` r
+
 SimulationSet$new(
   simulationSetName, 
   simulationFile, 
@@ -418,6 +437,7 @@ SimulationSet$new(
 **Population Simulation Set**
 
 ``` r
+
 PopulationSimulationSet$new(
   referencePopulation,
   simulationSetName, 
@@ -459,17 +479,17 @@ pediatric study. A regular csv format is expected for such a file.
 
 The example below shows a template of such a study design content.
 
-| Organism\|Weight | Organism\|Weight | Gender        | Applications\|IV Bolus\|DrugMass |
-|:-----------------|:-----------------|:--------------|:---------------------------------|
-| kg               | kg               |               | nmol                             |
-| SOURCE_MIN       | SOURCE_MAX       | SOURCE_EQUALS | TARGET                           |
-| 20               | 40               | MALE          | 2                                |
-| 20               | 40               | FEMALE        | 2.5                              |
-| 40               | 60               | MALE          | 10                               |
-| 40               | 60               | FEMALE        | 14                               |
-| 60               |                  |               | 20                               |
+| Organism\|Weight | Organism\|Weight | Gender | Applications\|IV Bolus\|DrugMass |
+|:---|:---|:---|:---|
+| kg | kg |  | nmol |
+| SOURCE_MIN | SOURCE_MAX | SOURCE_EQUALS | TARGET |
+| 20 | 40 | MALE | 2 |
+| 20 | 40 | FEMALE | 2.5 |
+| 40 | 60 | MALE | 10 |
+| 40 | 60 | FEMALE | 14 |
+| 60 |  |  | 20 |
 
-Table 2: Example of study design content
+Table 2: Example of study design content {.table}
 
 ### 3.3. Format of data files
 
@@ -477,6 +497,7 @@ Table 2: Example of study design content
 `DataSource` object** as follows:
 
 ``` r
+
 DataSource$new(dataFile, metaDataFile, caption = NULL)
 ```
 
@@ -525,20 +546,20 @@ Regarding units, two options are possible:
 The example below shows content of the dictionary template
 [tpDictionary.csv](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/tpDictionary.csv):
 
-| ID     | type        | datasetColumn | datasetUnit | reportName  | pathID           | comment                               |
-|:-------|:------------|:--------------|:------------|:------------|:-----------------|:--------------------------------------|
-| sid    | identifier  | SID           |             |             |                  |                                       |
-| stud   | identifier  | STUD          |             |             |                  |                                       |
-| time   | timeprofile | TIME          | h           |             |                  |                                       |
-| dv     | timeprofile | DV            | mg/ml       |             |                  |                                       |
-| tad    | timeprofile | TAD           | h           |             |                  |                                       |
-| age    | covariate   | AGE           | year(s)     | Age         | Organism\|Age    |                                       |
-| wght   | covariate   | WGHT          | kg          | Body weight | Organism\|Weight |                                       |
-| hght   | covariate   | HGHT          | cm          | Height      | Organism\|Height |                                       |
-| bmi    | covariate   | BMI           | kg/m²       | BMI         | Organism\|BMI    |                                       |
-| gender | covariate   | SEX           |             | SEX         | Gender           | Make sure male=MALE and female=FEMALE |
+| ID | type | datasetColumn | datasetUnit | reportName | pathID | comment |
+|:---|:---|:---|:---|:---|:---|:---|
+| sid | identifier | SID |  |  |  |  |
+| stud | identifier | STUD |  |  |  |  |
+| time | timeprofile | TIME | h |  |  |  |
+| dv | timeprofile | DV | mg/ml |  |  |  |
+| tad | timeprofile | TAD | h |  |  |  |
+| age | covariate | AGE | year(s) | Age | Organism\|Age |  |
+| wght | covariate | WGHT | kg | Body weight | Organism\|Weight |  |
+| hght | covariate | HGHT | cm | Height | Organism\|Height |  |
+| bmi | covariate | BMI | kg/m² | BMI | Organism\|BMI |  |
+| gender | covariate | SEX |  | SEX | Gender | Make sure male=MALE and female=FEMALE |
 
-Table 3: Template for data dictionary
+Table 3: Template for data dictionary {.table}
 
 ### 3.4. Outputs
 
@@ -551,6 +572,7 @@ sub-sections will provide more details on each input:
 **Output**
 
 ``` r
+
 Output$new(
   path,
   displayName,
@@ -597,6 +619,7 @@ same PK parameters but from different paths, it is also possible to use
 `PkParameterInfo` instances instead of pk parameter names directly.
 
 ``` r
+
 PkParameterInfo$new(
   pkParameter,
   displayName, 
@@ -624,6 +647,7 @@ application ranges are included into the report. The enum
 `ApplicationRanges` provide the names of application ranges.
 
 ``` r
+
 ApplicationRanges
 #> $total
 #> [1] "total"
@@ -679,6 +703,7 @@ Additionally, the enums `StandardSimulationTasks` and
 simulation and plot tasks common to mean model and population workflows.
 
 ``` r
+
 # Names of standard simulation tasks
 StandardSimulationTasks
 #> $simulate
@@ -706,6 +731,7 @@ Using the example shown in section [1.4.](#id_14-general-scheme). The
 task names in the mean model workflow were:
 
 ``` r
+
 # All workflow's tasks
 myExampleWorkflow$getAllTasks()
 #> [1] "plotSensitivity"              "plotPKParameters"            
@@ -726,6 +752,7 @@ myExampleWorkflow$getInactiveTasks()
 The activation/inactivation of tasks can be done as follows:
 
 ``` r
+
 # Inactivate all tasks
 myExampleWorkflow$inactivateTasks()
 myExampleWorkflow$getActiveTasks()
@@ -749,6 +776,7 @@ task method `getInputs()` which can be combined with the function
 `file.exists`
 
 ``` r
+
 # Get list of files or folders required to run task "plotTimeProfilesAndResiduals"
 myExampleWorkflow$plotTimeProfilesAndResiduals$getInputs()
 #> [1] "myExample-Results/SimulationResults/My example-SimulationResults.csv"
@@ -767,6 +795,7 @@ directly accessed as shown below (using the character `$` after
 `settings`).
 
 ``` r
+
 # Get value of settings property "showProgress" for the task "simulate"
 myExampleWorkflow$simulate$settings$showProgress
 #> [1] TRUE
@@ -873,12 +902,12 @@ challenging. For this reason, some templates have been created to make
 it easier. The table below provides a list of available templates and
 their usage.
 
-| Template                      | Link                                                                                                                                                             | Usage                                                                                                                                                                          |
-|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Excel workflow input          | [WorkflowInput.xlsx](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/WorkflowInput.xlsx)                               | [`createWorkflowFromExcelInput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/createWorkflowFromExcelInput.md)                           |
-| Word reference report         | [reference.docx](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/reference.docx)                                       | `wordConversionTemplate` argument of [`Worklfow`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Worklfow.md) objects                        |
-| Qualification workflow script | [qualification-workflow-template.R](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/qualification-workflow-template.R) | Source file to create function `createQualificationReport()`                                                                                                                   |
-| Observed data dictionary      | [tpDictionary.csv](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/tpDictionary.csv)                                   | `observedMetaDataFile` argument of [`SimulationSet`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationSet.md) objects                |
-| Study Design                  | [StudyDesign.csv](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/StudyDesign.csv)                                     | `studyDesignFile` argument of [`PopulationSimulationSet`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationSimulationSet.md) objects |
-| json theme                    | [re-theme.json](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/re-theme.json)                                         | [`setDefaultThemeFromJson()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultThemeFromJson.md)                                     |
-| Mass Balance settings         | [mass-balance-settings.json](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/mass-balance-settings.json)               | `massBalanceFile` argument of [`SimulationSet`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationSet.md) objects                     |
+| Template | Link | Usage |
+|----|----|----|
+| Excel workflow input | [WorkflowInput.xlsx](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/WorkflowInput.xlsx) | [`createWorkflowFromExcelInput()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/createWorkflowFromExcelInput.md) |
+| Word reference report | [reference.docx](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/reference.docx) | `wordConversionTemplate` argument of [`Worklfow`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/Worklfow.md) objects |
+| Qualification workflow script | [qualification-workflow-template.R](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/qualification-workflow-template.R) | Source file to create function `createQualificationReport()` |
+| Observed data dictionary | [tpDictionary.csv](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/tpDictionary.csv) | `observedMetaDataFile` argument of [`SimulationSet`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationSet.md) objects |
+| Study Design | [StudyDesign.csv](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/StudyDesign.csv) | `studyDesignFile` argument of [`PopulationSimulationSet`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/PopulationSimulationSet.md) objects |
+| json theme | [re-theme.json](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/re-theme.json) | [`setDefaultThemeFromJson()`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/setDefaultThemeFromJson.md) |
+| Mass Balance settings | [mass-balance-settings.json](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/articles/templates/mass-balance-settings.json) | `massBalanceFile` argument of [`SimulationSet`](https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/dev/reference/SimulationSet.md) objects |

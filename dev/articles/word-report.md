@@ -1,10 +1,18 @@
 # How to work with word reports
 
 ``` r
+
 require(ospsuite.reportingengine)
 #> Loading required package: ospsuite.reportingengine
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 For each workflow, the Reporting Engine exports a
@@ -46,6 +54,7 @@ Otherwise you can copy the file directly from its location within the
 package as illustrated below.
 
 ``` r
+
 wordConversionTemplate <- system.file("extdata", "reference.docx", package = "ospsuite.reportingengine")
 file.copy(from = wordConversionTemplate, to = getwd())
 ```
@@ -92,6 +101,7 @@ below
 Word Version of Report of Example 1
 
 ``` r
+
 myExampleWorkflow <- MeanModelWorkflow$new(
     simulationSets = myExampleSet,
     workflowFolder = "myExample-Results",
@@ -114,6 +124,7 @@ illustrated below.
 of the markdown**.
 
 ``` r
+
 knitr::pandoc(input = "report-word.md", format = "docx", config = "report-configuration.txt")
 ```
 

@@ -1,10 +1,18 @@
 # Qualification Workflow
 
 ``` r
+
 require(ospsuite.reportingengine)
 #> Loading required package: ospsuite.reportingengine
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 ## Objectives
@@ -39,6 +47,7 @@ requires the inputs below:
   qualification runner
 
 ``` r
+
 startQualificationRunner(qualificationRunnerFolder, qualificationPlanFile, outputFolder)
 ```
 
@@ -77,6 +86,7 @@ the same inputs as `loadConfigurationPlan` (`workflowFolder` and
 `configurationPlanFile`).
 
 ``` r
+
 workflow <- loadQualificationWorkflow(workflowFolder, configurationPlanFile)
 ```
 
@@ -154,7 +164,7 @@ For `plotGOFMerged`, `plotPKRatio` and `plotDDIRatio` tasks, it is
 possible to include a **GMFE** artifact in the configuration plan. This
 artifact corresponds to the addition of a table showing the Geometric
 Mean Fold Error (*GMFE*) of the *residuals* calculated for specific plot
-using the formula $GMFE = 10^{\Sigma log_{10}{(residuals)}}$.
+using the formula $`GMFE = 10^{\Sigma log_{10}(residuals)}`$.
 
 ##### Measure
 
@@ -196,6 +206,7 @@ Then, you can also `inactivate` the tasks corresponding to the re-run of
 the simulations before re-running the workflow.
 
 ``` r
+
 # Reload Configuration Plan
 workflow$updateConfigurationPlan(
   configurationPlanFile = newConfigurationPlanFile
@@ -220,6 +231,7 @@ qualification workflow including the call to the qualification runner
 and named `createQualificationReport`.
 
 ``` r
+
 #' @title createQualificationReport
 #' @description Run a qualification workflow to create a qualification report.
 #' @param qualificationRunnerFolder Folder where QualificationRunner.exe is located

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>R package to create reports for the Open Systems Pharmacology models • ospsuite.reportingengine</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="R package to create reports for the Open Systems Pharmacology models">
 <meta name="description" content="Creates tables and figures and combines them into (Markdown and MS-Word) reports.">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9005</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.4.0.9006</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,10 +82,10 @@
 <p>You can install the development version of <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Open-Systems-Pharmacology/OSPSuite.ReportingEngine"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"Open-Systems-Pharmacology/OSPSuite.ReportingEngine"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="using-the-package-bundle-">Using the package bundle 📦<a class="anchor" aria-label="anchor" href="#using-the-package-bundle-"></a>
+<h3 id="using-the-package-bundle-package">Using the package bundle 📦<a class="anchor" aria-label="anchor" href="#using-the-package-bundle-package"></a>
 </h3>
 <p>You can install the <a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a> package by downloading and installing its zip or tar.gz bundle.</p>
 <ul>
@@ -113,33 +113,33 @@
 <col width="26%">
 <col width="46%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th>Package</th>
 <th>Version</th>
 <th>Installation Instructions</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils" class="external-link"><code>{ospsuite.utils}</code></a></td>
 <td>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> 1.5</td>
 <td>Download and install package bundle <a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.RUtils/releases" class="external-link">here 📦</a>
 </td>
 </tr>
-<tr class="even">
+<tr>
 <td><a href="https://github.com/Open-Systems-Pharmacology/TLF-Library" class="external-link"><code>{tlf}</code></a></td>
 <td>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> 1.5</td>
 <td>Download and install package bundle <a href="https://github.com/Open-Systems-Pharmacology/TLF-Library/releases" class="external-link">here 📦</a><br>⚠ Visit <a href="https://github.com/Open-Systems-Pharmacology/TLF-Library" class="external-link"><code>{tlf}</code> Documentation</a> to install its dependencies ⚠</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><a href="https://github.com/Open-Systems-Pharmacology/rSharp" class="external-link"><code>{rSharp}</code></a></td>
 <td>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> 1.0</td>
 <td>Instructions are available <a href="https://github.com/Open-Systems-Pharmacology/rSharp#installation" class="external-link">here 📖</a>
 </td>
 </tr>
-<tr class="even">
+<tr>
 <td><a href="https://github.com/Open-Systems-Pharmacology/OSPSuite-R" class="external-link"><code>{ospsuite}</code></a></td>
 <td>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> 12.1</td>
@@ -222,7 +222,7 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="documentation-">Documentation 📖<a class="anchor" aria-label="anchor" href="#documentation-"></a>
+<h2 id="documentation-open_book">Documentation 📖<a class="anchor" aria-label="anchor" href="#documentation-open_book"></a>
 </h2>
 <p>A detailed account of existing functions and articles on how to use them can be found on the <a href="https://www.open-systems-pharmacology.org/OSPSuite.ReportingEngine/">dedicated website</a>.</p>
 </div>
@@ -232,7 +232,7 @@
 <p>Everyone interacting in the Open Systems Pharmacology community (codebases, issue trackers, chat rooms, mailing lists etc…) is expected to follow the Open Systems Pharmacology <a href="https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CODE_OF_CONDUCT.md" class="external-link">code of conduct</a>.</p>
 </div>
 <div class="section level2">
-<h2 id="contribution-">Contribution 💡<a class="anchor" aria-label="anchor" href="#contribution-"></a>
+<h2 id="contribution-bulb">Contribution 💡<a class="anchor" aria-label="anchor" href="#contribution-bulb"></a>
 </h2>
 <p>We encourage contribution to the Open Systems Pharmacology community. Before getting started please read the <a href="https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CONTRIBUTING.md" class="external-link">contribution guidelines</a>. If you are contributing code, please be familiar with the <a href="https://github.com/Open-Systems-Pharmacology/Suite/blob/master/CODING_STANDARDS_R.md" class="external-link">coding standards</a>.</p>
 </div>

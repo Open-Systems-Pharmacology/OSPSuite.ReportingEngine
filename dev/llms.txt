@@ -20,6 +20,7 @@ You can install the development version of
 from [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("Open-Systems-Pharmacology/OSPSuite.ReportingEngine")
 ```
@@ -44,6 +45,7 @@ Then, to install manually, replace the
 `.zip` or `tar.gz` file in the code below:
 
 ``` r
+
 install.packages(path/to/ospsuite.reportingengine.zip, repos = NULL)
 ```
 
@@ -51,6 +53,7 @@ To install the package along with its tests, the `.tar.gz` bundle is
 required. Then, use the `install-tests` option as illustrated below.
 
 ``` r
+
 install.packages(path/to/ospsuite.reportingengine.tar.gz, repos = NULL, INSTALL_opts = "--install-tests")
 ```
 
@@ -68,6 +71,7 @@ Once the bundles downloaded, you can install the packages by using the
 code below:
 
 ``` r
+
 # bundlePath <- path/to/osp/bundles
 install.packages(file.path(bundlePath,"ospsuite.utils.zip"), repos = NULL)
 install.packages(file.path(bundlePath,"tlf.zip"), repos = NULL)
@@ -95,6 +99,7 @@ install.packages(file.path(bundlePath,"ospsuite.zip"), repos = NULL)
 To install these packages, use the code below:
 
 ``` r
+
 # Required packages
 install.packages("dplyr")
 install.packages("ggplot2")

@@ -24,6 +24,7 @@ names of default parameters
 ## Examples
 
 ``` r
+
 getDefaultPKParametersXParameters(PopulationWorkflowTypes$pediatric)
 #> $Age
 #> [1] "Organism|Age"

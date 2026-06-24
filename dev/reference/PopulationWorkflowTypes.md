@@ -27,6 +27,7 @@ Other enum helpers:
 ## Examples
 
 ``` r
+
 # Lists available Population Workflow types
 PopulationWorkflowTypes
 #> $pediatric

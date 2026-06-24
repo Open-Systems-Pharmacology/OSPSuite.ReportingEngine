@@ -21,6 +21,7 @@ Array of name properties and their value
 ## Examples
 
 ``` r
+
 # Example of list with properties
 plotField <- list(
   PlotNumber = 5,

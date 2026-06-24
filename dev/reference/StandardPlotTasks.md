@@ -28,6 +28,7 @@ Other enum helpers:
 ## Examples
 
 ``` r
+
 # Lists all available standard plot task names available in both mean and population workflows
 StandardPlotTasks
 #> $plotTimeProfilesAndResiduals

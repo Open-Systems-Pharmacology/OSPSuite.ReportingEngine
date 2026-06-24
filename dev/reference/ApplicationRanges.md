@@ -27,6 +27,7 @@ Other enum helpers:
 ## Examples
 
 ``` r
+
 # Lists available Application Ranges
 ApplicationRanges
 #> $total

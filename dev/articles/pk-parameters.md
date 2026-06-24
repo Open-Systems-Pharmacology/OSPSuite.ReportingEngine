@@ -1,10 +1,18 @@
 # PK parameters
 
 ``` r
+
 require(ospsuite.reportingengine)
 #> Loading required package: ospsuite.reportingengine
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 This vignette focuses on PK parameters plots and tables generated using
@@ -61,7 +69,7 @@ Workflows.
 |       3 | MeanModelWorkflow |               2 |
 |       4 | MeanModelWorkflow |               2 |
 
-Table 1: Features tested by each template script
+Table 1: Features tested by each template script {.table}
 
 ### Example 1
 
@@ -76,6 +84,7 @@ time profile simulation results.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -100,18 +109,18 @@ workflow1 <-
     simulationSets = setA,
     workflowFolder = "Example-1"
   )
-#> 16/01/2026 - 14:36:20
+#> 24/06/2026 - 16:09:36
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:36:20
+#>  Date: 24/06/2026 - 16:09:36
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -123,36 +132,36 @@ workflow1$activateTasks(c(
 
 # Run the workflow
 workflow1$runWorkflow()
-#> 16/01/2026 - 14:36:20
+#> 24/06/2026 - 16:09:36
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:36:20
+#> 24/06/2026 - 16:09:36
 #> i Info  Starting run of Simulation task
-#> 16/01/2026 - 14:36:20
+#> 24/06/2026 - 16:09:36
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 16/01/2026 - 14:36:20
+#> 24/06/2026 - 16:09:36
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Simulation task completed in 0 min
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Starting run of Calculate PK Parameters task
 #>   |                                                                              |                                                                      |   0%
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Starting run of Calculate PK Parameters task for A
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Calculate PK Parameters task completed in 0 min
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Starting run of Plot PK Parameters task
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Starting run of Plot PK Parameters task for A
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Plot PK Parameters task completed in 0 min
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 16/01/2026 - 14:36:21
+#> 24/06/2026 - 16:09:37
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -176,6 +185,7 @@ used.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -204,18 +214,18 @@ workflow2 <-
     simulationSets = setA,
     workflowFolder = "Example-2"
   )
-#> 16/01/2026 - 14:36:23
+#> 24/06/2026 - 16:09:39
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:36:23
+#>  Date: 24/06/2026 - 16:09:39
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -227,36 +237,36 @@ workflow2$activateTasks(c(
 
 # Run the workflow
 workflow2$runWorkflow()
-#> 16/01/2026 - 14:36:23
+#> 24/06/2026 - 16:09:39
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:36:23
+#> 24/06/2026 - 16:09:39
 #> i Info  Starting run of Simulation task
-#> 16/01/2026 - 14:36:23
+#> 24/06/2026 - 16:09:39
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 16/01/2026 - 14:36:23
+#> 24/06/2026 - 16:09:39
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Simulation task completed in 0 min
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Starting run of Calculate PK Parameters task
 #>   |                                                                              |                                                                      |   0%
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Starting run of Calculate PK Parameters task for A
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Calculate PK Parameters task completed in 0 min
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Starting run of Plot PK Parameters task
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Starting run of Plot PK Parameters task for A
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Plot PK Parameters task completed in 0 min
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-2" -t docx -o 'Example-2/Report-word.docx' 'Example-2/Report-word.md'
 #> 
-#> 16/01/2026 - 14:36:24
+#> 24/06/2026 - 16:09:40
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -278,6 +288,7 @@ function **updatePKParameter** from the `ospsuite` package.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFileA <- system.file("extdata", "MiniModel1.pkml",
   package = "ospsuite.reportingengine"
@@ -335,18 +346,18 @@ workflow3 <-
     simulationSets = c(setA, setB),
     workflowFolder = "Example-3"
   )
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:36:26
+#>  Date: 24/06/2026 - 16:09:42
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -358,41 +369,41 @@ workflow3$activateTasks(c(
 
 # Run the workflow
 workflow3$runWorkflow()
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Starting run of Simulation task
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Splitting simulations for parallel run: 2 simulations split into 1 subsets
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Simulation task completed in 0 min
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Starting run of Calculate PK Parameters task
 #>   |                                                                              |                                                                      |   0%
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Starting run of Calculate PK Parameters task for A
 #>   |                                                                              |===================================                                   |  50%
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:42
 #> i Info  Starting run of Calculate PK Parameters task for B
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:43
 #> i Info  Calculate PK Parameters task completed in 0 min
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:43
 #> i Info  Starting run of Plot PK Parameters task
-#> 16/01/2026 - 14:36:26
+#> 24/06/2026 - 16:09:43
 #> i Info  Starting run of Plot PK Parameters task for A
-#> 16/01/2026 - 14:36:27
+#> 24/06/2026 - 16:09:43
 #> i Info  Starting run of Plot PK Parameters task for B
-#> 16/01/2026 - 14:36:27
+#> 24/06/2026 - 16:09:43
 #> i Info  Plot PK Parameters task completed in 0 min
-#> 16/01/2026 - 14:36:27
+#> 24/06/2026 - 16:09:43
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-3" -t docx -o 'Example-3/Report-word.docx' 'Example-3/Report-word.md'
 #> 
-#> 16/01/2026 - 14:36:27
+#> 24/06/2026 - 16:09:43
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -415,6 +426,7 @@ paths or simulations.
 **Code**
 
 ``` r
+
 # Get the pkml simulation file: "MiniModel2.pkml"
 simulationFile <- system.file("extdata", "MiniModel2.pkml",
   package = "ospsuite.reportingengine"
@@ -466,18 +478,18 @@ workflow4 <-
     simulationSets = c(setA, setB),
     workflowFolder = "Example-3"
   )
-#> 16/01/2026 - 14:36:28
+#> 24/06/2026 - 16:09:44
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:36:28
+#>  Date: 24/06/2026 - 16:09:44
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -486,20 +498,20 @@ workflow4$inactivateTasks(c("simulate", "calculatePKParameters"))
 
 # Run the workflow
 workflow4$runWorkflow()
-#> 16/01/2026 - 14:36:28
+#> 24/06/2026 - 16:09:44
 #> i Info  Starting run of Mean Model Workflow
-#> 16/01/2026 - 14:36:28
+#> 24/06/2026 - 16:09:44
 #> i Info  Starting run of Plot PK Parameters task
-#> 16/01/2026 - 14:36:28
+#> 24/06/2026 - 16:09:44
 #> i Info  Starting run of Plot PK Parameters task for A
-#> 16/01/2026 - 14:36:28
+#> 24/06/2026 - 16:09:45
 #> i Info  Starting run of Plot PK Parameters task for B
-#> 16/01/2026 - 14:36:28
+#> 24/06/2026 - 16:09:45
 #> i Info  Plot PK Parameters task completed in 0 min
-#> 16/01/2026 - 14:36:28
+#> 24/06/2026 - 16:09:45
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-3" -t docx -o 'Example-3/Report-word.docx' 'Example-3/Report-word.md'
 #> 
-#> 16/01/2026 - 14:36:28
+#> 24/06/2026 - 16:09:45
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 

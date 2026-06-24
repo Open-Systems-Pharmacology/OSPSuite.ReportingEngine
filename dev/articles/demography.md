@@ -1,9 +1,17 @@
 # Demography Parameters in Population Workflows
 
 ``` r
+
 library(ospsuite.reportingengine)
 #> Loading required package: tlf
 #> Loading required package: ospsuite
+#> 
+#> Attaching package: 'ospsuite'
+#> The following object is masked from 'package:tlf':
+#> 
+#>     plotTimeProfile
+#> Warning: replacing previous import 'ospsuite::plotTimeProfile' by
+#> 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'
 ```
 
 ## Overview
@@ -34,6 +42,7 @@ observed data in demography plots.
 **Code**
 
 ``` r
+
 # Define file paths for pkml simulation and populations
 dictionary <- system.file("extdata", "popDictionary.csv",
   package = "ospsuite.reportingengine"
@@ -64,11 +73,11 @@ data used in our example.
 
 **Dictionary**
 
-| ID     | type      | datasetColumn | datasetUnit | reportName | pathID           | comment                                      |
-|:-------|:----------|:--------------|:------------|:-----------|:-----------------|:---------------------------------------------|
-| age    | covariate | AGE           | year(s)     | Age        | Organism\|Age    |                                              |
-| weight | covariate | WEIGHT        | kg          | Weight     | Organism\|Weight |                                              |
-| gender | covariate | GENDER        |             | Gender     | Gender           | Make sure to use same names as in Population |
+| ID | type | datasetColumn | datasetUnit | reportName | pathID | comment |
+|:---|:---|:---|:---|:---|:---|:---|
+| age | covariate | AGE | year(s) | Age | Organism\|Age |  |
+| weight | covariate | WEIGHT | kg | Weight | Organism\|Weight |  |
+| gender | covariate | GENDER |  | Gender | Gender | Make sure to use same names as in Population |
 
 **Observed Data**
 
@@ -89,6 +98,7 @@ the appropriate unit for BMI (you need to use `format = 13` in order to
 keep correct encoded text as done for the square below).
 
 ``` r
+
 writeClipboard(ospsuite::ospUnits$BMI$`kg/m²`, format = 13)
 ```
 
@@ -106,6 +116,7 @@ In this example, the same observed data are included using the
 **Code**
 
 ``` r
+
 # Define file paths for pkml simulation and populations
 simulationFile <- system.file("extdata", "Aciclovir.pkml", package = "ospsuite")
 adultFile <- system.file("extdata", "adults.csv", package = "ospsuite.reportingengine")
@@ -181,24 +192,25 @@ only the demography task.
 **Code**
 
 ``` r
+
 parallelWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:32:06
+#> 24/06/2026 - 16:04:57
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:32:06
+#>  Date: 24/06/2026 - 16:04:57
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(parallelWorkflow)
@@ -220,6 +232,7 @@ package and look for the parameters in the enum `StandardPath`.
 **Code**
 
 ``` r
+
 # Query parameters defined in xParameters
 getXParametersForDemographyPlot(workflow = parallelWorkflow)
 #> NULL
@@ -242,6 +255,7 @@ getYParametersForDemographyPlot(workflow = parallelWorkflow)
 ```
 
 ``` r
+
 displayedParameters <- list(
   Age = "Organism|Age",
   Weight = "Organism|Weight",
@@ -257,14 +271,15 @@ setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displa
 Run the corresponding workflow:
 
 ``` r
+
 parallelWorkflow$runWorkflow()
-#> 16/01/2026 - 14:32:07
+#> 24/06/2026 - 16:04:58
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 16/01/2026 - 14:32:07
+#> 24/06/2026 - 16:04:58
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:32:16
+#> 24/06/2026 - 16:05:06
 #> i Info  Plot Demography task completed in 0.1 min
-#> 16/01/2026 - 14:32:16
+#> 24/06/2026 - 16:05:06
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
@@ -293,24 +308,25 @@ only the demography task.
 **Code**
 
 ``` r
+
 parallelWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Parallel-Range-Plots",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:32:18
+#> 24/06/2026 - 16:05:09
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:32:18
+#>  Date: 24/06/2026 - 16:05:09
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(parallelWorkflow)
@@ -327,6 +343,7 @@ using box-whisker plots.
 **Code**
 
 ``` r
+
 xParameters <- list(
   Age = "Organism|Age",
   Gender = "Gender"
@@ -339,14 +356,15 @@ setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displa
 Run the corresponding workflow:
 
 ``` r
+
 parallelWorkflow$runWorkflow()
-#> 16/01/2026 - 14:32:18
+#> 24/06/2026 - 16:05:09
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 16/01/2026 - 14:32:18
+#> 24/06/2026 - 16:05:09
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:32:28
+#> 24/06/2026 - 16:05:19
 #> i Info  Plot Demography task completed in 0.2 min
-#> 16/01/2026 - 14:32:28
+#> 24/06/2026 - 16:05:19
 #> i Info  Population Workflow for parallelComparison completed in 0.2 min
 ```
 
@@ -420,24 +438,25 @@ demography task.
 **Code**
 
 ``` r
+
 pediatricWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$pediatric,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Pediatric-Histograms",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:32:30
+#> 24/06/2026 - 16:05:21
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:32:30
+#>  Date: 24/06/2026 - 16:05:21
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -451,6 +470,7 @@ defines the parameters to be plotted in the histograms.
 **Code**
 
 ``` r
+
 displayedParameters <- list(
   Age = "Organism|Age",
   Weight = "Organism|Weight",
@@ -464,14 +484,15 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 Run the corresponding workflow:
 
 ``` r
+
 pediatricWorkflow$runWorkflow()
-#> 16/01/2026 - 14:32:30
+#> 24/06/2026 - 16:05:21
 #> i Info  Starting run of Population Workflow for pediatric
-#> 16/01/2026 - 14:32:30
+#> 24/06/2026 - 16:05:21
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:32:38
+#> 24/06/2026 - 16:05:28
 #> i Info  Plot Demography task completed in 0.1 min
-#> 16/01/2026 - 14:32:38
+#> 24/06/2026 - 16:05:28
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
@@ -501,24 +522,25 @@ demography task.
 **Code**
 
 ``` r
+
 pediatricWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$pediatric,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Pediatric-Range-Plots",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:32:40
+#> 24/06/2026 - 16:05:30
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:32:40
+#>  Date: 24/06/2026 - 16:05:30
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -535,6 +557,7 @@ using box-whisker plots.
 **Code**
 
 ``` r
+
 xParameters <- list(
   Age = "Organism|Age",
   Gender = "Gender"
@@ -547,14 +570,15 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 Run the corresponding workflow:
 
 ``` r
+
 pediatricWorkflow$runWorkflow()
-#> 16/01/2026 - 14:32:40
+#> 24/06/2026 - 16:05:30
 #> i Info  Starting run of Population Workflow for pediatric
-#> 16/01/2026 - 14:32:40
+#> 24/06/2026 - 16:05:30
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:32:53
+#> 24/06/2026 - 16:05:44
 #> i Info  Plot Demography task completed in 0.2 min
-#> 16/01/2026 - 14:32:53
+#> 24/06/2026 - 16:05:44
 #> i Info  Population Workflow for pediatric completed in 0.2 min
 ```
 
@@ -601,6 +625,7 @@ can update the number of bins or even include the bin edges within the
 field `bins` as illustrated below.
 
 ``` r
+
 workflow$plotDemography$settings$bins <- 5
 ```
 
@@ -610,24 +635,25 @@ workflow:
 **Code**
 
 ``` r
+
 parallelWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:32:55
+#> 24/06/2026 - 16:05:46
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:32:55
+#>  Date: 24/06/2026 - 16:05:46
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(parallelWorkflow)
@@ -645,13 +671,13 @@ setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displa
 parallelWorkflow$plotDemography$settings$bins <- 5
 
 parallelWorkflow$runWorkflow()
-#> 16/01/2026 - 14:32:55
+#> 24/06/2026 - 16:05:46
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 16/01/2026 - 14:32:55
+#> 24/06/2026 - 16:05:46
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:33:04
+#> 24/06/2026 - 16:05:54
 #> i Info  Plot Demography task completed in 0.1 min
-#> 16/01/2026 - 14:33:04
+#> 24/06/2026 - 16:05:54
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
@@ -670,24 +696,25 @@ below:
 **Code**
 
 ``` r
+
 pediatricWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$pediatric,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:33:06
+#> 24/06/2026 - 16:05:56
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:33:06
+#>  Date: 24/06/2026 - 16:05:56
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -705,13 +732,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$bins <- 5
 
 pediatricWorkflow$runWorkflow()
-#> 16/01/2026 - 14:33:06
+#> 24/06/2026 - 16:05:56
 #> i Info  Starting run of Population Workflow for pediatric
-#> 16/01/2026 - 14:33:06
+#> 24/06/2026 - 16:05:56
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:33:11
+#> 24/06/2026 - 16:06:02
 #> i Info  Plot Demography task completed in 0.1 min
-#> 16/01/2026 - 14:33:11
+#> 24/06/2026 - 16:06:02
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
@@ -740,6 +767,7 @@ continuous range plot by setting the `stairstep` field to `FALSE` as
 shown below.
 
 ``` r
+
 workflow$plotDemography$settings$stairstep <- FALSE
 ```
 
@@ -749,24 +777,25 @@ pediatric workflow:
 **Code**
 
 ``` r
+
 pediatricWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$pediatric,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:33:13
+#> 24/06/2026 - 16:06:03
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:33:13
+#>  Date: 24/06/2026 - 16:06:03
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -784,13 +813,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$stairstep <- FALSE
 
 pediatricWorkflow$runWorkflow()
-#> 16/01/2026 - 14:33:13
+#> 24/06/2026 - 16:06:03
 #> i Info  Starting run of Population Workflow for pediatric
-#> 16/01/2026 - 14:33:13
+#> 24/06/2026 - 16:06:03
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:33:19
+#> 24/06/2026 - 16:06:09
 #> i Info  Plot Demography task completed in 0.1 min
-#> 16/01/2026 - 14:33:19
+#> 24/06/2026 - 16:06:09
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
@@ -808,6 +837,7 @@ case the bars do not overlap by setting the `dodge` field to `FALSE` as
 shown below.
 
 ``` r
+
 workflow$plotDemography$settings$dodge <- FALSE
 ```
 
@@ -817,24 +847,25 @@ workflow:
 **Code**
 
 ``` r
+
 parallelWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$parallelComparison,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:33:20
+#> 24/06/2026 - 16:06:11
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:33:20
+#>  Date: 24/06/2026 - 16:06:11
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(parallelWorkflow)
@@ -851,13 +882,13 @@ setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displa
 parallelWorkflow$plotDemography$settings$dodge <- FALSE
 
 parallelWorkflow$runWorkflow()
-#> 16/01/2026 - 14:33:20
+#> 24/06/2026 - 16:06:11
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 16/01/2026 - 14:33:20
+#> 24/06/2026 - 16:06:11
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:33:29
+#> 24/06/2026 - 16:06:18
 #> i Info  Plot Demography task completed in 0.1 min
-#> 16/01/2026 - 14:33:29
+#> 24/06/2026 - 16:06:18
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
@@ -881,6 +912,7 @@ As a consequence, it is possible to define such feature by setting the
 `referenceGlobalRange` field to `FALSE` as illustrated below.
 
 ``` r
+
 workflow$plotDemography$settings$referenceGlobalRange <- FALSE
 ```
 
@@ -890,24 +922,25 @@ bins as the simulation set to compare:
 **Code**
 
 ``` r
+
 pediatricWorkflow <- PopulationWorkflow$new(
   workflowType = PopulationWorkflowTypes$pediatric,
   simulationSets = c(adultSet, childrenSet),
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 16/01/2026 - 14:33:30
+#> 24/06/2026 - 16:06:20
 #> i Info  Reporting Engine Information:
-#>  Date: 16/01/2026 - 14:33:30
+#>  Date: 24/06/2026 - 16:06:20
 #>  User Information:
-#>  Computer Name: runnervmmtnos
+#>  Computer Name: runnervm08nci
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.5.2 (2025-10-31)
-#>  OSP Suite Package version: 12.4.1.9001
-#>  OSP Reporting Engine version: 2.4.0.9005
+#>  R version: R version 4.6.0 (2026-04-24)
+#>  OSP Suite Package version: 12.4.3.9011
+#>  OSP Reporting Engine version: 2.4.0.9006
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -924,13 +957,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$referenceGlobalRange <- FALSE
 
 pediatricWorkflow$runWorkflow()
-#> 16/01/2026 - 14:33:30
+#> 24/06/2026 - 16:06:20
 #> i Info  Starting run of Population Workflow for pediatric
-#> 16/01/2026 - 14:33:30
+#> 24/06/2026 - 16:06:20
 #> i Info  Starting run of Plot Demography task
-#> 16/01/2026 - 14:33:37
+#> 24/06/2026 - 16:06:26
 #> i Info  Plot Demography task completed in 0.1 min
-#> 16/01/2026 - 14:33:37
+#> 24/06/2026 - 16:06:26
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 

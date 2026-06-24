@@ -46,9 +46,9 @@ measureValuesBetween(1:12, 7, 9, method = "percent")
 
 x <- rnorm(1e2)
 measureValuesBetween(x, -1, 1)
-#> [1] 66
+#> [1] 67
 measureValuesBetween(x, -1, 1, method = "ratio")
-#> [1] 0.66
+#> [1] 0.67
 
 measureValuesBetween(x, cos(x) + 1, cos(x) - 1)
 #> [1] 0

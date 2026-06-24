@@ -20,13 +20,13 @@ Source:
 
 Sevestre M, Solodenko J, Chelle P, Hamadeh A (2026).
 *ospsuite.reportingengine: R package to create reports for the Open
-Systems Pharmacology models*. R package version 2.4.0.9005,
+Systems Pharmacology models*. R package version 2.4.0.9006,
 <https://github.com/open-systems-pharmacology/ospsuite.reportingengine>.
 
     @Manual{,
       title = {ospsuite.reportingengine: R package to create reports for the Open Systems Pharmacology models},
       author = {Michael Sevestre and Juri Solodenko and Pierre Chelle and Abdullah Hamadeh},
       year = {2026},
-      note = {R package version 2.4.0.9005},
+      note = {R package version 2.4.0.9006},
       url = {https://github.com/open-systems-pharmacology/ospsuite.reportingengine},
     }
