@@ -199,18 +199,18 @@ parallelWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:04:57
+#> 25/06/2026 - 12:28:14
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:04:57
+#>  Date: 25/06/2026 - 12:28:14
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(parallelWorkflow)
@@ -273,13 +273,13 @@ Run the corresponding workflow:
 ``` r
 
 parallelWorkflow$runWorkflow()
-#> 24/06/2026 - 16:04:58
+#> 25/06/2026 - 12:28:15
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 24/06/2026 - 16:04:58
+#> 25/06/2026 - 12:28:15
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:05:06
+#> 25/06/2026 - 12:28:23
 #> i Info  Plot Demography task completed in 0.1 min
-#> 24/06/2026 - 16:05:06
+#> 25/06/2026 - 12:28:23
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
@@ -315,18 +315,18 @@ parallelWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Parallel-Range-Plots",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:05:09
+#> 25/06/2026 - 12:28:25
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:05:09
+#>  Date: 25/06/2026 - 12:28:25
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(parallelWorkflow)
@@ -358,13 +358,13 @@ Run the corresponding workflow:
 ``` r
 
 parallelWorkflow$runWorkflow()
-#> 24/06/2026 - 16:05:09
+#> 25/06/2026 - 12:28:26
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 24/06/2026 - 16:05:09
+#> 25/06/2026 - 12:28:26
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:05:19
+#> 25/06/2026 - 12:28:35
 #> i Info  Plot Demography task completed in 0.2 min
-#> 24/06/2026 - 16:05:19
+#> 25/06/2026 - 12:28:35
 #> i Info  Population Workflow for parallelComparison completed in 0.2 min
 ```
 
@@ -445,18 +445,18 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Histograms",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:05:21
+#> 25/06/2026 - 12:28:37
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:05:21
+#>  Date: 25/06/2026 - 12:28:37
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -486,13 +486,13 @@ Run the corresponding workflow:
 ``` r
 
 pediatricWorkflow$runWorkflow()
-#> 24/06/2026 - 16:05:21
+#> 25/06/2026 - 12:28:37
 #> i Info  Starting run of Population Workflow for pediatric
-#> 24/06/2026 - 16:05:21
+#> 25/06/2026 - 12:28:37
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:05:28
+#> 25/06/2026 - 12:28:45
 #> i Info  Plot Demography task completed in 0.1 min
-#> 24/06/2026 - 16:05:28
+#> 25/06/2026 - 12:28:45
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
@@ -529,18 +529,18 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Range-Plots",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:05:30
+#> 25/06/2026 - 12:28:47
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:05:30
+#>  Date: 25/06/2026 - 12:28:47
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -572,13 +572,13 @@ Run the corresponding workflow:
 ``` r
 
 pediatricWorkflow$runWorkflow()
-#> 24/06/2026 - 16:05:30
+#> 25/06/2026 - 12:28:47
 #> i Info  Starting run of Population Workflow for pediatric
-#> 24/06/2026 - 16:05:30
+#> 25/06/2026 - 12:28:47
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:05:44
+#> 25/06/2026 - 12:29:00
 #> i Info  Plot Demography task completed in 0.2 min
-#> 24/06/2026 - 16:05:44
+#> 25/06/2026 - 12:29:00
 #> i Info  Population Workflow for pediatric completed in 0.2 min
 ```
 
@@ -642,18 +642,18 @@ parallelWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:05:46
+#> 25/06/2026 - 12:29:02
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:05:46
+#>  Date: 25/06/2026 - 12:29:02
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(parallelWorkflow)
@@ -671,13 +671,13 @@ setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displa
 parallelWorkflow$plotDemography$settings$bins <- 5
 
 parallelWorkflow$runWorkflow()
-#> 24/06/2026 - 16:05:46
+#> 25/06/2026 - 12:29:02
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 24/06/2026 - 16:05:46
+#> 25/06/2026 - 12:29:02
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:05:54
+#> 25/06/2026 - 12:29:10
 #> i Info  Plot Demography task completed in 0.1 min
-#> 24/06/2026 - 16:05:54
+#> 25/06/2026 - 12:29:10
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
@@ -703,18 +703,18 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:05:56
+#> 25/06/2026 - 12:29:12
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:05:56
+#>  Date: 25/06/2026 - 12:29:12
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -732,13 +732,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$bins <- 5
 
 pediatricWorkflow$runWorkflow()
-#> 24/06/2026 - 16:05:56
+#> 25/06/2026 - 12:29:12
 #> i Info  Starting run of Population Workflow for pediatric
-#> 24/06/2026 - 16:05:56
+#> 25/06/2026 - 12:29:12
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:06:02
+#> 25/06/2026 - 12:29:17
 #> i Info  Plot Demography task completed in 0.1 min
-#> 24/06/2026 - 16:06:02
+#> 25/06/2026 - 12:29:17
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
@@ -784,18 +784,18 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:06:03
+#> 25/06/2026 - 12:29:19
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:06:03
+#>  Date: 25/06/2026 - 12:29:19
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -813,13 +813,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$stairstep <- FALSE
 
 pediatricWorkflow$runWorkflow()
-#> 24/06/2026 - 16:06:03
+#> 25/06/2026 - 12:29:19
 #> i Info  Starting run of Population Workflow for pediatric
-#> 24/06/2026 - 16:06:03
+#> 25/06/2026 - 12:29:19
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:06:09
+#> 25/06/2026 - 12:29:25
 #> i Info  Plot Demography task completed in 0.1 min
-#> 24/06/2026 - 16:06:09
+#> 25/06/2026 - 12:29:25
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
@@ -854,18 +854,18 @@ parallelWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:06:11
+#> 25/06/2026 - 12:29:26
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:06:11
+#>  Date: 25/06/2026 - 12:29:26
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(parallelWorkflow)
@@ -882,13 +882,13 @@ setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displa
 parallelWorkflow$plotDemography$settings$dodge <- FALSE
 
 parallelWorkflow$runWorkflow()
-#> 24/06/2026 - 16:06:11
+#> 25/06/2026 - 12:29:26
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 24/06/2026 - 16:06:11
+#> 25/06/2026 - 12:29:26
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:06:18
+#> 25/06/2026 - 12:29:34
 #> i Info  Plot Demography task completed in 0.1 min
-#> 24/06/2026 - 16:06:18
+#> 25/06/2026 - 12:29:34
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
@@ -929,18 +929,18 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 24/06/2026 - 16:06:20
+#> 25/06/2026 - 12:29:36
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:06:20
+#>  Date: 25/06/2026 - 12:29:36
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 inactivateWorkflowTasks(pediatricWorkflow)
@@ -957,13 +957,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$referenceGlobalRange <- FALSE
 
 pediatricWorkflow$runWorkflow()
-#> 24/06/2026 - 16:06:20
+#> 25/06/2026 - 12:29:36
 #> i Info  Starting run of Population Workflow for pediatric
-#> 24/06/2026 - 16:06:20
+#> 25/06/2026 - 12:29:36
 #> i Info  Starting run of Plot Demography task
-#> 24/06/2026 - 16:06:26
+#> 25/06/2026 - 12:29:42
 #> i Info  Plot Demography task completed in 0.1 min
-#> 24/06/2026 - 16:06:26
+#> 25/06/2026 - 12:29:42
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 

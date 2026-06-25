@@ -234,18 +234,18 @@ workflowA <-
     simulationSets = setA,
     workflowFolder = "Example-A"
   )
-#> 24/06/2026 - 16:09:52
+#> 25/06/2026 - 12:32:53
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:09:52
+#>  Date: 25/06/2026 - 12:32:53
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -314,27 +314,27 @@ configuration.
 
 # Run the workflow
 workflowA$runWorkflow()
-#> 24/06/2026 - 16:09:53
+#> 25/06/2026 - 12:32:54
 #> i Info  Starting run of Mean Model Workflow
-#> 24/06/2026 - 16:09:53
+#> 25/06/2026 - 12:32:54
 #> i Info  Starting run of Simulation task
-#> 24/06/2026 - 16:09:53
+#> 25/06/2026 - 12:32:54
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 24/06/2026 - 16:09:53
+#> 25/06/2026 - 12:32:54
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 24/06/2026 - 16:09:53
+#> 25/06/2026 - 12:32:55
 #> i Info  Simulation task completed in 0 min
-#> 24/06/2026 - 16:09:53
+#> 25/06/2026 - 12:32:55
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 24/06/2026 - 16:09:53
+#> 25/06/2026 - 12:32:55
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 24/06/2026 - 16:09:56
+#> 25/06/2026 - 12:32:57
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 24/06/2026 - 16:09:56
+#> 25/06/2026 - 12:32:57
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o 'Example-A/Report-word.docx' 'Example-A/Report-word.md'
 #> 
-#> 24/06/2026 - 16:09:56
+#> 25/06/2026 - 12:32:57
 #> i Info  Mean Model Workflow completed in 0.1 min
 ```
 

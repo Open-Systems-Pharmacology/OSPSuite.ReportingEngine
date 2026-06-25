@@ -119,18 +119,18 @@ workflowParallel <-
     simulationSets = c(set500, set200),
     workflowFolder = "Example-Pop-PK"
   )
-#> 24/06/2026 - 16:10:04
+#> 25/06/2026 - 12:33:05
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:10:04
+#>  Date: 25/06/2026 - 12:33:05
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -138,42 +138,42 @@ workflowParallel$activateTasks(c("simulate", "calculatePKParameters", "plotPKPar
 
 # Run the workflow
 workflowParallel$runWorkflow()
-#> 24/06/2026 - 16:10:05
+#> 25/06/2026 - 12:33:06
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 24/06/2026 - 16:10:05
+#> 25/06/2026 - 12:33:06
 #> i Info  Starting run of Simulation task
-#> 24/06/2026 - 16:10:05
+#> 25/06/2026 - 12:33:06
 #> i Info  Starting run of Population Simulations
 #>   |                                                                              |                                                                      |   0%
-#> 24/06/2026 - 16:10:05
+#> 25/06/2026 - 12:33:06
 #> i Info  Starting run of 500 individuals (Pop500_p1p2p3)
 #>   |                                                                              |===================================                                   |  50%
-#> 24/06/2026 - 16:10:05
+#> 25/06/2026 - 12:33:07
 #> i Info  Starting run of 200 individuals (Pop200_p1p2p3)
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 24/06/2026 - 16:10:05
+#> 25/06/2026 - 12:33:07
 #> i Info  Simulation task completed in 0 min
-#> 24/06/2026 - 16:10:05
+#> 25/06/2026 - 12:33:07
 #> i Info  Starting run of Calculate PK Parameters task
 #>   |                                                                              |                                                                      |   0%
-#> 24/06/2026 - 16:10:05
+#> 25/06/2026 - 12:33:07
 #> i Info  Starting run of Calculate PK Parameters task for 500 individuals
 #>   |                                                                              |===================================                                   |  50%
-#> 24/06/2026 - 16:10:06
+#> 25/06/2026 - 12:33:07
 #> i Info  Starting run of Calculate PK Parameters task for 200 individuals
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 24/06/2026 - 16:10:06
+#> 25/06/2026 - 12:33:08
 #> i Info  Calculate PK Parameters task completed in 0 min
-#> 24/06/2026 - 16:10:06
+#> 25/06/2026 - 12:33:08
 #> i Info  Starting run of Plot PK Parameters task
-#> 24/06/2026 - 16:10:13
+#> 25/06/2026 - 12:33:14
 #> i Info  Plot PK Parameters task completed in 0.1 min
-#> 24/06/2026 - 16:10:13
+#> 25/06/2026 - 12:33:14
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o 'Example-Pop-PK/Report-word.docx' 'Example-Pop-PK/Report-word.md'
 #> 
-#> 24/06/2026 - 16:10:13
+#> 25/06/2026 - 12:33:15
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
@@ -294,18 +294,18 @@ ratioWorkflow <-
     simulationSets = c(set500, set200),
     workflowFolder = "Example-Pop-PK"
   )
-#> 24/06/2026 - 16:10:15
+#> 25/06/2026 - 12:33:17
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:10:15
+#>  Date: 25/06/2026 - 12:33:17
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 # Update settings to display the progress bar of the MC Simulations
@@ -320,38 +320,38 @@ ratioWorkflow$activateTasks(c("calculatePKParameters", "plotPKParameters"))
 
 # Run the workflow
 ratioWorkflow$runWorkflow()
-#> 24/06/2026 - 16:10:16
+#> 25/06/2026 - 12:33:17
 #> i Info  Starting run of Population Workflow for ratioComparison
-#> 24/06/2026 - 16:10:16
+#> 25/06/2026 - 12:33:17
 #> i Info  Starting run of Calculate PK Parameters task
 #>   |                                                                              |                                                                      |   0%
-#> 24/06/2026 - 16:10:16
+#> 25/06/2026 - 12:33:17
 #> i Info  Starting run of Calculate PK Parameters task for 500 individuals
 #>   |                                                                              |===================================                                   |  50%
-#> 24/06/2026 - 16:10:16
+#> 25/06/2026 - 12:33:18
 #> i Info  Starting run of Calculate PK Parameters task for 200 individuals
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 24/06/2026 - 16:10:17
+#> 25/06/2026 - 12:33:18
 #> i Info  Simulation Set '200 individuals' was identified with population different from reference '500 individuals'.
 #> Ratio comparison will use Monte Carlo Sampling for analyzing statistics.
-#> 24/06/2026 - 16:10:17
+#> 25/06/2026 - 12:33:18
 #> i Info  Monte Carlo Sampling for 200 individuals will use 100 repetitions with Random Seed 123456
 #>   |                                                                              |                                                                      |   0%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |==========                                                            |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |===========                                                           |  16%  |                                                                              |============                                                          |  17%  |                                                                              |=============                                                         |  18%  |                                                                              |=============                                                         |  19%  |                                                                              |==============                                                        |  20%  |                                                                              |===============                                                       |  21%  |                                                                              |===============                                                       |  22%  |                                                                              |================                                                      |  23%  |                                                                              |=================                                                     |  24%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  30%  |                                                                              |======================                                                |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  34%  |                                                                              |========================                                              |  35%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  38%  |                                                                              |===========================                                           |  39%  |                                                                              |============================                                          |  40%  |                                                                              |=============================                                         |  41%  |                                                                              |=============================                                         |  42%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |================================                                      |  45%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |==================================                                    |  48%  |                                                                              |==================================                                    |  49%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================                                  |  51%  |                                                                              |====================================                                  |  52%  |                                                                              |=====================================                                 |  53%  |                                                                              |======================================                                |  54%  |                                                                              |======================================                                |  55%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  58%  |                                                                              |=========================================                             |  59%  |                                                                              |==========================================                            |  60%  |                                                                              |===========================================                           |  61%  |                                                                              |===========================================                           |  62%  |                                                                              |============================================                          |  63%  |                                                                              |=============================================                         |  64%  |                                                                              |==============================================                        |  65%  |                                                                              |==============================================                        |  66%  |                                                                              |===============================================                       |  67%  |                                                                              |================================================                      |  68%  |                                                                              |================================================                      |  69%  |                                                                              |=================================================                     |  70%  |                                                                              |==================================================                    |  71%  |                                                                              |==================================================                    |  72%  |                                                                              |===================================================                   |  73%  |                                                                              |====================================================                  |  74%  |                                                                              |====================================================                  |  75%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  77%  |                                                                              |=======================================================               |  78%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  80%  |                                                                              |=========================================================             |  81%  |                                                                              |=========================================================             |  82%  |                                                                              |==========================================================            |  83%  |                                                                              |===========================================================           |  84%  |                                                                              |============================================================          |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  87%  |                                                                              |==============================================================        |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |================================================================      |  91%  |                                                                              |================================================================      |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |==================================================================    |  94%  |                                                                              |==================================================================    |  95%  |                                                                              |===================================================================   |  96%  |                                                                              |====================================================================  |  97%  |                                                                              |===================================================================== |  98%  |                                                                              |===================================================================== |  99%  |                                                                              |======================================================================| 100%
-#> 24/06/2026 - 16:10:17
+#> 25/06/2026 - 12:33:19
 #> i Info  Monte Carlo Sampling completed in 0 min
-#> 24/06/2026 - 16:10:17
+#> 25/06/2026 - 12:33:19
 #> i Info  Calculate PK Parameters task completed in 0 min
-#> 24/06/2026 - 16:10:17
+#> 25/06/2026 - 12:33:19
 #> i Info  Starting run of Plot PK Parameters task
-#> 24/06/2026 - 16:10:17
+#> 25/06/2026 - 12:33:19
 #> ! Warning   'Example-Pop-PK/PKAnalysis' already exists
-#> 24/06/2026 - 16:10:28
+#> 25/06/2026 - 12:33:30
 #> i Info  Plot PK Parameters task completed in 0.2 min
-#> 24/06/2026 - 16:10:29
+#> 25/06/2026 - 12:33:30
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o 'Example-Pop-PK/Report-word.docx' 'Example-Pop-PK/Report-word.md'
 #> 
-#> 24/06/2026 - 16:10:29
+#> 25/06/2026 - 12:33:30
 #> i Info  Population Workflow for ratioComparison completed in 0.2 min
 ```
 
@@ -422,18 +422,18 @@ pediatricWorkflow <-
     simulationSets = c(set500, set200),
     workflowFolder = "Example-Pop-PK"
   )
-#> 24/06/2026 - 16:10:31
+#> 25/06/2026 - 12:33:32
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:10:31
+#>  Date: 25/06/2026 - 12:33:32
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -446,18 +446,18 @@ setXParametersForPKParametersPlot(pediatricWorkflow, "Organism|p3")
 
 # Run the workflow
 pediatricWorkflow$runWorkflow()
-#> 24/06/2026 - 16:10:31
+#> 25/06/2026 - 12:33:33
 #> i Info  Starting run of Population Workflow for pediatric
-#> 24/06/2026 - 16:10:31
+#> 25/06/2026 - 12:33:33
 #> i Info  Starting run of Plot PK Parameters task
-#> 24/06/2026 - 16:10:31
+#> 25/06/2026 - 12:33:33
 #> ! Warning   'Example-Pop-PK/PKAnalysis' already exists
-#> 24/06/2026 - 16:10:50
+#> 25/06/2026 - 12:33:52
 #> i Info  Plot PK Parameters task completed in 0.3 min
-#> 24/06/2026 - 16:10:50
+#> 25/06/2026 - 12:33:52
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o 'Example-Pop-PK/Report-word.docx' 'Example-Pop-PK/Report-word.md'
 #> 
-#> 24/06/2026 - 16:10:50
+#> 25/06/2026 - 12:33:52
 #> i Info  Population Workflow for pediatric completed in 0.3 min
 ```
 
@@ -557,18 +557,18 @@ parallelRangeWorkflow <-
     simulationSets = c(set500, set200),
     workflowFolder = "Example-Pop-PK"
   )
-#> 24/06/2026 - 16:10:53
+#> 25/06/2026 - 12:33:55
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:10:53
+#>  Date: 25/06/2026 - 12:33:55
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -581,18 +581,18 @@ setXParametersForPKParametersPlot(parallelRangeWorkflow, "Organism|p3")
 
 # Run the workflow
 parallelRangeWorkflow$runWorkflow()
-#> 24/06/2026 - 16:10:53
+#> 25/06/2026 - 12:33:55
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 24/06/2026 - 16:10:53
+#> 25/06/2026 - 12:33:55
 #> i Info  Starting run of Plot PK Parameters task
-#> 24/06/2026 - 16:10:53
+#> 25/06/2026 - 12:33:55
 #> ! Warning   'Example-Pop-PK/PKAnalysis' already exists
-#> 24/06/2026 - 16:11:06
+#> 25/06/2026 - 12:34:08
 #> i Info  Plot PK Parameters task completed in 0.2 min
-#> 24/06/2026 - 16:11:06
+#> 25/06/2026 - 12:34:08
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o 'Example-Pop-PK/Report-word.docx' 'Example-Pop-PK/Report-word.md'
 #> 
-#> 24/06/2026 - 16:11:06
+#> 25/06/2026 - 12:34:08
 #> i Info  Population Workflow for parallelComparison completed in 0.2 min
 ```
 
@@ -645,18 +645,18 @@ parallelReferenceWorkflow <-
     simulationSets = c(set500, set200),
     workflowFolder = "Example-Pop-PK"
   )
-#> 24/06/2026 - 16:11:08
+#> 25/06/2026 - 12:34:10
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:11:08
+#>  Date: 25/06/2026 - 12:34:10
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -666,18 +666,18 @@ parallelReferenceWorkflow$activateTasks("plotPKParameters")
 
 # Run the workflow
 parallelReferenceWorkflow$runWorkflow()
-#> 24/06/2026 - 16:11:08
+#> 25/06/2026 - 12:34:10
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 24/06/2026 - 16:11:08
+#> 25/06/2026 - 12:34:10
 #> i Info  Starting run of Plot PK Parameters task
-#> 24/06/2026 - 16:11:08
+#> 25/06/2026 - 12:34:10
 #> ! Warning   'Example-Pop-PK/PKAnalysis' already exists
-#> 24/06/2026 - 16:11:16
+#> 25/06/2026 - 12:34:19
 #> i Info  Plot PK Parameters task completed in 0.1 min
-#> 24/06/2026 - 16:11:16
+#> 25/06/2026 - 12:34:19
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-Pop-PK" -t docx -o 'Example-Pop-PK/Report-word.docx' 'Example-Pop-PK/Report-word.md'
 #> 
-#> 24/06/2026 - 16:11:17
+#> 25/06/2026 - 12:34:19
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 

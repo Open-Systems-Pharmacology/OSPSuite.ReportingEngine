@@ -61,18 +61,18 @@ workflow <-
     workflowFolder = "Example-1",
     reportTitle = "A meaningful title"
   )
-#> 24/06/2026 - 16:04:35
+#> 25/06/2026 - 12:27:51
 #> i Info  Reporting Engine Information:
-#>  Date: 24/06/2026 - 16:04:35
+#>  Date: 25/06/2026 - 12:27:51
 #>  User Information:
-#>  Computer Name: runnervm08nci
+#>  Computer Name: runnervmfmtub
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
 #>  System versions:
-#>  R version: R version 4.6.0 (2026-04-24)
+#>  R version: R version 4.6.1 (2026-06-24)
 #>  OSP Suite Package version: 12.4.3.9011
-#>  OSP Reporting Engine version: 2.4.0.9006
+#>  OSP Reporting Engine version: 2.4.0.9007
 #>  tlf version: 1.6.2.9001
 
 # Set the workflow tasks to be run
@@ -80,27 +80,27 @@ workflow$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow$runWorkflow()
-#> 24/06/2026 - 16:04:35
+#> 25/06/2026 - 12:27:52
 #> i Info  Starting run of Mean Model Workflow
-#> 24/06/2026 - 16:04:35
+#> 25/06/2026 - 12:27:52
 #> i Info  Starting run of Simulation task
-#> 24/06/2026 - 16:04:35
+#> 25/06/2026 - 12:27:52
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 24/06/2026 - 16:04:35
+#> 25/06/2026 - 12:27:52
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 24/06/2026 - 16:04:36
+#> 25/06/2026 - 12:27:52
 #> i Info  Simulation task completed in 0 min
-#> 24/06/2026 - 16:04:36
+#> 25/06/2026 - 12:27:52
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 24/06/2026 - 16:04:36
+#> 25/06/2026 - 12:27:52
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 24/06/2026 - 16:04:39
-#> i Info  Plot Time profiles and Residuals task completed in 0.1 min
-#> 24/06/2026 - 16:04:39
+#> 25/06/2026 - 12:27:55
+#> i Info  Plot Time profiles and Residuals task completed in 0 min
+#> 25/06/2026 - 12:27:55
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 24/06/2026 - 16:04:39
+#> 25/06/2026 - 12:27:55
 #> i Info  Mean Model Workflow completed in 0.1 min
 ```
 
@@ -153,18 +153,18 @@ workflow$reportTitle <- titlePage
 
 # Re-run the workflow with the new title page
 workflow$runWorkflow()
-#> 24/06/2026 - 16:04:42
+#> 25/06/2026 - 12:27:58
 #> i Info  Starting run of Mean Model Workflow
-#> 24/06/2026 - 16:04:42
+#> 25/06/2026 - 12:27:58
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 24/06/2026 - 16:04:42
+#> 25/06/2026 - 12:27:58
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 24/06/2026 - 16:04:44
+#> 25/06/2026 - 12:28:01
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 24/06/2026 - 16:04:44
+#> 25/06/2026 - 12:28:01
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 24/06/2026 - 16:04:44
+#> 25/06/2026 - 12:28:01
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -202,18 +202,18 @@ workflow$reportTitle <- titlePageFile
 
 # Re-run the workflow with the new title page
 workflow$runWorkflow()
-#> 24/06/2026 - 16:04:46
+#> 25/06/2026 - 12:28:02
 #> i Info  Starting run of Mean Model Workflow
-#> 24/06/2026 - 16:04:46
+#> 25/06/2026 - 12:28:02
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 24/06/2026 - 16:04:46
+#> 25/06/2026 - 12:28:02
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 24/06/2026 - 16:04:48
+#> 25/06/2026 - 12:28:05
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 24/06/2026 - 16:04:48
+#> 25/06/2026 - 12:28:05
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 24/06/2026 - 16:04:48
+#> 25/06/2026 - 12:28:05
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
