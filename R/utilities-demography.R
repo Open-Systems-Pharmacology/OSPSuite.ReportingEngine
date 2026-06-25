@@ -529,7 +529,8 @@ getDemographyAggregatedData <- function(data,
         quantile(
           x = data[, xParameterName],
           # needs to add 1 because n edges will create n-1 bins
-          probs = seq(0, 1, length.out = xParameterBreaks + 1)
+          probs = seq(0, 1, length.out = xParameterBreaks + 1),
+          na.rm = TRUE
         )
       ))
     } else {
