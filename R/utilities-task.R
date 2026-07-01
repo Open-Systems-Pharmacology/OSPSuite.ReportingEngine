@@ -7,7 +7,11 @@
 #' # Lists all available standard simulation task names available in both mean and population workflows
 #' StandardSimulationTasks
 #'
-StandardSimulationTasks <- enum(c("simulate", "calculatePKParameters", "calculateSensitivity"))
+StandardSimulationTasks <- enum(c(
+  "simulate",
+  "calculatePKParameters",
+  "calculateSensitivity"
+))
 
 #' @title StandardPlotTasks
 #' @description Names of plot tasks performed by both `MeanModelWorkflow` and `PopulationWorkflow` objects
@@ -18,7 +22,11 @@ StandardSimulationTasks <- enum(c("simulate", "calculatePKParameters", "calculat
 #' # Lists all available standard plot task names available in both mean and population workflows
 #' StandardPlotTasks
 #'
-StandardPlotTasks <- enum(c("plotTimeProfilesAndResiduals", "plotPKParameters", "plotSensitivity"))
+StandardPlotTasks <- enum(c(
+  "plotTimeProfilesAndResiduals",
+  "plotPKParameters",
+  "plotSensitivity"
+))
 
 #' @title AllAvailableTasks
 #' @description Names of all existing tasks that can be performed by `MeanModelWorkflow` or `PopulationWorkflow` objects
@@ -59,7 +67,11 @@ AllAvailableTasks <- c(
 #'
 activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-  validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks")
+  validateIsIncludedAndLog(
+    tasks,
+    workflow$getAllTasks(),
+    groupName = "names of available workflow tasks"
+  )
 
   for (task in tasks) {
     workflow[[task]]$activate()
@@ -90,7 +102,11 @@ activateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
 #'
 inactivateWorkflowTasks <- function(workflow, tasks = workflow$getAllTasks()) {
   validateIsOfType(workflow, "Workflow")
-  validateIsIncludedAndLog(tasks, workflow$getAllTasks(), groupName = "names of available workflow tasks")
+  validateIsIncludedAndLog(
+    tasks,
+    workflow$getAllTasks(),
+    groupName = "names of available workflow tasks"
+  )
 
   for (task in tasks) {
     workflow[[task]]$inactivate()
@@ -169,7 +185,11 @@ loadSimulateTask <- function(workflow, active = TRUE, settings = NULL) {
 #' )
 #' }
 #'
-loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = NULL) {
+loadCalculatePKParametersTask <- function(
+  workflow,
+  active = FALSE,
+  settings = NULL
+) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
 
@@ -188,7 +208,9 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
   if (!isOfType(workflow, "PopulationWorkflow")) {
     return(calculatePKParametersTask)
   }
-  if (!isIncluded(workflow$workflowType, PopulationWorkflowTypes$ratioComparison)) {
+  if (
+    !isIncluded(workflow$workflowType, PopulationWorkflowTypes$ratioComparison)
+  ) {
     return(calculatePKParametersTask)
   }
   calculatePKParametersTask$ratioComparison <- TRUE
@@ -224,7 +246,11 @@ loadCalculatePKParametersTask <- function(workflow, active = FALSE, settings = N
 #' )
 #' }
 #'
-loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NULL) {
+loadCalculateSensitivityTask <- function(
+  workflow,
+  active = FALSE,
+  settings = NULL
+) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
 
@@ -284,11 +310,16 @@ loadCalculateSensitivityTask <- function(workflow, active = FALSE, settings = NU
 #' )
 #' }
 #'
-loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, settings = NULL) {
+loadPlotTimeProfilesAndResidualsTask <- function(
+  workflow,
+  active = FALSE,
+  settings = NULL
+) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
-  settings <- settings %||% GofTaskSettings$new(AllAvailableTasks$plotTimeProfilesAndResiduals)
+  settings <- settings %||%
+    GofTaskSettings$new(AllAvailableTasks$plotTimeProfilesAndResiduals)
 
   taskFunction <- plotMeanGoodnessOfFit
   nameFunction <- getObjectNameAsString(plotMeanGoodnessOfFit)
@@ -344,7 +375,11 @@ loadPlotTimeProfilesAndResidualsTask <- function(workflow, active = FALSE, setti
 #' )
 #' }
 #'
-loadPlotPKParametersTask <- function(workflow, active = FALSE, settings = NULL) {
+loadPlotPKParametersTask <- function(
+  workflow,
+  active = FALSE,
+  settings = NULL
+) {
   validateIsOfType(workflow, "Workflow")
   validateIsLogical(active)
   validateIsOfType(settings, "TaskSettings", nullAllowed = TRUE)
@@ -628,7 +663,10 @@ getSimulationResultFileNames <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   simulationResultFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
-    simulationResultFileNames <- c(simulationResultFileNames, structureSet$simulationResultFileNames)
+    simulationResultFileNames <- c(
+      simulationResultFileNames,
+      structureSet$simulationResultFileNames
+    )
   }
   return(simulationResultFileNames)
 }
@@ -653,7 +691,10 @@ getPKAnalysisResultsFileNames <- function(workflow) {
   validateIsOfType(workflow, "Workflow")
   pkAnalysisResultsFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
-    pkAnalysisResultsFileNames <- c(pkAnalysisResultsFileNames, structureSet$pkAnalysisResultsFileNames)
+    pkAnalysisResultsFileNames <- c(
+      pkAnalysisResultsFileNames,
+      structureSet$pkAnalysisResultsFileNames
+    )
   }
   return(pkAnalysisResultsFileNames)
 }
@@ -682,7 +723,10 @@ getMeanSensitivityAnalysisResultsFileNames <- function(workflow) {
   validateIsOfType(workflow, "MeanModelWorkflow")
   sensitivityAnalysisResultsFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
-    sensitivityAnalysisResultsFileNames <- c(sensitivityAnalysisResultsFileNames, structureSet$sensitivityAnalysisResultsFileNames)
+    sensitivityAnalysisResultsFileNames <- c(
+      sensitivityAnalysisResultsFileNames,
+      structureSet$sensitivityAnalysisResultsFileNames
+    )
   }
   return(sensitivityAnalysisResultsFileNames)
 }
@@ -711,7 +755,10 @@ getPopulationSensitivityAnalysisResultsFileNames <- function(workflow) {
   validateIsOfType(workflow, "PopulationWorkflow")
   sensitivityAnalysisResultsFileNames <- NULL
   for (structureSet in workflow$simulationStructures) {
-    sensitivityAnalysisResultsFileNames <- c(sensitivityAnalysisResultsFileNames, structureSet$popSensitivityAnalysisResultsIndexFile)
+    sensitivityAnalysisResultsFileNames <- c(
+      sensitivityAnalysisResultsFileNames,
+      structureSet$popSensitivityAnalysisResultsIndexFile
+    )
   }
   return(sensitivityAnalysisResultsFileNames)
 }
@@ -815,11 +862,13 @@ checkTaskInputsExist <- function(task) {
 #' # myWorkflow$userDefinedTasks[[index]]$
 #' }
 #'
-addUserDefinedTask <- function(workflow,
-                               taskFunction,
-                               taskName = "userDefinedTask",
-                               active = TRUE,
-                               settings = NULL) {
+addUserDefinedTask <- function(
+  workflow,
+  taskFunction,
+  taskName = "userDefinedTask",
+  active = TRUE,
+  settings = NULL
+) {
   validateIsOfType(workflow, "Workflow")
   validateIsOfType(taskFunction, "function")
   validateIsString(taskName)
@@ -854,7 +903,13 @@ addUserDefinedTask <- function(workflow,
   if (isOfType(workflow, "PopulationWorkflow")) {
     # PopulationPlotTask arguments
     validateIsIncludedAndLog(
-      c("structureSets", "settings", "workflowType", "xParameters", "yParameters"),
+      c(
+        "structureSets",
+        "settings",
+        "workflowType",
+        "xParameters",
+        "yParameters"
+      ),
       argumentNames,
       groupName = "Task function arguments"
     )
@@ -877,7 +932,11 @@ addUserDefinedTask <- function(workflow,
       )
     )
   }
-  logDebug(paste0("User defined task '", taskName, "' successfully loaded on workflow"))
+  logDebug(paste0(
+    "User defined task '",
+    taskName,
+    "' successfully loaded on workflow"
+  ))
   return(invisible())
 }
 
@@ -907,7 +966,10 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
     # data.frame to list
     outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
-      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+      configurationPlan$getSimulationResultsPath(
+        project = output$project,
+        simulation = output$simulation
+      )
     }))
   }
 
@@ -919,10 +981,12 @@ loadQualificationTimeProfilesTask <- function(workflow, configurationPlan) {
     workflowFolder = workflow$workflowFolder,
     active = active,
     message = defaultWorkflowMessages$plotTimeProfiles,
-    settings = list(axes = getAxesPropertiesFromName(
-      configurationPlan = configurationPlan,
-      plotName = "TimeProfile"
-    ))
+    settings = list(
+      axes = getAxesPropertiesFromName(
+        configurationPlan = configurationPlan,
+        plotName = "TimeProfile"
+      )
+    )
   ))
 }
 
@@ -950,7 +1014,10 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
     # data.frame to list
     outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
-      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+      configurationPlan$getSimulationResultsPath(
+        project = output$project,
+        simulation = output$simulation
+      )
     }))
   }
 
@@ -963,14 +1030,18 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
     active = active,
     message = defaultWorkflowMessages$plotGOFMerged,
     settings = list(
-      predictedVsObserved = list(axes = getAxesPropertiesFromName(
-        configurationPlan = configurationPlan,
-        plotName = "GOFMergedPlotsPredictedVsObserved"
-      )),
-      residualsOverTime = list(axes = getAxesPropertiesFromName(
-        configurationPlan = configurationPlan,
-        plotName = "GOFMergedPlotsResidualsOverTime"
-      )),
+      predictedVsObserved = list(
+        axes = getAxesPropertiesFromName(
+          configurationPlan = configurationPlan,
+          plotName = "GOFMergedPlotsPredictedVsObserved"
+        )
+      ),
+      residualsOverTime = list(
+        axes = getAxesPropertiesFromName(
+          configurationPlan = configurationPlan,
+          plotName = "GOFMergedPlotsResidualsOverTime"
+        )
+      ),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific
@@ -987,7 +1058,10 @@ loadGOFMergedTask <- function(workflow, configurationPlan) {
 #' @return A `QualificationTask` object
 #' @export
 #' @family workflow tasks
-loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPlan) {
+loadQualificationComparisonTimeProfileTask <- function(
+  workflow,
+  configurationPlan
+) {
   validateIsOfType(workflow, "QualificationWorkflow")
   validateIsOfType(configurationPlan, "ConfigurationPlan")
 
@@ -1004,7 +1078,10 @@ loadQualificationComparisonTimeProfileTask <- function(workflow, configurationPl
     # data.frame to list
     outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
-      configurationPlan$getSimulationResultsPath(project = output$project, simulation = output$simulation)
+      configurationPlan$getSimulationResultsPath(
+        project = output$project,
+        simulation = output$simulation
+      )
     }))
   }
 
@@ -1050,7 +1127,10 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
     # data.frame to list
     outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
-      configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
+      configurationPlan$getPKAnalysisResultsPath(
+        project = output$project,
+        simulation = output$simulation
+      )
     }))
   }
 
@@ -1085,7 +1165,10 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
             function(pkParameterName) {
               ospsuite::pkParameterByName(pkParameterName)$displayUnit
             }
-          )
+          ),
+          # Weight default unit
+          # Age default unit will be taken from axes$x$unit
+          Weight = ospsuite::ospUnits$Mass$kg
         )
       )
     )
@@ -1118,7 +1201,10 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
     # data.frame to list
     outputs <- split(outputs, seq_len(nrow(outputs)))
     inputFiles <- as.character(sapply(outputs, function(output) {
-      configurationPlan$getPKAnalysisResultsPath(project = output$project, simulation = output$simulation)
+      configurationPlan$getPKAnalysisResultsPath(
+        project = output$project,
+        simulation = output$simulation
+      )
     }))
   }
 
@@ -1131,14 +1217,18 @@ loadPlotDDIRatioTask <- function(workflow, configurationPlan) {
     active = active,
     message = defaultWorkflowMessages$plotDDIRatio,
     settings = list(
-      predictedVsObserved = list(axes = getAxesPropertiesFromName(
-        configurationPlan = configurationPlan,
-        plotName = "DDIRatioPlotsPredictedVsObserved"
-      )),
-      residualsOverTime = list(axes = getAxesPropertiesFromName(
-        configurationPlan = configurationPlan,
-        plotName = "DDIRatioPlotsResidualsVsObserved"
-      )),
+      predictedVsObserved = list(
+        axes = getAxesPropertiesFromName(
+          configurationPlan = configurationPlan,
+          plotName = "DDIRatioPlotsPredictedVsObserved"
+        )
+      ),
+      residualsOverTime = list(
+        axes = getAxesPropertiesFromName(
+          configurationPlan = configurationPlan,
+          plotName = "DDIRatioPlotsResidualsVsObserved"
+        )
+      ),
       digits = reEnv$formatNumericsDigits,
       nsmall = reEnv$formatNumericsSmall,
       scientific = reEnv$formatNumericsScientific
