@@ -1166,8 +1166,8 @@ loadPlotPKRatioTask <- function(workflow, configurationPlan) {
               ospsuite::pkParameterByName(pkParameterName)$displayUnit
             }
           ),
-          # Age and weight default units
-          Age = ospsuite::ospUnits$`Age in years`$`year(s)`,
+          # Weight default unit
+          # Age default unit will be taken from axes$x$unit
           Weight = ospsuite::ospUnits$Mass$kg
         )
       )

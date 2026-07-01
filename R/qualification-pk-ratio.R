@@ -440,7 +440,8 @@ getPKRatioForMapping <- function(
   # Concatenate all the results
   data <- cbind.data.frame(
     study = observedData[selectedRow, reEnv$pkRatioDictionary$study],
-    age = ospsuite::toUnit(age, age$value, targetUnit = settings$units$Age),
+    # Assumes that x-axis is always Age in PKRatio plots
+    age = ospsuite::toUnit(age, age$value, targetUnit = settings$axes$x$unit),
     weight = ospsuite::toUnit(weight, weight$value, targetUnit = settings$units$Weight),
     data
   )
