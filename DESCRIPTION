@@ -1,7 +1,7 @@
 Type: Package
 Package: ospsuite.reportingengine
 Title: R package to create reports for the Open Systems Pharmacology models
-Version: 2.4.0.9007
+Version: 2.4.7
 Authors@R: 
     c(person(given = "Open-Systems-Pharmacology Community",
              role = "cph"),
@@ -60,8 +60,8 @@ LazyData: true
 RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 Remotes:  
-    Open-Systems-Pharmacology/rSharp,
-    ospsuite.utils=Open-Systems-Pharmacology/OSPSuite.RUtils,
-    tlf=Open-Systems-Pharmacology/TLF-Library,
-    ospsuite=Open-Systems-Pharmacology/OSPSuite-R
+    rSharp=Open-Systems-Pharmacology/rSharp@*release,
+    ospsuite.utils=Open-Systems-Pharmacology/OSPSuite.RUtils@*release,
+    tlf=Open-Systems-Pharmacology/TLF-Library@*release,
+    ospsuite=Open-Systems-Pharmacology/OSPSuite-R@*release
 Roxygen: list(markdown = TRUE)

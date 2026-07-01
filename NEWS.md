@@ -1,4 +1,4 @@
-# ospsuite.reportingengine (development version)
+# ospsuite.reportingengine 2.4.7
 
 ## Breaking changes
 
