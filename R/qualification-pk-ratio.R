@@ -440,15 +440,15 @@ getPKRatioForMapping <- function(
   # Concatenate all the results
   data <- cbind.data.frame(
     study = observedData[selectedRow, reEnv$pkRatioDictionary$study],
-    age = ospsuite::toDisplayUnit(age, age$value),
-    weight = ospsuite::toDisplayUnit(weight, weight$value),
+    age = ospsuite::toUnit(age, age$value, targetUnit = settings$units$Age),
+    weight = ospsuite::toUnit(weight, weight$value, targetUnit = settings$units$Weight),
     data
   )
   metaData <- c(
     list(
       study = list(dimension = "Study ID", unit = ""),
-      age = list(dimension = "Age", unit = age$displayUnit),
-      weight = list(dimension = "Body Weight", unit = weight$displayUnit)
+      age = list(dimension = "Age", unit = settings$units$Age),
+      weight = list(dimension = "Body Weight", unit = settings$units$Weight)
     ),
     metaData
   )
