@@ -65,9 +65,9 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
   simulationSets = simulationSet,
   workflowFolder = "Mass-Balance-Workflow"
 )
-#> 01/07/2026 - 10:38:03
+#> 01/07/2026 - 19:09:55
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 10:38:03
+#>  Date: 01/07/2026 - 19:09:55
 #>  User Information:
 #>  Computer Name: runnervmjbsos
 #>  User: runner
@@ -82,23 +82,23 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
 massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
 massBalanceWorkflow$activateTasks("plotMassBalance")
 massBalanceWorkflow$runWorkflow()
-#> 01/07/2026 - 10:38:04
+#> 01/07/2026 - 19:09:56
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 10:38:04
+#> 01/07/2026 - 19:09:56
 #> i Info  Starting run of Plot Mass Balance task
-#> 01/07/2026 - 10:38:04
+#> 01/07/2026 - 19:09:56
 #> i Info  Starting run of Plot Mass Balance task for Aciclovir
-#> 01/07/2026 - 10:38:06
+#> 01/07/2026 - 19:09:57
 #> ! Warning   No molecule paths included in group 'Aciclovir - Endosome'.
-#> 01/07/2026 - 10:38:07
+#> 01/07/2026 - 19:09:57
 #> ! Warning   No molecule paths included in group 'Rest of Aciclovir'.
-#> 01/07/2026 - 10:38:20
-#> i Info  Plot Mass Balance task completed in 0.3 min
-#> 01/07/2026 - 10:38:20
+#> 01/07/2026 - 19:10:06
+#> i Info  Plot Mass Balance task completed in 0.2 min
+#> 01/07/2026 - 19:10:06
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o 'Mass-Balance-Workflow/Report-word.docx' 'Mass-Balance-Workflow/Report-word.md'
 #> 
-#> 01/07/2026 - 10:38:20
-#> i Info  Mean Model Workflow completed in 0.3 min
+#> 01/07/2026 - 19:10:06
+#> i Info  Mean Model Workflow completed in 0.2 min
 ```
 
     #> file:////home/runner/work/OSPSuite.ReportingEngine/OSPSuite.ReportingEngine/vignettes/Mass-Balance-Workflow/Report.html screenshot completed
@@ -275,9 +275,9 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
   simulationSets = simulationSet,
   workflowFolder = "Mass-Balance-Workflow"
 )
-#> 01/07/2026 - 10:38:23
+#> 01/07/2026 - 19:10:08
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 10:38:23
+#>  Date: 01/07/2026 - 19:10:08
 #>  User Information:
 #>  Computer Name: runnervmjbsos
 #>  User: runner
@@ -292,19 +292,19 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
 massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
 massBalanceWorkflow$activateTasks("plotMassBalance")
 massBalanceWorkflow$runWorkflow()
-#> 01/07/2026 - 10:38:23
+#> 01/07/2026 - 19:10:08
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 10:38:23
+#> 01/07/2026 - 19:10:08
 #> i Info  Starting run of Plot Mass Balance task
-#> 01/07/2026 - 10:38:23
+#> 01/07/2026 - 19:10:08
 #> i Info  Starting run of Plot Mass Balance task for Aciclovir
-#> 01/07/2026 - 10:38:47
-#> i Info  Plot Mass Balance task completed in 0.4 min
-#> 01/07/2026 - 10:38:47
+#> 01/07/2026 - 19:10:24
+#> i Info  Plot Mass Balance task completed in 0.3 min
+#> 01/07/2026 - 19:10:24
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o 'Mass-Balance-Workflow/Report-word.docx' 'Mass-Balance-Workflow/Report-word.md'
 #> 
-#> 01/07/2026 - 10:38:48
-#> i Info  Mean Model Workflow completed in 0.4 min
+#> 01/07/2026 - 19:10:24
+#> i Info  Mean Model Workflow completed in 0.3 min
 ```
 
 Since the settings included 2 plots, the report includes 2 sub-sections.

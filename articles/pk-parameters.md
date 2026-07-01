@@ -109,9 +109,9 @@ workflow1 <-
     simulationSets = setA,
     workflowFolder = "Example-1"
   )
-#> 01/07/2026 - 10:39:09
+#> 01/07/2026 - 19:10:39
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 10:39:08
+#>  Date: 01/07/2026 - 19:10:39
 #>  User Information:
 #>  Computer Name: runnervmjbsos
 #>  User: runner
@@ -132,36 +132,36 @@ workflow1$activateTasks(c(
 
 # Run the workflow
 workflow1$runWorkflow()
-#> 01/07/2026 - 10:39:09
+#> 01/07/2026 - 19:10:40
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 10:39:09
+#> 01/07/2026 - 19:10:40
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 10:39:09
+#> 01/07/2026 - 19:10:40
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 01/07/2026 - 10:39:09
+#> 01/07/2026 - 19:10:40
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 01/07/2026 - 10:39:09
+#> 01/07/2026 - 19:10:40
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 10:39:09
+#> 01/07/2026 - 19:10:40
 #> i Info  Starting run of Calculate PK Parameters task
 #>   |                                                                              |                                                                      |   0%
-#> 01/07/2026 - 10:39:09
+#> 01/07/2026 - 19:10:40
 #> i Info  Starting run of Calculate PK Parameters task for A
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 01/07/2026 - 10:39:10
+#> 01/07/2026 - 19:10:40
 #> i Info  Calculate PK Parameters task completed in 0 min
-#> 01/07/2026 - 10:39:10
+#> 01/07/2026 - 19:10:40
 #> i Info  Starting run of Plot PK Parameters task
-#> 01/07/2026 - 10:39:10
+#> 01/07/2026 - 19:10:40
 #> i Info  Starting run of Plot PK Parameters task for A
-#> 01/07/2026 - 10:39:10
+#> 01/07/2026 - 19:10:41
 #> i Info  Plot PK Parameters task completed in 0 min
-#> 01/07/2026 - 10:39:10
+#> 01/07/2026 - 19:10:41
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 01/07/2026 - 10:39:10
+#> 01/07/2026 - 19:10:41
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -214,9 +214,9 @@ workflow2 <-
     simulationSets = setA,
     workflowFolder = "Example-2"
   )
-#> 01/07/2026 - 10:39:12
+#> 01/07/2026 - 19:10:42
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 10:39:12
+#>  Date: 01/07/2026 - 19:10:42
 #>  User Information:
 #>  Computer Name: runnervmjbsos
 #>  User: runner
@@ -237,36 +237,36 @@ workflow2$activateTasks(c(
 
 # Run the workflow
 workflow2$runWorkflow()
-#> 01/07/2026 - 10:39:12
+#> 01/07/2026 - 19:10:42
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 10:39:12
+#> 01/07/2026 - 19:10:42
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 10:39:12
+#> 01/07/2026 - 19:10:42
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 01/07/2026 - 10:39:12
+#> 01/07/2026 - 19:10:42
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 01/07/2026 - 10:39:12
+#> 01/07/2026 - 19:10:43
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 10:39:12
+#> 01/07/2026 - 19:10:43
 #> i Info  Starting run of Calculate PK Parameters task
 #>   |                                                                              |                                                                      |   0%
-#> 01/07/2026 - 10:39:12
+#> 01/07/2026 - 19:10:43
 #> i Info  Starting run of Calculate PK Parameters task for A
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 01/07/2026 - 10:39:13
+#> 01/07/2026 - 19:10:43
 #> i Info  Calculate PK Parameters task completed in 0 min
-#> 01/07/2026 - 10:39:13
+#> 01/07/2026 - 19:10:43
 #> i Info  Starting run of Plot PK Parameters task
-#> 01/07/2026 - 10:39:13
+#> 01/07/2026 - 19:10:43
 #> i Info  Starting run of Plot PK Parameters task for A
-#> 01/07/2026 - 10:39:13
+#> 01/07/2026 - 19:10:43
 #> i Info  Plot PK Parameters task completed in 0 min
-#> 01/07/2026 - 10:39:13
+#> 01/07/2026 - 19:10:43
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-2" -t docx -o 'Example-2/Report-word.docx' 'Example-2/Report-word.md'
 #> 
-#> 01/07/2026 - 10:39:13
+#> 01/07/2026 - 19:10:43
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -346,9 +346,9 @@ workflow3 <-
     simulationSets = c(setA, setB),
     workflowFolder = "Example-3"
   )
-#> 01/07/2026 - 10:39:14
+#> 01/07/2026 - 19:10:44
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 10:39:14
+#>  Date: 01/07/2026 - 19:10:44
 #>  User Information:
 #>  Computer Name: runnervmjbsos
 #>  User: runner
@@ -369,41 +369,41 @@ workflow3$activateTasks(c(
 
 # Run the workflow
 workflow3$runWorkflow()
-#> 01/07/2026 - 10:39:14
+#> 01/07/2026 - 19:10:44
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 10:39:14
+#> 01/07/2026 - 19:10:44
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 10:39:14
+#> 01/07/2026 - 19:10:44
 #> i Info  Splitting simulations for parallel run: 2 simulations split into 1 subsets
-#> 01/07/2026 - 10:39:14
+#> 01/07/2026 - 19:10:44
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Starting run of Calculate PK Parameters task
 #>   |                                                                              |                                                                      |   0%
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Starting run of Calculate PK Parameters task for A
 #>   |                                                                              |===================================                                   |  50%
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Starting run of Calculate PK Parameters task for B
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Calculate PK Parameters task completed in 0 min
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Starting run of Plot PK Parameters task
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Starting run of Plot PK Parameters task for A
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Starting run of Plot PK Parameters task for B
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Plot PK Parameters task completed in 0 min
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-3" -t docx -o 'Example-3/Report-word.docx' 'Example-3/Report-word.md'
 #> 
-#> 01/07/2026 - 10:39:15
+#> 01/07/2026 - 19:10:45
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -478,9 +478,9 @@ workflow4 <-
     simulationSets = c(setA, setB),
     workflowFolder = "Example-3"
   )
-#> 01/07/2026 - 10:39:17
+#> 01/07/2026 - 19:10:47
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 10:39:17
+#>  Date: 01/07/2026 - 19:10:47
 #>  User Information:
 #>  Computer Name: runnervmjbsos
 #>  User: runner
@@ -498,20 +498,20 @@ workflow4$inactivateTasks(c("simulate", "calculatePKParameters"))
 
 # Run the workflow
 workflow4$runWorkflow()
-#> 01/07/2026 - 10:39:17
+#> 01/07/2026 - 19:10:47
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 10:39:17
+#> 01/07/2026 - 19:10:47
 #> i Info  Starting run of Plot PK Parameters task
-#> 01/07/2026 - 10:39:17
+#> 01/07/2026 - 19:10:47
 #> i Info  Starting run of Plot PK Parameters task for A
-#> 01/07/2026 - 10:39:17
+#> 01/07/2026 - 19:10:47
 #> i Info  Starting run of Plot PK Parameters task for B
-#> 01/07/2026 - 10:39:17
+#> 01/07/2026 - 19:10:47
 #> i Info  Plot PK Parameters task completed in 0 min
-#> 01/07/2026 - 10:39:17
+#> 01/07/2026 - 19:10:47
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-3" -t docx -o 'Example-3/Report-word.docx' 'Example-3/Report-word.md'
 #> 
-#> 01/07/2026 - 10:39:17
+#> 01/07/2026 - 19:10:47
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
