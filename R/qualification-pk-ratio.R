@@ -448,7 +448,7 @@ getPKRatioForMapping <- function(
   metaData <- c(
     list(
       study = list(dimension = "Study ID", unit = ""),
-      age = list(dimension = "Age", unit = settings$units$Age),
+      age = list(dimension = "Age", unit = settings$axes$x$unit),
       weight = list(dimension = "Body Weight", unit = settings$units$Weight)
     ),
     metaData
