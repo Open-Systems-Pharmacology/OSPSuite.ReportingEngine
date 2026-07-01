@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Qualification Workflow • ospsuite.reportingengine</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Qualification Workflow">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,14 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: ospsuite.reportingengine</span></span>
 <span><span class="co">#&gt; Loading required package: tlf</span></span>
-<span><span class="co">#&gt; Loading required package: ospsuite</span></span></code></pre></div>
+<span><span class="co">#&gt; Loading required package: ospsuite</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'ospsuite'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     plotTimeProfile</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'ospsuite::plotTimeProfile' by</span></span>
+<span><span class="co">#&gt; 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -256,7 +263,7 @@ time/predicted by including the options
 corresponds to the addition of a table showing the Geometric Mean Fold
 Error (<em>GMFE</em>) of the <em>residuals</em> calculated for specific
 plot using the formula
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>M</mi><mi>F</mi><mi>E</mi><mo>=</mo><msup><mn>10</mn><mrow><mi>Σ</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>10</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>i</mi><mi>d</mi><mi>u</mi><mi>a</mi><mi>l</mi><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></msup></mrow><annotation encoding="application/x-tex">GMFE = 10^{\Sigma log_{10}(residuals)}</annotation></semantics></math>.</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>M</mi><mi>F</mi><mi>E</mi><mo>=</mo><msup><mn>10</mn><mrow><mi mathvariant="normal">Σ</mi><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>10</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>r</mi><mi>e</mi><mi>s</mi><mi>i</mi><mi>d</mi><mi>u</mi><mi>a</mi><mi>l</mi><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">GMFE = 10^{\Sigma log_{10}(residuals)}</annotation></semantics></math>.</p>
 </div>
 <div class="section level5">
 <h5 id="measure">Measure<a class="anchor" aria-label="anchor" href="#measure"></a>
@@ -589,7 +596,7 @@ exponent notations as illustrated in the example below:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

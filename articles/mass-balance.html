@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Mass Balance • ospsuite.reportingengine</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Mass Balance">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,14 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tlf</span></span>
-<span><span class="co">#&gt; Loading required package: ospsuite</span></span></code></pre></div>
+<span><span class="co">#&gt; Loading required package: ospsuite</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'ospsuite'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     plotTimeProfile</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'ospsuite::plotTimeProfile' by</span></span>
+<span><span class="co">#&gt; 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -130,39 +137,39 @@ associated with the compartment name.</p>
 <span>  simulationSets <span class="op">=</span> <span class="va">simulationSet</span>,</span>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Mass-Balance-Workflow"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:43:45</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:03</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:43:45</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:38:03</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">getAllTasks</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotMassBalance"</span><span class="op">)</span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:43:45</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:04</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:43:45</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:04</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:43:45</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:04</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Aciclovir</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:43:48</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:06</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>No molecule paths included in group '<span style="color: #00BBBB; font-weight: bold; font-style: italic;">Aciclovir - Endosome</span>'.</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:43:48</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:07</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">! Warning   </span>No molecule paths included in group '<span style="color: #00BBBB; font-weight: bold; font-style: italic;">Rest of Aciclovir</span>'.</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:02</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span> completed in 0.3 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:02</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o 'Mass-Balance-Workflow/Report-word.docx' 'Mass-Balance-Workflow/Report-word.md'</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:03</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:20</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.3 min</span></span></code></pre></div>
 </details><pre><code><span><span class="co">#&gt; file:////home/runner/work/OSPSuite.ReportingEngine/OSPSuite.ReportingEngine/vignettes/Mass-Balance-Workflow/Report.html screenshot completed</span></span></code></pre>
 <details><summary><strong>Report</strong>
@@ -335,35 +342,35 @@ object.</p>
 <span>  simulationSets <span class="op">=</span> <span class="va">simulationSet</span>,</span>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Mass-Balance-Workflow"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:06</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:44:06</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:38:23</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">inactivateTasks</span><span class="op">(</span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">getAllTasks</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">activateTasks</span><span class="op">(</span><span class="st">"plotMassBalance"</span><span class="op">)</span></span>
 <span><span class="va">massBalanceWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:06</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:06</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:06</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Aciclovir</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:29</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:47</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Mass Balance task</span> completed in 0.4 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:29</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:47</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o 'Mass-Balance-Workflow/Report-word.docx' 'Mass-Balance-Workflow/Report-word.md'</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:44:30</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:38:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Mean Model Workflow</span> completed in 0.4 min</span></span></code></pre></div>
 </details><p>Since the settings included 2 plots, the report includes 2
 sub-sections.</p>
@@ -383,7 +390,7 @@ sub-sections.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

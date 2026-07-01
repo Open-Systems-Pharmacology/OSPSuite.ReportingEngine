@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Demography Parameters in Population Workflows • ospsuite.reportingengine</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Demography Parameters in Population Workflows">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ospsuite.reportingengine</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,14 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/open-systems-pharmacology/ospsuite.reportingengine" class="external-link">ospsuite.reportingengine</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tlf</span></span>
-<span><span class="co">#&gt; Loading required package: ospsuite</span></span></code></pre></div>
+<span><span class="co">#&gt; Loading required package: ospsuite</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'ospsuite'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tlf':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     plotTimeProfile</span></span>
+<span><span class="co">#&gt; Warning: replacing previous import 'ospsuite::plotTimeProfile' by</span></span>
+<span><span class="co">#&gt; 'tlf::plotTimeProfile' when loading 'ospsuite.reportingengine'</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -359,19 +366,19 @@ activate only the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:40:49</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:02</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:40:49</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:35:02</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span></code></pre></div>
@@ -420,13 +427,13 @@ look for the parameters in the enum <code>StandardPath</code>.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:40:50</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:02</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:40:50</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:02</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:40:58</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:11</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:40:58</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:11</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
 </details><p>For Parallel and Ratio Comparison workflows, the demography
 histograms display the distributions for each simulation set along with
@@ -453,19 +460,19 @@ activate only the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Range-Plots"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:00</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:13</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:41:00</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:35:13</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span></code></pre></div>
@@ -487,14 +494,14 @@ using box-whisker plots.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:00</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:14</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:00</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:14</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:09</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:09</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:23</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:23</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.2 min</span></span></code></pre></div>
 </details><p>For Parallel and Ratio Comparison workflows, the demography range
 plots display the distributions for each simulation set along with its
 observed data if available (<a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17" class="external-link">#17</a>,
@@ -583,19 +590,19 @@ the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:11</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:25</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:41:11</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:35:25</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span></code></pre></div>
@@ -615,13 +622,13 @@ below which defines the parameters to be plotted in the histograms.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:12</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:25</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:12</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:25</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:18</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:18</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:33</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.1 min</span></span></code></pre></div>
 </details><p>For Pediatric workflows, the demography histograms display the
 distributions for all simulation sets together (<a href="https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/issues/17" class="external-link">#17</a>,
@@ -649,19 +656,19 @@ the demography task.</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range-Plots"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:20</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:35</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:41:20</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:35:34</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span></code></pre></div>
@@ -683,13 +690,13 @@ using box-whisker plots.</p>
 <p>Run the corresponding workflow:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:20</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:35</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:20</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:35</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:31</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.2 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:32</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:48</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.2 min</span></span></code></pre></div>
 </details><p>For Pediatric workflows, the demography range plots display the
 distributions for each simulation set along with its observed data if
@@ -739,19 +746,19 @@ workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:34</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:41:34</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:35:49</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
@@ -768,13 +775,13 @@ workflow:</p>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span></span>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:34</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:34</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:50</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:41</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:58</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:41</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:35:58</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
 </details><p>In the report displayed below, the histograms are displayed with 5
 bins except for categorical parameter whose categories are displayed as
@@ -791,19 +798,19 @@ below:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:43</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:00</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:41:43</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:36:00</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
@@ -820,13 +827,13 @@ below:</p>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">bins</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:44</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:00</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:44</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:00</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:49</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:49</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:06</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.1 min</span></span></code></pre></div>
 </details><pre><code><span><span class="co">#&gt; file:////home/runner/work/OSPSuite.ReportingEngine/OSPSuite.ReportingEngine/vignettes/Pediatric-Range/Report.html screenshot completed</span></span></code></pre>
 <details><summary><strong>Report</strong>
@@ -861,19 +868,19 @@ pediatric workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:51</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:08</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:41:51</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:36:08</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
@@ -890,13 +897,13 @@ pediatric workflow:</p>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">stairstep</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:51</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:08</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:51</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:08</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:56</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:13</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:57</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:13</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.1 min</span></span></code></pre></div>
 </details><pre><code><span><span class="co">#&gt; file:////home/runner/work/OSPSuite.ReportingEngine/OSPSuite.ReportingEngine/vignettes/Pediatric-Range/Report.html screenshot completed</span></span></code></pre>
 <details><summary><strong>Report</strong>
@@ -921,19 +928,19 @@ workflow:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Parallel-Histograms"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:58</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:41:58</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:36:15</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">parallelWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
@@ -949,13 +956,13 @@ workflow:</p>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">dodge</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
 <span></span>
 <span><span class="va">parallelWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:58</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:41:58</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:15</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:42:05</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:42:05</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:23</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">parallelComparison</span> completed in 0.1 min</span></span></code></pre></div>
 </details><pre><code><span><span class="co">#&gt; file:////home/runner/work/OSPSuite.ReportingEngine/OSPSuite.ReportingEngine/vignettes/Parallel-Histograms/Report.html screenshot completed</span></span></code></pre>
 <details><summary><strong>Report</strong>
@@ -986,19 +993,19 @@ bins as the simulation set to compare:</p>
 <span>  workflowFolder <span class="op">=</span> <span class="st">"Pediatric-Range"</span>,</span>
 <span>  createWordReport <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:42:07</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:24</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Reporting Engine Information:</span></span>
-<span><span class="co">#&gt;  Date: 28/07/2025 - 09:42:07</span></span>
+<span><span class="co">#&gt;  Date: 01/07/2026 - 10:36:24</span></span>
 <span><span class="co">#&gt;  User Information:</span></span>
-<span><span class="co">#&gt;  Computer Name: pkrvmpptgkbjq6m</span></span>
+<span><span class="co">#&gt;  Computer Name: runnervmjbsos</span></span>
 <span><span class="co">#&gt;  User: runner</span></span>
 <span><span class="co">#&gt;  Login: unknown</span></span>
 <span><span class="co">#&gt;  System is NOT validated</span></span>
 <span><span class="co">#&gt;  System versions:</span></span>
-<span><span class="co">#&gt;  R version: R version 4.5.1 (2025-06-13)</span></span>
-<span><span class="co">#&gt;  OSP Suite Package version: 12.3.0.9001</span></span>
-<span><span class="co">#&gt;  OSP Reporting Engine version: 2.3.11</span></span>
-<span><span class="co">#&gt;  tlf version: 1.6.0</span></span>
+<span><span class="co">#&gt;  R version: R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">#&gt;  OSP Suite Package version: 12.4.3</span></span>
+<span><span class="co">#&gt;  OSP Reporting Engine version: 2.4.7</span></span>
+<span><span class="co">#&gt;  tlf version: 1.6.2</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/inactivateWorkflowTasks.html">inactivateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/activateWorkflowTasks.html">activateWorkflowTasks</a></span><span class="op">(</span><span class="va">pediatricWorkflow</span>, tasks <span class="op">=</span> <span class="va">AllAvailableTasks</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">)</span></span>
@@ -1014,13 +1021,13 @@ bins as the simulation set to compare:</p>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="va">plotDemography</span><span class="op">$</span><span class="va">settings</span><span class="op">$</span><span class="va">referenceGlobalRange</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
 <span></span>
 <span><span class="va">pediatricWorkflow</span><span class="op">$</span><span class="fu">runWorkflow</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:42:08</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:24</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:42:08</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:24</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span>Starting run of <span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span></span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:42:13</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:30</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Plot Demography task</span> completed in 0.1 min</span></span>
-<span><span class="co">#&gt; 28/07/2025 - 09:42:13</span></span>
+<span><span class="co">#&gt; 01/07/2026 - 10:36:30</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00; font-weight: bold;">i Info  </span><span style="color: #00BBBB; font-weight: bold; font-style: italic;">Population Workflow</span> for <span style="color: #00BBBB; font-weight: bold; font-style: italic;">pediatric</span> completed in 0.1 min</span></span></code></pre></div>
 </details><pre><code><span><span class="co">#&gt; file:////home/runner/work/OSPSuite.ReportingEngine/OSPSuite.ReportingEngine/vignettes/Pediatric-Range/Report.html screenshot completed</span></span></code></pre>
 <details><summary><strong>Report</strong>
@@ -1038,7 +1045,7 @@ bins as the simulation set to compare:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
