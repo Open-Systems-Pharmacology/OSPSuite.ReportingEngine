@@ -499,6 +499,10 @@ getPlotSettings <- function(plotSettingsFromConfigurationPlot) {
 #' @param pkSimPortableFolder Folder where PK-Sim is located.
 #' If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
 #' This option is **MANDATORY** for the portable version of PK-Sim.
+#' @param moBiPortableFolder Folder where MoBi is located.
+#' If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
+#' This option is **MANDATORY** for the portable version of MoBi.
+#' Only required for qualification plans including MoBi projects.
 #' @param configurationPlanName Name of the configuration plan to be generated. Default is `"report-configuration-plan"`
 #' @param overwrite Logical defining if the contents of the output folder will be deleted, even if it not empty. Default is false.
 #' @param logFile Full path of log file where log output will be written. A log file will not be created if this value is not provided.
@@ -511,6 +515,7 @@ startQualificationRunner <- function(
   qualificationPlanFile,
   outputFolder,
   pkSimPortableFolder = NULL,
+  moBiPortableFolder = NULL,
   configurationPlanName = NULL,
   overwrite = TRUE,
   logFile = NULL,
@@ -524,6 +529,7 @@ startQualificationRunner <- function(
 
   options <- c(
     ifNotNull(pkSimPortableFolder, paste0('-p "', pkSimPortableFolder, '"')),
+    ifNotNull(moBiPortableFolder, paste0('-m "', moBiPortableFolder, '"')),
     ifNotNull(
       configurationPlanName,
       paste0('-n "', configurationPlanName, '"')
