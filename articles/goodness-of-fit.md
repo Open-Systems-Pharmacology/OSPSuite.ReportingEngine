@@ -162,11 +162,11 @@ workflow1 <-
     simulationSets = setA,
     workflowFolder = "Example-1"
   )
-#> 01/07/2026 - 19:09:00
+#> 17/08/2026 - 21:10:34
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:09:00
+#>  Date: 17/08/2026 - 21:10:34
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -181,27 +181,27 @@ workflow1$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow1$runWorkflow()
-#> 01/07/2026 - 19:09:00
+#> 17/08/2026 - 21:10:35
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:09:00
+#> 17/08/2026 - 21:10:35
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 19:09:00
+#> 17/08/2026 - 21:10:35
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 01/07/2026 - 19:09:00
+#> 17/08/2026 - 21:10:35
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 01/07/2026 - 19:09:01
+#> 17/08/2026 - 21:10:35
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 19:09:01
+#> 17/08/2026 - 21:10:35
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:09:01
+#> 17/08/2026 - 21:10:35
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:09:02
+#> 17/08/2026 - 21:10:37
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 01/07/2026 - 19:09:02
+#> 17/08/2026 - 21:10:37
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 01/07/2026 - 19:09:03
+#> 17/08/2026 - 21:10:37
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -272,11 +272,11 @@ workflow2 <-
     simulationSets = setA,
     workflowFolder = "Example-1"
   )
-#> 01/07/2026 - 19:09:05
+#> 17/08/2026 - 21:10:40
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:09:05
+#>  Date: 17/08/2026 - 21:10:40
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -292,20 +292,20 @@ workflow2$inactivateTasks("simulate")
 
 # Run the workflow
 workflow2$runWorkflow()
-#> 01/07/2026 - 19:09:05
+#> 17/08/2026 - 21:10:40
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:09:05
+#> 17/08/2026 - 21:10:40
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:09:05
+#> 17/08/2026 - 21:10:40
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:09:05
+#> 17/08/2026 - 21:10:40
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
-#> 01/07/2026 - 19:09:10
+#> 17/08/2026 - 21:10:46
 #> i Info  Plot Time profiles and Residuals task completed in 0.1 min
-#> 01/07/2026 - 19:09:10
+#> 17/08/2026 - 21:10:46
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 01/07/2026 - 19:09:11
+#> 17/08/2026 - 21:10:47
 #> i Info  Mean Model Workflow completed in 0.1 min
 ```
 
@@ -401,11 +401,11 @@ workflow3 <-
     simulationSets = setA,
     workflowFolder = "Example-1"
   )
-#> 01/07/2026 - 19:09:12
+#> 17/08/2026 - 21:10:48
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:09:12
+#>  Date: 17/08/2026 - 21:10:48
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -421,20 +421,20 @@ workflow3$inactivateTasks("simulate")
 
 # Run the workflow
 workflow3$runWorkflow()
-#> 01/07/2026 - 19:09:12
+#> 17/08/2026 - 21:10:48
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:09:12
+#> 17/08/2026 - 21:10:48
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:09:12
+#> 17/08/2026 - 21:10:48
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:09:12
+#> 17/08/2026 - 21:10:48
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionaryLoq.csv'
-#> 01/07/2026 - 19:09:18
+#> 17/08/2026 - 21:10:55
 #> i Info  Plot Time profiles and Residuals task completed in 0.1 min
-#> 01/07/2026 - 19:09:18
+#> 17/08/2026 - 21:10:55
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 01/07/2026 - 19:09:18
+#> 17/08/2026 - 21:10:55
 #> i Info  Mean Model Workflow completed in 0.1 min
 ```
 
@@ -521,11 +521,11 @@ workflow4 <-
     simulationSets = setAB,
     workflowFolder = "Example-4"
   )
-#> 01/07/2026 - 19:09:19
+#> 17/08/2026 - 21:10:57
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:09:19
+#>  Date: 17/08/2026 - 21:10:57
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -540,29 +540,29 @@ workflow4$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow4$runWorkflow()
-#> 01/07/2026 - 19:09:20
+#> 17/08/2026 - 21:10:57
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:09:20
+#> 17/08/2026 - 21:10:57
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 19:09:20
+#> 17/08/2026 - 21:10:57
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 01/07/2026 - 19:09:20
+#> 17/08/2026 - 21:10:57
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 01/07/2026 - 19:09:20
+#> 17/08/2026 - 21:10:58
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 19:09:20
+#> 17/08/2026 - 21:10:58
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:09:20
+#> 17/08/2026 - 21:10:58
 #> i Info  Starting run of Plot Time profiles and Residuals task for A and B
-#> 01/07/2026 - 19:09:20
+#> 17/08/2026 - 21:10:58
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
-#> 01/07/2026 - 19:09:27
+#> 17/08/2026 - 21:11:05
 #> i Info  Plot Time profiles and Residuals task completed in 0.1 min
-#> 01/07/2026 - 19:09:27
+#> 17/08/2026 - 21:11:05
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-4" -t docx -o 'Example-4/Report-word.docx' 'Example-4/Report-word.md'
 #> 
-#> 01/07/2026 - 19:09:27
+#> 17/08/2026 - 21:11:05
 #> i Info  Mean Model Workflow completed in 0.1 min
 ```
 
@@ -637,11 +637,11 @@ workflow5 <-
     simulationSets = c(setA, setB),
     workflowFolder = "Example-5"
   )
-#> 01/07/2026 - 19:09:28
+#> 17/08/2026 - 21:11:07
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:09:28
+#>  Date: 17/08/2026 - 21:11:07
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -656,31 +656,31 @@ workflow5$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow5$runWorkflow()
-#> 01/07/2026 - 19:09:28
+#> 17/08/2026 - 21:11:07
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:09:28
+#> 17/08/2026 - 21:11:07
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 19:09:28
+#> 17/08/2026 - 21:11:07
 #> i Info  Splitting simulations for parallel run: 2 simulations split into 1 subsets
-#> 01/07/2026 - 19:09:28
+#> 17/08/2026 - 21:11:07
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 01/07/2026 - 19:09:29
+#> 17/08/2026 - 21:11:07
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 19:09:29
+#> 17/08/2026 - 21:11:07
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:09:29
+#> 17/08/2026 - 21:11:07
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:09:29
+#> 17/08/2026 - 21:11:07
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
-#> 01/07/2026 - 19:09:34
+#> 17/08/2026 - 21:11:13
 #> i Info  Starting run of Plot Time profiles and Residuals task for B
-#> 01/07/2026 - 19:09:39
+#> 17/08/2026 - 21:11:20
 #> i Info  Plot Time profiles and Residuals task completed in 0.2 min
-#> 01/07/2026 - 19:09:39
+#> 17/08/2026 - 21:11:20
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-5" -t docx -o 'Example-5/Report-word.docx' 'Example-5/Report-word.md'
 #> 
-#> 01/07/2026 - 19:09:40
+#> 17/08/2026 - 21:11:20
 #> i Info  Mean Model Workflow completed in 0.2 min
 ```
 
@@ -732,11 +732,11 @@ workflow6 <-
     simulationSets = setA,
     workflowFolder = "Example-6"
   )
-#> 01/07/2026 - 19:09:41
+#> 17/08/2026 - 21:11:22
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:09:41
+#>  Date: 17/08/2026 - 21:11:22
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -751,29 +751,29 @@ workflow6$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow6$runWorkflow()
-#> 01/07/2026 - 19:09:41
+#> 17/08/2026 - 21:11:22
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 01/07/2026 - 19:09:41
+#> 17/08/2026 - 21:11:22
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 19:09:41
+#> 17/08/2026 - 21:11:22
 #> i Info  Starting run of Population Simulations
 #>   |                                                                              |                                                                      |   0%
-#> 01/07/2026 - 19:09:41
+#> 17/08/2026 - 21:11:22
 #> i Info  Starting run of A (Pop500_p1p2p3)
 #>   |                                                                              |======================================================================| 100%
 #> 
-#> 01/07/2026 - 19:09:41
+#> 17/08/2026 - 21:11:22
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 19:09:41
+#> 17/08/2026 - 21:11:22
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:09:41
+#> 17/08/2026 - 21:11:22
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:09:43
+#> 17/08/2026 - 21:11:24
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 01/07/2026 - 19:09:43
+#> 17/08/2026 - 21:11:24
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-6" -t docx -o 'Example-6/Report-word.docx' 'Example-6/Report-word.md'
 #> 
-#> 01/07/2026 - 19:09:43
+#> 17/08/2026 - 21:11:24
 #> i Info  Population Workflow for parallelComparison completed in 0 min
 ```
 
@@ -835,11 +835,11 @@ workflow7 <-
     simulationSets = setA,
     workflowFolder = "Example-6"
   )
-#> 01/07/2026 - 19:09:44
+#> 17/08/2026 - 21:11:26
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:09:44
+#>  Date: 17/08/2026 - 21:11:26
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -855,20 +855,20 @@ workflow7$inactivateTasks(StandardSimulationTasks$simulate)
 
 # Run the workflow
 workflow7$runWorkflow()
-#> 01/07/2026 - 19:09:44
+#> 17/08/2026 - 21:11:26
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 01/07/2026 - 19:09:44
+#> 17/08/2026 - 21:11:26
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:09:44
+#> 17/08/2026 - 21:11:26
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:09:44
+#> 17/08/2026 - 21:11:26
 #> ! Warning   incomplete final line found on '/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/tpDictionary.csv'
-#> 01/07/2026 - 19:09:50
+#> 17/08/2026 - 21:11:32
 #> i Info  Plot Time profiles and Residuals task completed in 0.1 min
-#> 01/07/2026 - 19:09:50
+#> 17/08/2026 - 21:11:32
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-6" -t docx -o 'Example-6/Report-word.docx' 'Example-6/Report-word.md'
 #> 
-#> 01/07/2026 - 19:09:50
+#> 17/08/2026 - 21:11:33
 #> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 

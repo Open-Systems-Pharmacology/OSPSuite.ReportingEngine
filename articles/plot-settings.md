@@ -234,11 +234,11 @@ workflowA <-
     simulationSets = setA,
     workflowFolder = "Example-A"
   )
-#> 01/07/2026 - 19:10:52
+#> 17/08/2026 - 21:12:42
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:10:52
+#>  Date: 17/08/2026 - 21:12:42
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -314,27 +314,27 @@ configuration.
 
 # Run the workflow
 workflowA$runWorkflow()
-#> 01/07/2026 - 19:10:52
+#> 17/08/2026 - 21:12:42
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:10:52
+#> 17/08/2026 - 21:12:42
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 19:10:52
+#> 17/08/2026 - 21:12:42
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 01/07/2026 - 19:10:52
+#> 17/08/2026 - 21:12:42
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 01/07/2026 - 19:10:53
+#> 17/08/2026 - 21:12:42
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 19:10:53
+#> 17/08/2026 - 21:12:42
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:10:53
+#> 17/08/2026 - 21:12:42
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:10:54
+#> 17/08/2026 - 21:12:44
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 01/07/2026 - 19:10:54
+#> 17/08/2026 - 21:12:44
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-A" -t docx -o 'Example-A/Report-word.docx' 'Example-A/Report-word.md'
 #> 
-#> 01/07/2026 - 19:10:54
+#> 17/08/2026 - 21:12:44
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 

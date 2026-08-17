@@ -11,6 +11,7 @@ startQualificationRunner(
   qualificationPlanFile,
   outputFolder,
   pkSimPortableFolder = NULL,
+  moBiPortableFolder = NULL,
   configurationPlanName = NULL,
   overwrite = TRUE,
   logFile = NULL,
@@ -39,6 +40,14 @@ startQualificationRunner(
   will be read from the registry (available only in case of full
   **non-portable** installation). This option is **MANDATORY** for the
   portable version of PK-Sim.
+
+- moBiPortableFolder:
+
+  Folder where MoBi is located. If not specified, installation path will
+  be read from the registry (available only in case of full
+  **non-portable** installation). This option is **MANDATORY** for the
+  portable version of MoBi. Only required for qualification plans
+  including MoBi projects.
 
 - configurationPlanName:
 

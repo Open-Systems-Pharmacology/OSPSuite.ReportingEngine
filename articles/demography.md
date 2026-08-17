@@ -199,11 +199,11 @@ parallelWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:07:05
+#> 17/08/2026 - 21:09:15
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:07:05
+#>  Date: 17/08/2026 - 21:09:15
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -273,14 +273,14 @@ Run the corresponding workflow:
 ``` r
 
 parallelWorkflow$runWorkflow()
-#> 01/07/2026 - 19:07:05
+#> 17/08/2026 - 21:09:15
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 01/07/2026 - 19:07:05
+#> 17/08/2026 - 21:09:15
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:07:16
-#> i Info  Plot Demography task completed in 0.2 min
-#> 01/07/2026 - 19:07:16
-#> i Info  Population Workflow for parallelComparison completed in 0.2 min
+#> 17/08/2026 - 21:09:22
+#> i Info  Plot Demography task completed in 0.1 min
+#> 17/08/2026 - 21:09:22
+#> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
 For Parallel and Ratio Comparison workflows, the demography histograms
@@ -315,11 +315,11 @@ parallelWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Parallel-Range-Plots",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:07:18
+#> 17/08/2026 - 21:09:25
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:07:18
+#>  Date: 17/08/2026 - 21:09:24
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -358,14 +358,14 @@ Run the corresponding workflow:
 ``` r
 
 parallelWorkflow$runWorkflow()
-#> 01/07/2026 - 19:07:18
+#> 17/08/2026 - 21:09:25
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 01/07/2026 - 19:07:18
+#> 17/08/2026 - 21:09:25
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:07:31
-#> i Info  Plot Demography task completed in 0.2 min
-#> 01/07/2026 - 19:07:31
-#> i Info  Population Workflow for parallelComparison completed in 0.2 min
+#> 17/08/2026 - 21:09:32
+#> i Info  Plot Demography task completed in 0.1 min
+#> 17/08/2026 - 21:09:32
+#> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
 For Parallel and Ratio Comparison workflows, the demography range plots
@@ -445,11 +445,11 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Histograms",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:07:33
+#> 17/08/2026 - 21:09:34
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:07:33
+#>  Date: 17/08/2026 - 21:09:33
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -486,14 +486,14 @@ Run the corresponding workflow:
 ``` r
 
 pediatricWorkflow$runWorkflow()
-#> 01/07/2026 - 19:07:33
+#> 17/08/2026 - 21:09:34
 #> i Info  Starting run of Population Workflow for pediatric
-#> 01/07/2026 - 19:07:33
+#> 17/08/2026 - 21:09:34
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:07:44
-#> i Info  Plot Demography task completed in 0.2 min
-#> 01/07/2026 - 19:07:44
-#> i Info  Population Workflow for pediatric completed in 0.2 min
+#> 17/08/2026 - 21:09:40
+#> i Info  Plot Demography task completed in 0.1 min
+#> 17/08/2026 - 21:09:40
+#> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
 For Pediatric workflows, the demography histograms display the
@@ -529,11 +529,11 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Range-Plots",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:07:45
+#> 17/08/2026 - 21:09:41
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:07:45
+#>  Date: 17/08/2026 - 21:09:41
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -572,14 +572,14 @@ Run the corresponding workflow:
 ``` r
 
 pediatricWorkflow$runWorkflow()
-#> 01/07/2026 - 19:07:46
+#> 17/08/2026 - 21:09:41
 #> i Info  Starting run of Population Workflow for pediatric
-#> 01/07/2026 - 19:07:46
+#> 17/08/2026 - 21:09:41
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:08:04
-#> i Info  Plot Demography task completed in 0.3 min
-#> 01/07/2026 - 19:08:04
-#> i Info  Population Workflow for pediatric completed in 0.3 min
+#> 17/08/2026 - 21:09:51
+#> i Info  Plot Demography task completed in 0.2 min
+#> 17/08/2026 - 21:09:51
+#> i Info  Population Workflow for pediatric completed in 0.2 min
 ```
 
 For Pediatric workflows, the demography range plots display the
@@ -642,11 +642,11 @@ parallelWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:08:05
+#> 17/08/2026 - 21:09:53
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:08:05
+#>  Date: 17/08/2026 - 21:09:53
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -671,14 +671,14 @@ setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displa
 parallelWorkflow$plotDemography$settings$bins <- 5
 
 parallelWorkflow$runWorkflow()
-#> 01/07/2026 - 19:08:05
+#> 17/08/2026 - 21:09:53
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 01/07/2026 - 19:08:05
+#> 17/08/2026 - 21:09:53
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:08:15
-#> i Info  Plot Demography task completed in 0.2 min
-#> 01/07/2026 - 19:08:15
-#> i Info  Population Workflow for parallelComparison completed in 0.2 min
+#> 17/08/2026 - 21:09:59
+#> i Info  Plot Demography task completed in 0.1 min
+#> 17/08/2026 - 21:09:59
+#> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
 In the report displayed below, the histograms are displayed with 5 bins
@@ -703,11 +703,11 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:08:16
+#> 17/08/2026 - 21:10:01
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:08:16
+#>  Date: 17/08/2026 - 21:10:01
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -732,13 +732,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$bins <- 5
 
 pediatricWorkflow$runWorkflow()
-#> 01/07/2026 - 19:08:17
+#> 17/08/2026 - 21:10:01
 #> i Info  Starting run of Population Workflow for pediatric
-#> 01/07/2026 - 19:08:17
+#> 17/08/2026 - 21:10:01
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:08:23
+#> 17/08/2026 - 21:10:07
 #> i Info  Plot Demography task completed in 0.1 min
-#> 01/07/2026 - 19:08:23
+#> 17/08/2026 - 21:10:07
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
@@ -784,11 +784,11 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:08:25
+#> 17/08/2026 - 21:10:08
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:08:25
+#>  Date: 17/08/2026 - 21:10:08
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -813,13 +813,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$stairstep <- FALSE
 
 pediatricWorkflow$runWorkflow()
-#> 01/07/2026 - 19:08:25
+#> 17/08/2026 - 21:10:08
 #> i Info  Starting run of Population Workflow for pediatric
-#> 01/07/2026 - 19:08:25
+#> 17/08/2026 - 21:10:08
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:08:33
+#> 17/08/2026 - 21:10:12
 #> i Info  Plot Demography task completed in 0.1 min
-#> 01/07/2026 - 19:08:33
+#> 17/08/2026 - 21:10:12
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 
@@ -854,11 +854,11 @@ parallelWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Parallel-Histograms",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:08:34
+#> 17/08/2026 - 21:10:14
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:08:34
+#>  Date: 17/08/2026 - 21:10:14
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -882,14 +882,14 @@ setYParametersForDemographyPlot(workflow = parallelWorkflow, parameters = displa
 parallelWorkflow$plotDemography$settings$dodge <- FALSE
 
 parallelWorkflow$runWorkflow()
-#> 01/07/2026 - 19:08:34
+#> 17/08/2026 - 21:10:14
 #> i Info  Starting run of Population Workflow for parallelComparison
-#> 01/07/2026 - 19:08:34
+#> 17/08/2026 - 21:10:14
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:08:44
-#> i Info  Plot Demography task completed in 0.2 min
-#> 01/07/2026 - 19:08:44
-#> i Info  Population Workflow for parallelComparison completed in 0.2 min
+#> 17/08/2026 - 21:10:20
+#> i Info  Plot Demography task completed in 0.1 min
+#> 17/08/2026 - 21:10:20
+#> i Info  Population Workflow for parallelComparison completed in 0.1 min
 ```
 
     #> file:////home/runner/work/OSPSuite.ReportingEngine/OSPSuite.ReportingEngine/vignettes/Parallel-Histograms/Report.html screenshot completed
@@ -929,11 +929,11 @@ pediatricWorkflow <- PopulationWorkflow$new(
   workflowFolder = "Pediatric-Range",
   createWordReport = FALSE
 )
-#> 01/07/2026 - 19:08:45
+#> 17/08/2026 - 21:10:21
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:08:45
+#>  Date: 17/08/2026 - 21:10:21
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -957,13 +957,13 @@ setYParametersForDemographyPlot(workflow = pediatricWorkflow, parameters = displ
 pediatricWorkflow$plotDemography$settings$referenceGlobalRange <- FALSE
 
 pediatricWorkflow$runWorkflow()
-#> 01/07/2026 - 19:08:46
+#> 17/08/2026 - 21:10:21
 #> i Info  Starting run of Population Workflow for pediatric
-#> 01/07/2026 - 19:08:46
+#> 17/08/2026 - 21:10:21
 #> i Info  Starting run of Plot Demography task
-#> 01/07/2026 - 19:08:52
+#> 17/08/2026 - 21:10:26
 #> i Info  Plot Demography task completed in 0.1 min
-#> 01/07/2026 - 19:08:52
+#> 17/08/2026 - 21:10:26
 #> i Info  Population Workflow for pediatric completed in 0.1 min
 ```
 

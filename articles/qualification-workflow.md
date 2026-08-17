@@ -238,6 +238,10 @@ and named `createQualificationReport`.
 #' @param pkSimPortableFolder Folder where PK-Sim is located.
 #' If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
 #' This option is **MANDATORY** for the portable version of PK-Sim.
+#' @param moBiPortableFolder Folder where MoBi is located.
+#' If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).
+#' This option is **MANDATORY** for the portable version of MoBi.
+#' Only required for qualification plans including MoBi projects.
 #' @param createWordReport Logical defining if a `docx` version of the report should also be created.
 #' Note that `pandoc` installation is required for this feature
 #' [https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc]
@@ -261,6 +265,7 @@ and named `createQualificationReport`.
 #' 
 createQualificationReport <- function(qualificationRunnerFolder,
                                       pkSimPortableFolder = NULL,
+                                      moBiPortableFolder = NULL,
                                       createWordReport = TRUE,
                                       maxSimulationsPerCore = NULL,
                                       versionInfo = NULL,
@@ -338,6 +343,7 @@ createQualificationReport <- function(qualificationRunnerFolder,
     qualificationPlanFile = qualificationPlanFile,
     outputFolder = reInputFolder,
     pkSimPortableFolder = pkSimPortableFolder,
+    moBiPortableFolder = moBiPortableFolder,
     configurationPlanName = configurationPlanName,
     overwrite = overwrite,
     logFile = logFile,

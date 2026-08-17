@@ -61,11 +61,11 @@ workflow <-
     workflowFolder = "Example-1",
     reportTitle = "A meaningful title"
   )
-#> 01/07/2026 - 19:06:50
+#> 17/08/2026 - 21:08:58
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:06:50
+#>  Date: 17/08/2026 - 21:08:58
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -80,27 +80,27 @@ workflow$activateTasks(c("simulate", "plotTimeProfilesAndResiduals"))
 
 # Run the workflow
 workflow$runWorkflow()
-#> 01/07/2026 - 19:06:51
+#> 17/08/2026 - 21:08:58
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:06:51
+#> 17/08/2026 - 21:08:58
 #> i Info  Starting run of Simulation task
-#> 01/07/2026 - 19:06:51
+#> 17/08/2026 - 21:08:58
 #> i Info  Splitting simulations for parallel run: 1 simulations split into 1 subsets
-#> 01/07/2026 - 19:06:51
+#> 17/08/2026 - 21:08:58
 #> i Info  Starting run of subset simulations
 #>   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
-#> 01/07/2026 - 19:06:51
+#> 17/08/2026 - 21:08:59
 #> i Info  Simulation task completed in 0 min
-#> 01/07/2026 - 19:06:51
+#> 17/08/2026 - 21:08:59
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:06:51
+#> 17/08/2026 - 21:08:59
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:06:53
+#> 17/08/2026 - 21:09:01
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 01/07/2026 - 19:06:53
+#> 17/08/2026 - 21:09:01
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 01/07/2026 - 19:06:53
+#> 17/08/2026 - 21:09:01
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -153,18 +153,18 @@ workflow$reportTitle <- titlePage
 
 # Re-run the workflow with the new title page
 workflow$runWorkflow()
-#> 01/07/2026 - 19:06:54
+#> 17/08/2026 - 21:09:03
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:06:54
+#> 17/08/2026 - 21:09:03
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:06:54
+#> 17/08/2026 - 21:09:03
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:06:56
+#> 17/08/2026 - 21:09:05
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 01/07/2026 - 19:06:56
+#> 17/08/2026 - 21:09:05
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 01/07/2026 - 19:06:56
+#> 17/08/2026 - 21:09:05
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 
@@ -202,18 +202,18 @@ workflow$reportTitle <- titlePageFile
 
 # Re-run the workflow with the new title page
 workflow$runWorkflow()
-#> 01/07/2026 - 19:06:57
+#> 17/08/2026 - 21:09:06
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:06:57
+#> 17/08/2026 - 21:09:06
 #> i Info  Starting run of Plot Time profiles and Residuals task
-#> 01/07/2026 - 19:06:57
+#> 17/08/2026 - 21:09:06
 #> i Info  Starting run of Plot Time profiles and Residuals task for A
-#> 01/07/2026 - 19:06:59
+#> 17/08/2026 - 21:09:08
 #> i Info  Plot Time profiles and Residuals task completed in 0 min
-#> 01/07/2026 - 19:06:59
+#> 17/08/2026 - 21:09:08
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Example-1" -t docx -o 'Example-1/Report-word.docx' 'Example-1/Report-word.md'
 #> 
-#> 01/07/2026 - 19:06:59
+#> 17/08/2026 - 21:09:08
 #> i Info  Mean Model Workflow completed in 0 min
 ```
 

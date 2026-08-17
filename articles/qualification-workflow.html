@@ -338,6 +338,10 @@ and named <code>createQualificationReport</code>.</p>
 <span><span class="co">#' @param pkSimPortableFolder Folder where PK-Sim is located.</span></span>
 <span><span class="co">#' If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).</span></span>
 <span><span class="co">#' This option is **MANDATORY** for the portable version of PK-Sim.</span></span>
+<span><span class="co">#' @param moBiPortableFolder Folder where MoBi is located.</span></span>
+<span><span class="co">#' If not specified, installation path will be read from the registry (available only in case of full **non-portable** installation).</span></span>
+<span><span class="co">#' This option is **MANDATORY** for the portable version of MoBi.</span></span>
+<span><span class="co">#' Only required for qualification plans including MoBi projects.</span></span>
 <span><span class="co">#' @param createWordReport Logical defining if a `docx` version of the report should also be created.</span></span>
 <span><span class="co">#' Note that `pandoc` installation is required for this feature</span></span>
 <span><span class="co">#' [https://github.com/Open-Systems-Pharmacology/OSPSuite.ReportingEngine/wiki/Installing-pandoc]</span></span>
@@ -361,6 +365,7 @@ and named <code>createQualificationReport</code>.</p>
 <span><span class="co">#' </span></span>
 <span><span class="va">createQualificationReport</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">qualificationRunnerFolder</span>,</span>
 <span>                                      <span class="va">pkSimPortableFolder</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                                      <span class="va">moBiPortableFolder</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                                      <span class="va">createWordReport</span> <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                      <span class="va">maxSimulationsPerCore</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                                      <span class="va">versionInfo</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -438,6 +443,7 @@ and named <code>createQualificationReport</code>.</p>
 <span>    qualificationPlanFile <span class="op">=</span> <span class="va">qualificationPlanFile</span>,</span>
 <span>    outputFolder <span class="op">=</span> <span class="va">reInputFolder</span>,</span>
 <span>    pkSimPortableFolder <span class="op">=</span> <span class="va">pkSimPortableFolder</span>,</span>
+<span>    moBiPortableFolder <span class="op">=</span> <span class="va">moBiPortableFolder</span>,</span>
 <span>    configurationPlanName <span class="op">=</span> <span class="va">configurationPlanName</span>,</span>
 <span>    overwrite <span class="op">=</span> <span class="va">overwrite</span>,</span>
 <span>    logFile <span class="op">=</span> <span class="va">logFile</span>,</span>
@@ -596,7 +602,7 @@ exponent notations as illustrated in the example below:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

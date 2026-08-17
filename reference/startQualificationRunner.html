@@ -59,6 +59,7 @@
 <span>  <span class="va">qualificationPlanFile</span>,</span>
 <span>  <span class="va">outputFolder</span>,</span>
 <span>  pkSimPortableFolder <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  moBiPortableFolder <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  configurationPlanName <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  logFile <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -87,6 +88,13 @@
 <dd><p>Folder where PK-Sim is located.
 If not specified, installation path will be read from the registry (available only in case of full <strong>non-portable</strong> installation).
 This option is <strong>MANDATORY</strong> for the portable version of PK-Sim.</p></dd>
+
+
+<dt id="arg-mobiportablefolder">moBiPortableFolder<a class="anchor" aria-label="anchor" href="#arg-mobiportablefolder"></a></dt>
+<dd><p>Folder where MoBi is located.
+If not specified, installation path will be read from the registry (available only in case of full <strong>non-portable</strong> installation).
+This option is <strong>MANDATORY</strong> for the portable version of MoBi.
+Only required for qualification plans including MoBi projects.</p></dd>
 
 
 <dt id="arg-configurationplanname">configurationPlanName<a class="anchor" aria-label="anchor" href="#arg-configurationplanname"></a></dt>
@@ -128,7 +136,7 @@ This option is <strong>MANDATORY</strong> for the portable version of PK-Sim.</p
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

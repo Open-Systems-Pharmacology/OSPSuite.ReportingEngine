@@ -65,11 +65,11 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
   simulationSets = simulationSet,
   workflowFolder = "Mass-Balance-Workflow"
 )
-#> 01/07/2026 - 19:09:55
+#> 17/08/2026 - 21:11:39
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:09:55
+#>  Date: 17/08/2026 - 21:11:39
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -82,22 +82,22 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
 massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
 massBalanceWorkflow$activateTasks("plotMassBalance")
 massBalanceWorkflow$runWorkflow()
-#> 01/07/2026 - 19:09:56
+#> 17/08/2026 - 21:11:39
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:09:56
+#> 17/08/2026 - 21:11:39
 #> i Info  Starting run of Plot Mass Balance task
-#> 01/07/2026 - 19:09:56
+#> 17/08/2026 - 21:11:39
 #> i Info  Starting run of Plot Mass Balance task for Aciclovir
-#> 01/07/2026 - 19:09:57
+#> 17/08/2026 - 21:11:41
 #> ! Warning   No molecule paths included in group 'Aciclovir - Endosome'.
-#> 01/07/2026 - 19:09:57
+#> 17/08/2026 - 21:11:41
 #> ! Warning   No molecule paths included in group 'Rest of Aciclovir'.
-#> 01/07/2026 - 19:10:06
+#> 17/08/2026 - 21:11:50
 #> i Info  Plot Mass Balance task completed in 0.2 min
-#> 01/07/2026 - 19:10:06
+#> 17/08/2026 - 21:11:51
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o 'Mass-Balance-Workflow/Report-word.docx' 'Mass-Balance-Workflow/Report-word.md'
 #> 
-#> 01/07/2026 - 19:10:06
+#> 17/08/2026 - 21:11:51
 #> i Info  Mean Model Workflow completed in 0.2 min
 ```
 
@@ -275,11 +275,11 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
   simulationSets = simulationSet,
   workflowFolder = "Mass-Balance-Workflow"
 )
-#> 01/07/2026 - 19:10:08
+#> 17/08/2026 - 21:11:54
 #> i Info  Reporting Engine Information:
-#>  Date: 01/07/2026 - 19:10:08
+#>  Date: 17/08/2026 - 21:11:54
 #>  User Information:
-#>  Computer Name: runnervmjbsos
+#>  Computer Name: runnervmp9m8c
 #>  User: runner
 #>  Login: unknown
 #>  System is NOT validated
@@ -292,18 +292,18 @@ massBalanceWorkflow <- MeanModelWorkflow$new(
 massBalanceWorkflow$inactivateTasks(massBalanceWorkflow$getAllTasks())
 massBalanceWorkflow$activateTasks("plotMassBalance")
 massBalanceWorkflow$runWorkflow()
-#> 01/07/2026 - 19:10:08
+#> 17/08/2026 - 21:11:54
 #> i Info  Starting run of Mean Model Workflow
-#> 01/07/2026 - 19:10:08
+#> 17/08/2026 - 21:11:54
 #> i Info  Starting run of Plot Mass Balance task
-#> 01/07/2026 - 19:10:08
+#> 17/08/2026 - 21:11:54
 #> i Info  Starting run of Plot Mass Balance task for Aciclovir
-#> 01/07/2026 - 19:10:24
+#> 17/08/2026 - 21:12:10
 #> i Info  Plot Mass Balance task completed in 0.3 min
-#> 01/07/2026 - 19:10:24
+#> 17/08/2026 - 21:12:10
 #> i Info  Executing: pandoc --embed-resources --standalone --wrap=none --toc --from=markdown+tex_math_dollars+superscript+subscript+raw_attribute --reference-doc="/home/runner/work/_temp/Library/ospsuite.reportingengine/extdata/reference.docx" --resource-path="Mass-Balance-Workflow" -t docx -o 'Mass-Balance-Workflow/Report-word.docx' 'Mass-Balance-Workflow/Report-word.md'
 #> 
-#> 01/07/2026 - 19:10:24
+#> 17/08/2026 - 21:12:10
 #> i Info  Mean Model Workflow completed in 0.3 min
 ```
 
