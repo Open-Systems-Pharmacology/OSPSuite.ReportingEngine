@@ -9,6 +9,7 @@ startQualificationRunner(
   qualificationPlanFile,
   outputFolder,
   pkSimPortableFolder = NULL,
+  moBiPortableFolder = NULL,
   configurationPlanName = NULL,
   overwrite = TRUE,
   logFile = NULL,
@@ -26,6 +27,11 @@ startQualificationRunner(
 \item{pkSimPortableFolder}{Folder where PK-Sim is located.
 If not specified, installation path will be read from the registry (available only in case of full \strong{non-portable} installation).
 This option is \strong{MANDATORY} for the portable version of PK-Sim.}
+
+\item{moBiPortableFolder}{Folder where MoBi is located.
+If not specified, installation path will be read from the registry (available only in case of full \strong{non-portable} installation).
+This option is \strong{MANDATORY} for the portable version of MoBi.
+Only required for qualification plans including MoBi projects.}
 
 \item{configurationPlanName}{Name of the configuration plan to be generated. Default is \code{"report-configuration-plan"}}
 
